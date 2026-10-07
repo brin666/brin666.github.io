@@ -1,0 +1,70 @@
+{
+  "article": "五道工程题跑完，三家只差 3.8 分",
+  "theme": "三家模型在五项工程任务中的总分接近；呈现本轮交付与失败细节，同时克制外推结论。",
+  "stickers": [
+    {
+      "id": "sticker-01",
+      "file": "sticker-01.png",
+      "keyword": "3.8 / 500",
+      "type": "typography",
+      "source": "generated",
+      "importance": "primary",
+      "suggested_side": "right",
+      "suggested_scale": "large",
+      "rotation": 0,
+      "reason": "Kimi K3 与 DeepSeek V4 Flash 的总分差为 3.80 / 500，是文章开篇强调的微小差距。",
+      "suggested_zone": "title",
+      "source_detail": {
+        "generation_prompt": "Deterministic typography rendered locally with the article-sticker helper; exact wording: 3.8 / 500."
+      }
+    },
+    {
+      "id": "sticker-02",
+      "file": "sticker-02.png",
+      "keyword": "紧邻终点的三枚标记",
+      "type": "concept",
+      "source": "generated",
+      "importance": "primary",
+      "suggested_side": "left",
+      "suggested_scale": "medium",
+      "rotation": -2,
+      "reason": "三家总分接近；Kimi 本轮领先，但文章明确不把微小差距写成确定的全面胜出。",
+      "suggested_zone": "title",
+      "source_detail": {
+        "generation_prompt": "Locally drawn original vector illustration: three closely grouped race markers and a small finish flag, with only a slight lead; no logos or text."
+      }
+    },
+    {
+      "id": "sticker-03",
+      "file": "sticker-03.png",
+      "keyword": "台风路径地球",
+      "type": "object",
+      "source": "generated",
+      "importance": "secondary",
+      "suggested_side": "left",
+      "suggested_scale": "medium",
+      "rotation": 1,
+      "reason": "对应 F1 台风路径模拟器；抽象路径表现的是合成测试界面，不暗示真实气象数据。",
+      "suggested_zone": "upper_body",
+      "source_detail": {
+        "generation_prompt": "Locally drawn original vector illustration: a small gridded globe with a synthetic curved storm route, route dots and a subtle spiral; no map labels."
+      }
+    },
+    {
+      "id": "sticker-04",
+      "file": "sticker-04.png",
+      "keyword": "WebGL 海浪网格",
+      "type": "object",
+      "source": "generated",
+      "importance": "secondary",
+      "suggested_side": "right",
+      "suggested_scale": "medium",
+      "rotation": -1,
+      "reason": "对应 F2 本地 WebGL 海浪模拟器，波面网格强调可视化交付而非观测校准或海洋预测。",
+      "suggested_zone": "mid_body",
+      "source_detail": {
+        "generation_prompt": "Locally drawn original vector illustration: an isolated perspective patch of gently rippling WebGL mesh waves in muted teal and sea-glass blue."
+      }
+    }
+  ]
+}

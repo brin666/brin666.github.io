@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#fbfaf7" />
+    <meta name="description" content="DeepSeek V4 Flash、GLM 5.3 与 Kimi K3 的五项工程任务评测记录：15 个正式单元、结果表、方法说明与六张项目截图。" />
+    <title>Agent Arena · Product Engineering Benchmark v0.1 · 百乐</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --page: #fbfaf7;
+        --paper: #fffefa;
+        --ink: #1c1c1a;
+        --muted: #6f6e68;
+        --quiet: #6f6e68;
+        --rule: rgba(36, 35, 30, .14);
+        --accent: #d7a82e;
+        --accent-wash: #f5edda;
+        --shot-bg: #101a1d;
+        --content: 1080px;
+        --reading: 640px;
+        font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+        color: var(--ink);
+        background: var(--page);
+        font-synthesis: none;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      *,
+      *::before,
+      *::after { box-sizing: border-box; }
+
+      html { scroll-behavior: smooth; }
+
+      body {
+        min-width: 320px;
+        margin: 0;
+        background: var(--page);
+        background-image: linear-gradient(rgba(37, 35, 31, .026) 1px, transparent 1px), linear-gradient(90deg, rgba(37, 35, 31, .026) 1px, transparent 1px);
+        background-size: 32px 32px;
+        color: var(--ink);
+      }
+
+      ::selection { color: var(--ink); background: #ead48f; }
+
+      a { color: inherit; text-underline-offset: .2em; }
+
+      a:focus-visible,
+      [tabindex="0"]:focus-visible {
+        outline: 2px solid #977015;
+        outline-offset: 4px;
+      }
+
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      .page-shell {
+        width: min(calc(100% - 48px), var(--content));
+        min-height: 100svh;
+        margin-inline: auto;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .page-header {
+        min-height: 78px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--rule);
+      }
+
+      .wordmark {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+        font-weight: 720;
+        letter-spacing: .1em;
+        text-decoration: none;
+      }
+
+      .wordmark-dot {
+        width: 7px;
+        height: 7px;
+        border: 1.5px solid var(--accent);
+        border-radius: 50%;
+      }
+
+      .back-link {
+        color: var(--muted);
+        font-size: 12px;
+        text-decoration: none;
+      }
+
+      .back-link:hover,
+      .article-footer a:hover { color: var(--ink); }
+
+      main { flex: 1; }
+
+      .case-article { padding: 76px 0 100px; }
+
+      .article-heading {
+        max-width: 850px;
+        margin: 0 auto;
+        padding-bottom: 32px;
+        border-bottom: 1px solid var(--rule);
+      }
+
+      .project-eyebrow {
+        margin: 0 0 18px;
+        color: var(--muted);
+        font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+        font-size: 10px;
+        letter-spacing: .12em;
+      }
+
+      .project-eyebrow::before {
+        content: "";
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        margin-right: 9px;
+        border-radius: 50%;
+        background: var(--accent);
+        vertical-align: 1px;
+      }
+
+      .heading-stickers {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-top: 24px;
+      }
+
+      .heading-stickers img { display: block; width: auto; height: auto; object-fit: contain; }
+      .heading-stickers img:first-child { width: 122px; }
+      .heading-stickers img:last-child { width: 112px; }
+      .gallery-heading { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+      .gallery-heading img { display: block; width: 76px; height: 76px; object-fit: contain; }
+
+      h1 {
+        max-width: 15em;
+        margin: 0;
+        font-size: clamp(34px, 5vw, 50px);
+        font-weight: 720;
+        letter-spacing: -.035em;
+        line-height: 1.3;
+        text-wrap: pretty;
+      }
+
+      .deck {
+        max-width: 68ch;
+        margin: 18px 0 0;
+        color: #55544f;
+        font-size: 16px;
+        line-height: 1.9;
+      }
+
+      .article-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 18px;
+        margin: 22px 0 0;
+        color: var(--quiet);
+        font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+        font-size: 11px;
+        letter-spacing: .025em;
+      }
+
+      .opening,
+      .article-body {
+        width: 100%;
+        margin-inline: auto;
+        font-size: 17px;
+        letter-spacing: .008em;
+        line-height: 2.02;
+      }
+
+      .opening { padding-top: 31px; }
+
+      .opening p,
+      .article-body p { margin: 0 0 19px; }
+
+      .opening p:first-child { font-size: 19px; line-height: 1.9; }
+
+      mark {
+        padding: 0 .12em;
+        color: inherit;
+        background: linear-gradient(transparent 56%, #ead48f 56%);
+      }
+
+      .results { margin-top: 58px; }
+
+      .section-heading {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 17px;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: clamp(23px, 3vw, 29px);
+        font-weight: 700;
+        letter-spacing: -.025em;
+        line-height: 1.45;
+      }
+
+      .section-heading p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.7;
+      }
+
+      .table-scroll {
+        overflow-x: auto;
+        border-top: 1px solid var(--ink);
+        border-bottom: 1px solid var(--rule);
+        scrollbar-color: #aaa58f transparent;
+        scrollbar-width: thin;
+      }
+
+      table {
+        width: 100%;
+        min-width: 790px;
+        border-collapse: collapse;
+        font-size: 13px;
+        font-variant-numeric: tabular-nums;
+        line-height: 1.5;
+      }
+
+      caption {
+        padding: 0;
+        text-align: left;
+      }
+
+      th,
+      td {
+        padding: 14px 12px;
+        border-bottom: 1px solid var(--rule);
+        text-align: right;
+        white-space: nowrap;
+      }
+
+      thead th {
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 600;
+      }
+
+      th:first-child,
+      td:first-child,
+      th:nth-child(2),
+      td:nth-child(2) { text-align: left; }
+
+      tbody tr:last-child td { border-bottom: 0; }
+
+      .rank {
+        width: 38px;
+        color: var(--quiet);
+        font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+      }
+
+      .model-name { font-weight: 680; }
+
+      .model-id {
+        display: block;
+        margin-top: 3px;
+        color: var(--quiet);
+        font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+        font-size: 10px;
+        font-weight: 400;
+      }
+
+      .total-cell { font-weight: 720; }
+
+      .table-note {
+        margin: 12px 0 0;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.8;
+      }
+
+      .score-composition {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px;
+        margin-top: 23px;
+        padding: 17px 0;
+        border-top: 1px solid var(--rule);
+        border-bottom: 1px solid var(--rule);
+        color: #55544f;
+        font-size: 12px;
+        line-height: 1.85;
+      }
+
+      .score-composition p { margin: 0; }
+
+      .score-composition strong {
+        display: block;
+        margin-bottom: 3px;
+        color: var(--ink);
+        font-size: 11px;
+        font-weight: 680;
+      }
+
+      .article-body { padding-top: 58px; }
+
+      .passage {
+        max-width: var(--reading);
+        margin-inline: auto;
+      }
+
+      .passage + .passage { margin-top: 49px; }
+
+      .gallery-section { max-width: none; }
+
+      .passage h2 { margin: 0 0 17px; }
+
+      .passage h3 {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 18px;
+        margin: 0 0 8px;
+        font-size: 19px;
+        font-weight: 680;
+        letter-spacing: -.015em;
+      }
+
+      .task-code {
+        color: var(--quiet);
+        font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: .08em;
+      }
+
+      .gallery-intro {
+        max-width: var(--reading);
+        margin: 0 0 17px !important;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.8;
+      }
+
+      .shot-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 15px;
+        margin: 19px 0 0;
+      }
+
+      .shot {
+        min-width: 0;
+        margin: 0;
+      }
+
+      .shot-frame {
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        aspect-ratio: 1.26;
+        border: 1px solid rgba(36, 35, 30, .1);
+        background: var(--shot-bg);
+      }
+
+      .shot img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      figcaption { padding-top: 9px; }
+
+      figcaption strong {
+        display: block;
+        font-size: 12px;
+        font-weight: 680;
+        line-height: 1.55;
+      }
+
+      figcaption code {
+        display: block;
+        margin-top: 2px;
+        color: var(--quiet);
+        font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+        font-size: 10px;
+        line-height: 1.55;
+        overflow-wrap: anywhere;
+      }
+
+      .gallery-note {
+        max-width: var(--reading);
+        margin-top: 13px !important;
+        padding-top: 11px;
+        border-top: 1px solid var(--rule);
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.8;
+      }
+
+      .fact-note {
+        margin: 24px 0 0 !important;
+        padding: 17px 19px;
+        background: var(--accent-wash);
+        color: #4b4536;
+        font-size: 13px;
+        line-height: 1.85;
+      }
+
+      .fact-note strong { color: var(--ink); }
+
+      .method-list {
+        margin: 20px 0 0;
+        padding: 0;
+        list-style: none;
+        border-top: 1px solid var(--rule);
+      }
+
+      .method-list li {
+        display: grid;
+        grid-template-columns: minmax(128px, .62fr) 1.8fr;
+        gap: 20px;
+        padding: 13px 0;
+        border-bottom: 1px solid var(--rule);
+        font-size: 13px;
+        line-height: 1.8;
+      }
+
+      .method-list strong { font-weight: 680; }
+
+      .method-list span { color: #55544f; }
+
+      .tier-note {
+        margin-top: 18px !important;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.8;
+      }
+
+      .closing {
+        margin-top: 42px !important;
+        padding-top: 22px;
+        border-top: 1px solid var(--ink);
+      }
+
+      .article-footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+        margin: 67px auto 0;
+        padding-top: 20px;
+        border-top: 1px solid var(--rule);
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .article-footer a { text-decoration: none; }
+
+      .page-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        min-height: 76px;
+        border-top: 1px solid var(--rule);
+        color: var(--quiet);
+        font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+        font-size: 10px;
+        letter-spacing: .1em;
+      }
+
+      @media (max-width: 760px) {
+        .page-shell { width: min(calc(100% - 34px), var(--content)); }
+        .page-header { min-height: 68px; }
+        .case-article { padding: 54px 0 76px; }
+        .article-heading { padding-bottom: 25px; }
+        h1 { max-width: 13em; font-size: clamp(32px, 8.4vw, 44px); }
+        .deck { font-size: 15px; }
+        .opening,
+        .article-body { font-size: 16px; line-height: 1.95; }
+        .opening p:first-child { font-size: 18px; }
+        .results { margin-top: 45px; }
+        .section-heading { display: block; }
+        .section-heading p { margin-top: 5px; }
+        .shot-grid { gap: 10px; }
+      }
+
+      @media (max-width: 560px) {
+        .page-shell { width: min(calc(100% - 30px), var(--content)); }
+        .case-article { padding-top: 42px; }
+        .article-meta { gap: 7px 12px; }
+        .score-composition { grid-template-columns: 1fr; gap: 12px; }
+        .article-body { padding-top: 44px; }
+        .passage + .passage { margin-top: 41px; }
+        .shot-grid { grid-template-columns: 1fr; gap: 17px; }
+        .gallery-heading img { width: 62px; height: 62px; }
+        .shot-frame { aspect-ratio: 1.32; }
+        .method-list li { grid-template-columns: 1fr; gap: 2px; }
+        .article-footer { flex-direction: column; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="page-header">
+        <a class="wordmark" href="../../preview.html#projects" aria-label="BRIN 百乐首页">
+          <span class="wordmark-dot" aria-hidden="true"></span> BRIN
+        </a>
+        <a class="back-link" href="../../preview.html#projects">← 返回项目</a>
+      </header>
+
+      <main>
+        <article class="case-article" aria-labelledby="article-title">
+          <header class="article-heading">
+            <p class="project-eyebrow">PROJECT / AGENT ARENA</p>
+            <h1 id="article-title">五道工程题跑完，三家只差 <mark>3.8 分</mark></h1>
+            <p class="deck">DeepSeek V4 Flash、GLM 5.3 与 Kimi K3 的 Product Engineering Benchmark v0.1。15 个正式单元全部完成，名次有了，差距却没大到能随手下结论。</p>
+            <p class="article-meta"><span>百乐</span><span>Hermes Agent · 2026.09</span><span>Product Engineering Benchmark v0.1</span></p>
+            <div class="heading-stickers" aria-hidden="true"><img src="./assets/sticker-01.png" alt="" width="974" height="242" /><img src="./assets/sticker-02.png" alt="" width="856" height="450" /></div>
+          </header>
+
+          <section class="opening" aria-label="文章开篇">
+            <p>15 个正式评测单元全部计分后，Kimi K3 排在第一。把总分并排看，差距比名次更显眼：461.60、458.80、457.80。Kimi 领先 DeepSeek V4 Flash 的总差是 <mark>3.80 / 500</mark>；摊到五道题的平均分，只有 0.76 分。</p>
+            <p>我愿意把结论写成“这一轮 Kimi 第一”，不会把它写成“明显胜出”。这两句话听起来只差一点，证据要求却不一样。</p>
+          </section>
+
+          <section class="results" aria-labelledby="results-title">
+            <div class="section-heading">
+              <h2 id="results-title">五项任务的最终分数</h2>
+              <p>单题满分 100 · 总分满分 500</p>
+            </div>
+            <div class="table-scroll" role="region" aria-label="模型任务得分表，可横向滚动" tabindex="0">
+              <table>
+                <caption class="visually-hidden">三种模型在五项工程任务中的正式评测得分</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">排名</th>
+                    <th scope="col">模型</th>
+                    <th scope="col"><abbr title="台风路径 3D 模拟器">F1</abbr></th>
+                    <th scope="col"><abbr title="Web3D 海浪模拟器">F2</abbr></th>
+                    <th scope="col"><abbr title="支付账本">B1</abbr></th>
+                    <th scope="col"><abbr title="库存预占">B2</abbr></th>
+                    <th scope="col"><abbr title="可靠 Webhook">B3</abbr></th>
+                    <th scope="col">总分 / 500</th>
+                    <th scope="col">均分 / 100</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="rank">01</td>
+                    <td><span class="model-name">Kimi K3</span><code class="model-id">kimi-k3</code></td>
+                    <td>96.80</td><td>96.80</td><td>90.80</td><td>83.60</td><td>93.60</td>
+                    <td class="total-cell">461.60</td><td>92.32</td>
+                  </tr>
+                  <tr>
+                    <td class="rank">02</td>
+                    <td><span class="model-name">GLM 5.3</span><code class="model-id">glm-5.3</code></td>
+                    <td>90.80</td><td>96.80</td><td>90.80</td><td>86.80</td><td>93.60</td>
+                    <td class="total-cell">458.80</td><td>91.76</td>
+                  </tr>
+                  <tr>
+                    <td class="rank">03</td>
+                    <td><span class="model-name">DeepSeek V4 Flash</span><code class="model-id">deepseek-v4-flash</code></td>
+                    <td>92.80</td><td>96.80</td><td>94.00</td><td>83.00</td><td>91.20</td>
+                    <td class="total-cell">457.80</td><td>91.56</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="table-note">F1 台风路径 3D 模拟器 · F2 Web3D 海浪模拟器 · B1 支付账本 · B2 库存预占 · B3 可靠 Webhook。每题由 70 分自动化验收与 30 分 GPT-5.6 盲评组成。</p>
+
+            <div class="score-composition" aria-label="分数构成摘要">
+              <p><strong>自动化验收 / 350</strong>Kimi 345 · GLM 350 · DeepSeek 350</p>
+              <p><strong>GPT-5.6 盲评 / 150</strong>Kimi 116.6 · GLM 108.8 · DeepSeek 107.8</p>
+            </div>
+
+          </section>
+
+          <div class="article-body">
+            <section class="passage">
+              <h2>这 0.76 分，能说明多少？</h2>
+              <p>Kimi K3 与 GLM 5.3 相差 2.80 分；GLM 5.3 与 DeepSeek V4 Flash 相差 1.00 分。单看榜单，它们排成了三档；看评分记录，第二、第三名会随合规的整数聚合规则互换。单题评审分在不同独立轮次之间，最大差值达到 4.4 / 30 分，已经大过这两家的总分间距。</p>
+              <p>所以我的读法是：Kimi 在这轮里拿到最稳的第一；GLM 和 DeepSeek 的微小差距，不足以支持“谁明显更强”。如果把选型问题换成“这五类工程任务里，现在先试谁”，我会先试 Kimi；如果是要据此替换一套生产模型，我会再加任务、换评委复核。</p>
+              <p>这个判断有明确边界。三种合理的整数聚合规则都把 Kimi 放在第一，但这不等于跨任务、跨接口、跨版本也必然如此。新增一批任务后若不再领先，我会改结论。</p>
+            </section>
+
+            <section class="passage">
+              <h2>高分不等于没有掉链子的地方</h2>
+              <p>Kimi 的 B2「库存预占」只通过了 12 条验收断言中的 11 条。失败项是 <code>release_returns_inventory</code>，最终得分 83.60；这也是它自动化总分比另外两家少 5 分的原因。总榜第一没有把这次真实失败抹掉。</p>
+              <p>反过来看，GLM 和 DeepSeek 的自动化验收都是 350 / 350，但盲评分数低于 Kimi。自动测试回答“契约有没有过”，工程评审还会看边界处理、测试证据和实现结构；两种分数不能互相替代。</p>
+            </section>
+
+            <section class="passage gallery-section" aria-labelledby="typhoon-title">
+              <div class="gallery-heading"><h2 id="typhoon-title">台风路径 3D 模拟器</h2><img src="./assets/sticker-03.png" alt="" aria-hidden="true" loading="lazy" /></div>
+              <p class="gallery-intro">F1 前端题的三份交付截图。模型名称与完整 model ID 一起保留，套餐或会员档位没有写进记录。</p>
+              <div class="shot-grid">
+                <figure class="shot">
+                  <div class="shot-frame"><img src="./assets/typhoon-deepseek.png" alt="DeepSeek V4 Flash 完成的台风路径 3D 模拟器页面截图" width="1455" height="1306" loading="lazy" /></div>
+                  <figcaption><strong>DeepSeek V4 Flash</strong><code>deepseek-v4-flash</code></figcaption>
+                </figure>
+                <figure class="shot">
+                  <div class="shot-frame"><img src="./assets/typhoon-glm.png" alt="GLM 5.3 完成的台风路径 3D 模拟器页面截图" width="1475" height="1166" loading="lazy" /></div>
+                  <figcaption><strong>GLM 5.3</strong><code>glm-5.3</code></figcaption>
+                </figure>
+                <figure class="shot">
+                  <div class="shot-frame"><img src="./assets/typhoon-kimi.png" alt="Kimi K3 完成的台风路径 3D 模拟器页面截图" width="1472" height="1308" loading="lazy" /></div>
+                  <figcaption><strong>Kimi K3</strong><code>kimi-k3</code></figcaption>
+                </figure>
+              </div>
+              <p class="gallery-note">台风路径使用合成测试数据，不是实时台风资料，也不代表气象预测能力。截图展示的是交付界面；分数来自固定验收与评分记录。</p>
+            </section>
+
+            <section class="passage gallery-section" aria-labelledby="wave-title">
+              <div class="gallery-heading"><h2 id="wave-title">Web3D 海浪模拟器</h2><img src="./assets/sticker-04.png" alt="" aria-hidden="true" loading="lazy" /></div>
+              <p class="gallery-intro">F2 要求本地渲染真实变化的 WebGL 波面，并让振幅、波长、速度和方向控制实际影响画面。</p>
+              <div class="shot-grid">
+                <figure class="shot">
+                  <div class="shot-frame"><img src="./assets/wave-deepseek.png" alt="DeepSeek V4 Flash 完成的 Web3D 海浪模拟器页面截图" width="1476" height="1215" loading="lazy" /></div>
+                  <figcaption><strong>DeepSeek V4 Flash</strong><code>deepseek-v4-flash</code></figcaption>
+                </figure>
+                <figure class="shot">
+                  <div class="shot-frame"><img src="./assets/wave-glm.png" alt="GLM 5.3 完成的 Web3D 海浪模拟器页面截图" width="1473" height="1170" loading="lazy" /></div>
+                  <figcaption><strong>GLM 5.3</strong><code>glm-5.3</code></figcaption>
+                </figure>
+                <figure class="shot">
+                  <div class="shot-frame"><img src="./assets/wave-kimi.png" alt="Kimi K3 完成的 Web3D 海浪模拟器页面截图" width="1467" height="1172" loading="lazy" /></div>
+                  <figcaption><strong>Kimi K3</strong><code>kimi-k3</code></figcaption>
+                </figure>
+              </div>
+              <p class="gallery-note">这是本地 WebGL 展示题，不是经海洋观测数据校准的物理预测。三张图用来比较交付界面的取舍，不单独决定分数。</p>
+            </section>
+
+            <section class="passage">
+              <h2>分数背后的运行条件</h2>
+              <p>每个模型都在 Hermes Agent 中先核对身份，再从空白基线和新工作区开始；任务题面、工具、超时、网络策略与固定验收命令按运行契约锁定。自动化验收先确认结果有效，再把匿名证据交给 GPT-5.6 盲评。五题、三模型，共 15 个正式单元，最终 15 / 15 全部计分；没有硬封顶。</p>
+              <ul class="method-list">
+                <li><strong>DeepSeek V4 Flash</strong><span>Model ID：<code>deepseek-v4-flash</code> · 注册默认端点。</span></li>
+                <li><strong>GLM 5.3</strong><span>Model ID：<code>glm-5.3</code> · 五个正式单元均经用户提供的 OpenAI 兼容中转；官方 Z.AI Key 在测试中途过期。</span></li>
+                <li><strong>Kimi K3</strong><span>Model ID：<code>kimi-k3</code> · 使用中国 endpoint profile 覆盖。</span></li>
+              </ul>
+              <p class="tier-note">接口路径并不完全相同，因此这组成绩描述的是本次模型与实际调用配置的组合，不是隔离传输层后的模型能力实验。账号套餐、会员或“档位”信息没有记录，本页只展示评测清单里的确切 model ID。评委也只有 GPT-5.6 一个模型，还没有多评委交叉验证。</p>
+            </section>
+
+            <section class="passage closing">
+              <h2>如果现在要选</h2>
+              <p>只按这五项任务的正式记录，我会把 Kimi K3 放在第一位；这个第一名在三种合规整数聚合方法里都没变。至于 GLM 5.3 和 DeepSeek V4 Flash，我不会拿 2.80 分或 1.00 分的差距讲成确定的胜负。</p>
+              <p>下一轮最值得补的，不是把小数点再多写两位，而是增加任务、换评委，并尽量统一调用路径。那时如果名次还一样，结论才更经得起追问。</p>
+              <p class="table-note">分数依据：reports/benchmark-v0.1.md 与 PROJECT-INDEX.md；model ID 按正式运行记录核对。</p>
+            </section>
+          </div>
+
+          <footer class="article-footer">
+            <a href="../../preview.html#projects">← 返回项目栏目</a>
+            <a href="#article-title">回到文章开头 ↑</a>
+          </footer>
+        </article>
+      </main>
+
+      <footer class="page-footer"><span>BRIN</span><span>© 2026</span></footer>
+    </div>
+  </body>
+</html>

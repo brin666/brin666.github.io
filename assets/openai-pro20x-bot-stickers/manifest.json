@@ -1,0 +1,90 @@
+{
+  "article": "OpenAI Bot 发布前夕，为什么 OpenAI 还敢砍掉 Pro 20X 一半的额度？",
+  "theme": "额度、竞争与 Bot 形态的一篇个人观察",
+  "stickers": [
+    {
+      "id": "sticker-01",
+      "file": "sticker-01.png",
+      "keyword": "OpenAI（非官方手绘意象）",
+      "type": "brand",
+      "source": "generated",
+      "importance": "primary",
+      "suggested_side": "left",
+      "suggested_scale": "medium",
+      "rotation": -3,
+      "reason": "标题和全文主要讨论 OpenAI 的额度与 Bot 动向；按用户要求绘制非官方贴纸，不作官方品牌素材使用。",
+      "suggested_zone": "title",
+      "source_detail": { "generation_prompt": "Hand-drawn unofficial OpenAI-inspired interlocking knot and exact OpenAI wordmark; charcoal ink, warm ivory die-cut, dusty teal and terracotta, transparent background." }
+    },
+    {
+      "id": "sticker-02",
+      "file": "sticker-02.png",
+      "keyword": "额度从二到一",
+      "type": "concept",
+      "source": "generated",
+      "importance": "secondary",
+      "suggested_side": "right",
+      "suggested_scale": "medium",
+      "rotation": 2,
+      "reason": "对应开头关于 Pro 20X 额度与 API 消耗的对比。",
+      "suggested_zone": "upper_body",
+      "source_detail": { "generation_prompt": "Two small overlapping usage tickets, two filled segments changing into one, arrow, hand-drawn ivory die-cut editorial sticker, transparent background." }
+    },
+    {
+      "id": "sticker-03",
+      "file": "sticker-03.png",
+      "keyword": "五小时与每周重置",
+      "type": "object",
+      "source": "generated",
+      "importance": "secondary",
+      "suggested_side": "left",
+      "suggested_scale": "medium",
+      "rotation": -2,
+      "reason": "对应文章中对两种重置额度与重置卡的解释。",
+      "suggested_zone": "upper_body",
+      "source_detail": { "generation_prompt": "Overlapping 5h clock and 7d calendar reset cards with circular refresh arrows, hand-drawn ivory die-cut editorial sticker, transparent background." }
+    },
+    {
+      "id": "sticker-04",
+      "file": "sticker-04.png",
+      "keyword": "Bot",
+      "type": "object",
+      "source": "generated",
+      "importance": "primary",
+      "suggested_side": "right",
+      "suggested_scale": "medium",
+      "rotation": 3,
+      "reason": "回应结尾对 Bot 是否成为 Agent 下一种形态的提问；按用户要求只画小 Bot，不画窗口。",
+      "suggested_zone": "lower_body",
+      "source_detail": { "generation_prompt": "One small full-body curious Bot character, no window frame, hand-drawn ivory die-cut editorial sticker, charcoal ink, dusty teal and terracotta, transparent background." }
+    },
+    {
+      "id": "sticker-05",
+      "file": "sticker-05.png",
+      "keyword": "Anthropic（非官方手绘意象）",
+      "type": "brand",
+      "source": "generated",
+      "importance": "secondary",
+      "suggested_side": "right",
+      "suggested_scale": "small",
+      "rotation": -2,
+      "reason": "文章中段比较 Anthropic 的产品与成本消息；按用户要求绘制非官方贴纸，不作官方品牌素材使用。",
+      "suggested_zone": "mid_body",
+      "source_detail": { "generation_prompt": "Hand-drawn unofficial Anthropic-inspired A-like arch and exact Anthropic wordmark; charcoal ink, warm ivory die-cut, dusty teal and terracotta, transparent background." }
+    },
+    {
+      "id": "sticker-06",
+      "file": "sticker-06.png",
+      "keyword": "AI 视频",
+      "type": "object",
+      "source": "generated",
+      "importance": "decorative",
+      "suggested_side": "left",
+      "suggested_scale": "small",
+      "rotation": 2,
+      "reason": "对应作者对 Opus 宣传片与代码生成视频画面的感受。",
+      "suggested_zone": "mid_body",
+      "source_detail": { "generation_prompt": "Curled hand-drawn cinematic filmstrip with play, landscape and sparkle frames, warm ivory die-cut editorial sticker, transparent background." }
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+.article-heading h1 { max-width: 15em; font-size: clamp(29px, 3.3vw, 40px); line-height: 1.42; letter-spacing: -.04em; }
+.sticker-openai { top: 70px; left: -200px; width: 154px; transform: rotate(-3deg); }
+.sticker-quota { top: 98px; right: -226px; width: 192px; transform: rotate(2deg); }
+.sticker-reset { top: 113px; left: -216px; width: 173px; transform: rotate(-2deg); }
+.sticker-anthropic { top: 25px; right: -197px; width: 147px; transform: rotate(-2deg); }
+.sticker-video { top: 220px; left: -219px; width: 179px; transform: rotate(2deg); }
+.sticker-bot { top: 76px; right: -196px; width: 142px; transform: rotate(3deg); }
+
+@media (max-width: 1080px) and (min-width: 1001px) {
+  .sticker-openai { left: -152px; width: 119px; }
+  .sticker-quota { right: -157px; width: 135px; }
+  .sticker-reset { left: -160px; width: 135px; }
+  .sticker-anthropic { right: -145px; width: 115px; }
+  .sticker-video { left: -164px; width: 132px; }
+  .sticker-bot { right: -142px; width: 110px; }
+}
+
+@media (max-width: 1000px) {
+  .sticker-openai, .sticker-quota, .sticker-reset, .sticker-anthropic, .sticker-video, .sticker-bot { position: static; transform: none; }
+  .sticker-openai { width: 113px; margin: 22px 0 0 auto; }
+  .sticker-quota { width: 139px; margin: 22px 0 0 auto; }
+  .sticker-reset { width: 124px; margin: 22px auto 0 0; }
+  .sticker-anthropic { width: 103px; margin: 24px 0 0 auto; }
+  .sticker-video { width: 124px; margin: -106px auto 0 0; }
+  .sticker-bot { width: 104px; margin: 24px 0 0 auto; }
+}
+
+@media (max-width: 600px) {
+  .article-heading h1 { max-width: 100%; font-size: clamp(27px, 7.25vw, 33px); line-height: 1.45; letter-spacing: -.025em; }
+  .sticker-openai { width: 92px; margin-top: 18px; }
+  .sticker-quota { width: 112px; margin-top: 18px; }
+  .sticker-reset { width: 103px; margin-top: 18px; }
+  .sticker-anthropic { width: 91px; margin-top: 21px; }
+  .sticker-video { width: 100px; margin-top: -93px; }
+  .sticker-bot { width: 87px; margin-top: 21px; }
+}

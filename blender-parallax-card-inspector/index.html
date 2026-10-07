@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0d10">
+  <meta name="description" content="Blender 视差卡片检视：圣凯布米龙、风暴酷拉与大耳帽兜家族的独立展示草稿。">
+  <title>Blender 视差卡片检视</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./vendor/three/build/three.module.js",
+        "three/addons/": "./vendor/three/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#showcase">跳到卡片检视区</a>
+
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="back-link" href="../index.html" aria-label="返回 Field Log 博客首页">
+        <span class="back-mark" aria-hidden="true">↖</span>
+        <span>FIELD LOG / BLOG</span>
+      </a>
+      <p class="project-id">BLENDER PARALLAX CARD INSPECTOR <span>·</span> DRAFT 01</p>
+      <div class="top-actions">
+        <button id="global-auto" class="text-action" type="button" aria-pressed="true">
+          <span class="live-dot" aria-hidden="true"></span>
+          <span>自动轻晃</span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <h1 id="page-title">Blender<br><em>视差卡片</em><br>检视</h1>
+          <p class="hero-lede">把一张卡，转成一个可以被看见、被拖动、被保存的角度。</p>
+          <p class="hero-body">这是博客里的独立检视子页面：只展示已经创作好的卡片，不提供上传、生成或改卡功能。三张主卡各自保留独立展示框，之后还可以继续往这里添加新的卡片。</p>
+        </div>
+        <aside class="hero-note" aria-label="项目说明">
+          <div class="note-rule"></div>
+          <p>PROJECT NOTE</p>
+          <strong>三张主卡先占据舞台，材料卡退到下方成为索引。</strong>
+          <dl>
+            <div><dt>检视方式</dt><dd>拖动 / 方向键 / 自动轻晃</dd></div>
+            <div><dt>当前状态</dt><dd>展示草稿 · 本地素材</dd></div>
+            <div><dt>下一步</dt><dd>稳定后打包项目或 Skill</dd></div>
+          </dl>
+        </aside>
+      </section>
+
+      <section id="showcase" class="showcase" aria-labelledby="showcase-title">
+        <div class="section-heading">
+          <div>
+            <h2 id="showcase-title">三张主卡，各自有自己的光。</h2>
+            <p>点击一张卡成为当前检视对象；按住拖动可以手动找角度，停止操作后会回到轻微的自动摇晃。</p>
+          </div>
+          <span class="section-count">03 FEATURED CARDS</span>
+        </div>
+
+        <div id="card-deck" class="card-deck" aria-label="三张主展示卡">
+          <button class="inspect-card card--ember" type="button" data-card-id="shengkai" aria-pressed="true">
+            <span class="card-slot">01 <i></i> GLB READY</span>
+            <span class="card-frame">
+              <span class="parallax-card" aria-hidden="true">
+                <img class="card-layer layer-background" src="./assets/shengkaibumilong/background.png" alt="">
+                <img class="card-layer layer-atmosphere" src="./assets/shengkaibumilong/background-insect.png" alt="">
+                <img class="card-layer layer-subject" src="./assets/shengkaibumilong/subject.png" alt="">
+                <img class="card-layer layer-text" src="./assets/shengkaibumilong/text.png" alt="">
+                <span class="card-glint"></span>
+                <span class="card-edge"></span>
+              </span>
+              <span class="frame-corner frame-corner--top">DRAG TO INSPECT</span>
+              <span class="frame-corner frame-corner--bottom">FIRE / INSECT</span>
+            </span>
+            <span class="card-caption">
+              <span class="card-title-row"><strong>圣凯布米龙</strong><em>火 · 虫</em></span>
+              <span class="card-description">焰翅巡迹 · 赛季通行证限定宠物</span>
+              <span class="card-state">主体分层 / Blender 模型已就绪</span>
+            </span>
+          </button>
+
+          <button class="inspect-card card--electric" type="button" data-card-id="fengbao" aria-pressed="false">
+            <span class="card-slot">02 <i></i> GLB READY</span>
+            <span class="card-frame">
+              <span class="parallax-card" aria-hidden="true">
+                <img class="card-layer layer-background" src="./assets/fengbao-kula/background.png" alt="">
+                <img class="card-layer layer-atmosphere" src="./assets/fengbao-kula/background-electric.png" alt="">
+                <img class="card-layer layer-subject" src="./assets/fengbao-kula/subject.png" alt="">
+                <img class="card-layer layer-text" src="./assets/fengbao-kula/text.png" alt="">
+                <span class="card-glint"></span>
+                <span class="card-edge"></span>
+              </span>
+              <span class="frame-corner frame-corner--top">DRAG TO INSPECT</span>
+              <span class="frame-corner frame-corner--bottom">ELECTRIC / PRINT</span>
+            </span>
+            <span class="card-caption">
+              <span class="card-title-row"><strong>风暴酷拉</strong><em>电系</em></span>
+              <span class="card-description">电弧巡迹 · 黄色电场中的高速宠物</span>
+              <span class="card-state">主体分层 / Blender 模型已就绪</span>
+            </span>
+          </button>
+
+          <button class="inspect-card card--ice" type="button" data-card-id="daermaodou" aria-pressed="false">
+            <span class="card-slot">03 <i></i> 2.5D DRAFT</span>
+            <span class="card-frame">
+              <span class="parallax-card family-parallax-card" aria-hidden="true">
+                <img class="card-layer card-background" src="./assets/daermaodou-family/background.png" alt="">
+                <span class="family-character family-character--one" data-depth=".62" data-scale-key="formOneScale" data-position-x-key="formOneX" data-position-y-key="formOneY">
+                  <img src="./assets/daermaodou-family/form-1.png" alt="">
+                  <span class="family-subject-fx" aria-hidden="true">
+                    <span class="family-crystal family-crystal--a"></span>
+                    <span class="family-crystal family-crystal--b"></span>
+                    <span class="family-crystal family-crystal--c"></span>
+                    <span class="family-spark family-spark--a"></span>
+                  </span>
+                </span>
+                <span class="family-character family-character--three" data-depth="1.05" data-scale-key="formThreeScale" data-position-x-key="formThreeX" data-position-y-key="formThreeY">
+                  <img src="./assets/daermaodou-family/form-3.png" alt="">
+                  <span class="family-subject-fx" aria-hidden="true">
+                    <span class="family-crystal family-crystal--a"></span>
+                    <span class="family-crystal family-crystal--b"></span>
+                    <span class="family-crystal family-crystal--c"></span>
+                    <span class="family-spark family-spark--b"></span>
+                  </span>
+                </span>
+                <span class="family-character family-character--two" data-depth=".78" data-scale-key="formTwoScale" data-position-x-key="formTwoX" data-position-y-key="formTwoY">
+                  <img src="./assets/daermaodou-family/form-2-illustrated.png" alt="">
+                  <span class="family-subject-fx" aria-hidden="true">
+                    <span class="family-crystal family-crystal--a"></span>
+                    <span class="family-crystal family-crystal--b"></span>
+                    <span class="family-crystal family-crystal--c"></span>
+                    <span class="family-spark family-spark--c"></span>
+                  </span>
+                </span>
+                <span class="family-card-title">
+                  <small>ICE / CUTE FAMILY</small>
+                  <strong>大耳帽兜<em>家族</em></strong>
+                </span>
+                <span class="family-feature-block">
+                  <span class="family-feature-bar"></span>
+                  <span class="family-feature-copy">
+                    <small>特性</small>
+                    <strong>捉迷藏</strong>
+                    <span class="family-feature-description">使敌方获得冻结时，<br>也会使其获得全技能能耗+1。</span>
+                    <span class="family-feature-tags"><i>冰</i><i>萌</i></span>
+                  </span>
+                </span>
+                <span class="family-footer"><span>03 / 120</span><span>FROSTED PRINT</span></span>
+                <span class="family-ice-sweep"></span>
+                <span class="family-foil-wash"></span>
+                <span class="family-edge-foil"></span>
+              </span>
+              <span class="frame-corner frame-corner--top">DRAG TO INSPECT</span>
+              <span class="frame-corner frame-corner--bottom">ICE / CUTE</span>
+            </span>
+            <span class="card-caption">
+              <span class="card-title-row"><strong>大耳帽兜家族</strong><em>冰 · 萌</em></span>
+              <span class="card-description">捉迷藏 · 三角色分层冰晶卡面</span>
+              <span class="card-state">网页 2.5D / 4193 效果复刻</span>
+            </span>
+          </button>
+        </div>
+
+        <div class="inspector-console" aria-live="polite">
+          <div class="console-copy">
+            <p class="console-label">CURRENT INSPECTION</p>
+            <h3 id="inspect-title">圣凯布米龙</h3>
+            <p id="inspect-description">拖动卡面，观察火焰、虫翼和主体层在角度变化中的错位。</p>
+          </div>
+          <dl class="console-data">
+            <div><dt>素材状态</dt><dd id="inspect-state">Blender GLB / 分层网页预览</dd></div>
+            <div><dt>视角</dt><dd id="view-state">FRONT · 正面</dd></div>
+            <div><dt>操作</dt><dd>拖动 · ↑↓←→ · R 复位</dd></div>
+          </dl>
+          <button id="reset-view" class="console-button" type="button">恢复默认视角 <span aria-hidden="true">↺</span></button>
+        </div>
+
+        <!-- TEMP TUNING CONSOLE: REMOVE BEFORE PUBLISH -->
+        <section class="tuning-console" data-tuning-console aria-labelledby="tuning-title">
+          <div class="tuning-console__header">
+            <div>
+              <p class="tuning-console__kicker">TEMPORARY / REMOVE BEFORE PUBLISH</p>
+              <h3 id="tuning-title">卡片主体调校</h3>
+              <p>逐张卡调整主体大小与位置。参数只保存在当前浏览器，不会生成或上传卡片。</p>
+            </div>
+            <div class="tuning-console__actions">
+              <button id="tuning-reset-card" class="tuning-button" type="button">恢复当前卡片</button>
+              <button id="tuning-reset-all" class="tuning-button tuning-button--quiet" type="button">恢复全部默认</button>
+            </div>
+          </div>
+
+          <div id="tuning-tabs" class="tuning-tabs" role="tablist" aria-label="选择要调校的卡片">
+            <button id="tuning-tab-shengkai" class="tuning-tab" type="button" role="tab" data-tuning-tab="shengkai" aria-selected="true">01 · 圣凯布米龙</button>
+            <button id="tuning-tab-fengbao" class="tuning-tab" type="button" role="tab" data-tuning-tab="fengbao" aria-selected="false">02 · 风暴酷拉</button>
+            <button id="tuning-tab-daermaodou" class="tuning-tab" type="button" role="tab" data-tuning-tab="daermaodou" aria-selected="false">03 · 大耳帽兜家族</button>
+          </div>
+
+          <div id="tuning-fields" class="tuning-fields" role="tabpanel" aria-live="polite"></div>
+          <p class="tuning-console__footnote">上线前删除本段 HTML、对应 CSS 与 app.js 中标记为 <code>TEMP TUNING CONSOLE</code> 的代码；原来的 CURRENT INSPECTION 控制台已经独立保留。</p>
+        </section>
+        <!-- END TEMP TUNING CONSOLE -->
+      </section>
+
+      <section class="materials" aria-labelledby="materials-title">
+        <div class="section-heading section-heading--compact">
+          <div>
+            <h2 id="materials-title">底部材料索引。</h2>
+            <p>CardLab 的三种基础材料先缩小放在这里，只做视觉参照，不在这个页面提供生成器。</p>
+          </div>
+          <span class="section-count">CARDLAB MATERIALS</span>
+        </div>
+
+        <div class="material-strip">
+          <button class="material-sample material-sample--base" type="button" data-material="base" aria-pressed="true">
+            <span class="material-surface"><i></i></span>
+            <span class="material-copy"><strong>基础卡</strong><small>BASE CARD</small></span>
+          </button>
+          <button class="material-sample material-sample--holo" type="button" data-material="holo" aria-pressed="false">
+            <span class="material-surface"><i></i></span>
+            <span class="material-copy"><strong>彩色镭射卡</strong><small>HOLO CARD</small></span>
+          </button>
+          <button class="material-sample material-sample--coating" type="button" data-material="coating" aria-pressed="false">
+            <span class="material-surface"><i></i></span>
+            <span class="material-copy"><strong>镀膜卡</strong><small>COATING</small></span>
+          </button>
+        </div>
+        <p id="material-description" class="material-description">基础卡作为最干净的对照面：让主体分层与视差本身先被看见。</p>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="./app.js"></script>
+  <script type="module" src="./card-runtime.js"></script>
+</body>
+</html>

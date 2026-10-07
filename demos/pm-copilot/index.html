@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="description" content="PM Copilot Workbench 的隔离交互演示：从示例反馈到产品建议、PRD、原型和交付拆解。" />
+    <title>PM Copilot · 交互演示</title>
+    <link rel="stylesheet" href="./style.css?v=20261007" />
+    <script src="./app.js?v=20261007" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand"><span class="brand-mark" aria-hidden="true">◇</span><span><strong>PM Copilot</strong><small>产品决策工作台</small></span></div>
+        <div class="topbar-right"><span class="mode-tag">示例模式</span><a href="../../preview.html#projects">返回博客 ↗</a></div>
+      </header>
+
+      <div class="workspace">
+        <aside class="sidebar" aria-label="工作台导航">
+          <div class="sidebar-intro"><strong>任务台</strong><p>把用户线索变成可交付的产品决策。</p></div>
+          <nav class="step-nav" aria-label="演示流程">
+            <button class="nav-item is-active" type="button" data-page="home" aria-current="page"><span>工作台首页<small>项目总览与流程</small></span><em>当前</em></button>
+            <button class="nav-item" type="button" data-page="feedback"><span>用户反馈<small>样本与证据</small></span><em>01</em></button>
+            <button class="nav-item" type="button" data-page="feature"><span>功能建议<small>选择机会点</small></span><em>02</em></button>
+            <button class="nav-item" type="button" data-page="prd"><span>PRD 工坊<small>明确需求与验收</small></span><em>03</em></button>
+            <button class="nav-item" type="button" data-page="prototype"><span>原型工坊<small>查看交互草图</small></span><em>04</em></button>
+            <button class="nav-item" type="button" data-page="delivery"><span>交付拆解<small>任务与验证</small></span><em>05</em></button>
+          </nav>
+          <div class="sidebar-note"><strong>线索会留下痕迹</strong><p>每一步都指向上一步的证据。本页只在当前浏览器中演示，不连接真实模型或个人数据。</p></div>
+        </aside>
+
+        <main class="main-content" id="main-content">
+          <div class="demo-disclaimer" role="note"><span class="live-dot" aria-hidden="true"></span>隔离交互演示 · 使用原项目的示例反馈 · 不调用 AI、Codex CLI 或服务器写入接口</div>
+
+          <section class="page-section" id="page-home" data-page-section="home" aria-labelledby="home-title">
+            <div class="dashboard-hero">
+              <div class="hero-main"><span class="eyebrow">■ &nbsp; 示例项目待命</span><h1 id="home-title">AI 简历优化助手 Demo</h1><p>体验一条从用户反馈到产品交付物的证据链。</p><div class="chain" aria-label="工作流"><span>用户反馈</span><i></i><span>功能建议</span><i></i><span>PRD</span><i></i><span>原型说明</span><i></i><span>交付拆解</span></div><p class="chain-count"><span>证据链</span><strong id="home-count">0 / 5 已体验</strong></p></div>
+              <div class="hero-next hatch"><span class="eyebrow">NEXT DECISION</span><h2>先看反馈，再做产品选择</h2><p>不要从一段漂亮的 PRD 开始。先确认用户到底在抱怨什么。</p><button class="primary-action" type="button" data-page="feedback">查看示例反馈 ↗</button></div>
+            </div>
+            <div class="home-grid"><div class="panel"><span class="eyebrow">当前任务</span><h2 id="home-next-title">阅读反馈样本</h2><p id="home-next-copy">这组样本来自原项目的演示数据，不代表真实调研或线上用户统计。</p><button class="text-action" type="button" data-page="feedback">处理下一步 ↗</button></div><div class="panel hatch"><span class="eyebrow">工作原则</span><p class="principle">AI 可以归纳与起草；是否进入交付，应由人根据证据判断。</p></div></div>
+          </section>
+
+          <section class="page-section" id="page-feedback" data-page-section="feedback" aria-labelledby="feedback-title" hidden>
+            <div class="module-heading"><span class="eyebrow">01 / USER FEEDBACK</span><h1 id="feedback-title">先看原话</h1><p>以下摘自原项目随附的示例反馈。点击整理后会显示预置的规则化示例洞察，不会调用模型。</p></div>
+            <div class="panel"><div class="panel-top"><h2>示例反馈 · 6 条</h2><span class="soft-tag">演示样本</span></div><ol class="feedback-list"><li><span>01</span>AI 改出来的简历太模板化了。</li><li><span>02</span>不知道为什么要这样修改。</li><li><span>03</span>希望能看到修改前后对比。</li><li><span>04</span>改了之后有些内容不是我真实经历，不敢用。</li><li><span>05</span>想知道简历和岗位 JD 的匹配度。</li><li><span>06</span>想看到修改理由，而不是直接替换。</li></ol><button class="primary-action compact" type="button" data-action="insight">整理示例洞察 →</button></div>
+            <div class="panel reveal-panel" id="insight-result" hidden><span class="eyebrow">ARTIFACT 01 / 反馈洞察</span><h2>可信度比“生成得快”更先被提到</h2><p>样本中的 02、04、06 都指向同一问题：用户不清楚修改依据，也担心虚构经历。03 提醒我们要保留前后对照。</p><div class="evidence-row"><span>证据索引</span><button type="button" data-page="feedback" data-focus-evidence="2">02</button><button type="button" data-page="feedback" data-focus-evidence="4">04</button><button type="button" data-page="feedback" data-focus-evidence="6">06</button></div><button class="text-action" type="button" data-page="feature">继续选择功能建议 ↗</button></div>
+          </section>
+
+          <section class="page-section" id="page-feature" data-page-section="feature" aria-labelledby="feature-title" hidden>
+            <div class="module-heading"><span class="eyebrow">02 / FEATURE IDEA</span><h1 id="feature-title">选一个值得先做的方向</h1><p>两个候选方向都来自上述样本。选择只改变本次演示的后续 PRD 内容。</p></div>
+            <div class="choice-grid"><button class="choice-card" type="button" data-feature="evidence" aria-pressed="false"><span class="eyebrow">OPTION A / 02 · 04 · 06</span><strong>修改理由与证据对照</strong><span>每条优化建议都显示修改原因，并提醒核对原始经历。</span><em>选择这个方向 ↗</em></button><button class="choice-card" type="button" data-feature="compare" aria-pressed="false"><span class="eyebrow">OPTION B / 03 · 06</span><strong>修改前后对比</strong><span>把原文、建议文本和理由并排展示，保留用户选择权。</span><em>选择这个方向 ↗</em></button></div>
+            <div class="panel reveal-panel" id="feature-result" hidden><span class="eyebrow">ARTIFACT 02 / 功能建议</span><h2 id="feature-result-title"></h2><p id="feature-result-copy"></p><button class="text-action" type="button" data-page="prd">带着选择进入 PRD ↗</button></div>
+          </section>
+
+          <section class="page-section" id="page-prd" data-page-section="prd" aria-labelledby="prd-title" hidden>
+            <div class="module-heading"><span class="eyebrow">03 / PRD WORKSHOP</span><h1 id="prd-title">把方向写成可验收的需求</h1><p>这是可编辑的示例草稿。内容只保存在当前页面内，不会上传服务器。</p></div>
+            <div class="panel" id="prd-locked"><p>请先在「功能建议」中选择一个方向。</p><button class="text-action" type="button" data-page="feature">返回功能建议 ↗</button></div>
+            <form class="panel prd-form" id="prd-form" hidden><div class="panel-top"><h2>PRD 草稿</h2><span class="soft-tag">示例 · 可编辑</span></div><label>要解决的问题<textarea id="prd-problem" rows="3" required minlength="12"></textarea></label><label>第一版目标<textarea id="prd-goal" rows="3" required minlength="12"></textarea></label><fieldset><legend>验收时至少检查</legend><label><input type="checkbox" checked /> 用户可以看到原文与建议</label><label><input type="checkbox" checked /> 生成内容不能被当作未经核对的真实经历</label><label><input type="checkbox" checked /> 原始反馈的引用位置清楚可见</label></fieldset><button class="primary-action compact" type="submit">保存本页 PRD 草稿 →</button><p class="form-feedback" id="prd-feedback" role="status"></p></form>
+          </section>
+
+          <section class="page-section" id="page-prototype" data-page-section="prototype" aria-labelledby="prototype-title" hidden>
+            <div class="module-heading"><span class="eyebrow">04 / PROTOTYPE</span><h1 id="prototype-title">看一眼交互草图</h1><p>这只是低保真示意，不是可用于真实简历编辑的在线产品。</p></div>
+            <div class="panel" id="prototype-locked"><p>先保存 PRD 草稿，才能查看这一版交互。</p><button class="text-action" type="button" data-page="prd">返回 PRD ↗</button></div>
+            <div class="panel" id="prototype-demo" hidden><div class="panel-top"><h2>修改建议组件</h2><span class="soft-tag">HTML 低保真</span></div><div class="prototype-card"><p class="eyebrow">简历片段 / 示例文本</p><div class="prototype-tabs" role="tablist" aria-label="查看简历片段"><button type="button" role="tab" aria-selected="true" data-proto="before">原文</button><button type="button" role="tab" aria-selected="false" data-proto="after">建议</button></div><p class="resume-snippet" id="prototype-snippet"></p><div class="prototype-reason"><span>为什么这样建议</span><p id="prototype-reason"></p></div><button class="text-action" type="button" id="prototype-review">标记：我已核对这条建议 ↗</button></div><p class="form-feedback" id="prototype-feedback" role="status"></p><button class="primary-action compact" type="button" data-action="finish-prototype">完成原型检视 →</button></div>
+          </section>
+
+          <section class="page-section" id="page-delivery" data-page-section="delivery" aria-labelledby="delivery-title" hidden>
+            <div class="module-heading"><span class="eyebrow">05 / DELIVERY BREAKDOWN</span><h1 id="delivery-title">拆成可以交付的任务</h1><p>从需求与原型回到实现和验证。任务为演示清单，不代表项目已经上线。</p></div>
+            <div class="panel" id="delivery-locked"><p>先检视原型草图，才能查看交付拆解。</p><button class="text-action" type="button" data-page="prototype">返回原型 ↗</button></div>
+            <div class="panel" id="delivery-demo" hidden><div class="panel-top"><h2>交付清单</h2><span class="soft-tag">ARTIFACT 05</span></div><div class="task-grid"><div><span>FRONTEND</span><p>展示原文、建议及修改理由；允许用户逐条确认或拒绝。</p></div><div><span>AI / RULES</span><p>保留来源索引；证据不足时明确标注“待核对”，不补造经历。</p></div><div><span>TEST</span><p>检查证据引用缺失、原文被误覆盖、未确认内容进入导出等边界情况。</p></div></div><button class="primary-action compact" type="button" data-action="export">下载本次演示摘要 ↓</button><p class="export-note" role="status">仅导出当前浏览器中的示例选择和 PRD 草稿。</p></div>
+          </section>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

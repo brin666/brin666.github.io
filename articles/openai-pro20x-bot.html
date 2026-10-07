@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>OpenAI Bot 发布前夕，为什么 OpenAI 还敢砍掉 Pro 20X 一半的额度？ · 百乐</title>
+    <meta name="description" content="关于 Pro 20X 额度、算力竞争与 Bot 形态的一篇个人观察。" />
+    <link rel="stylesheet" href="./reading.css?v=20261003-2" />
+    <link rel="stylesheet" href="./openai-pro20x-bot.css?v=20261003-1" />
+    <script src="./reading.js?v=20261003-3" defer></script>
+  </head>
+  <body data-highlight-key="brin:openai-pro20x-bot-highlights:v1">
+    <div class="reading-page">
+      <header class="page-header">
+        <a class="wordmark" href="../preview.html#articles" aria-label="返回百乐首页的文章栏目"><span class="wordmark-dot" aria-hidden="true"></span>BRIN</a>
+        <a class="back-link" href="../preview.html#articles"><span aria-hidden="true">←</span> 返回文章</a>
+      </header>
+
+      <main>
+        <article class="reading-article" aria-labelledby="article-title">
+          <header class="article-heading">
+            <p class="article-index">02 <span aria-hidden="true">/</span> 文章</p>
+            <h1 id="article-title">OpenAI Bot 发布前夕，为什么 OpenAI 还敢砍掉 Pro 20X 一半的额度？</h1>
+            <p class="article-byline">百乐</p>
+            <figure class="sticker sticker-openai" aria-hidden="true"><img src="../assets/openai-pro20x-bot-stickers/sticker-01.png" alt="" width="931" height="1099" /></figure>
+          </header>
+
+          <div class="article-body" id="article-body">
+            <section class="passage passage-quota">
+              <p data-paragraph="1">今天看到个很有意思的消息：OpenAI 准备恢复 Pro 20X 的订阅，但额度要“砍一半”。这里的砍一半不是直接砍掉一半的用量——据正文所述，减少的只是对应的 API 使用量。通俗点说就是：<mark class="author-mark">以前 GPT 要花 2 倍额度做到的事，现在 1 倍额度就做到了。</mark>这么看额度是少了，你能做的事还是一样多。可大多数用户手上都同时开着好几条线程，额度恐怕只会烧得更快。</p>
+              <figure class="sticker sticker-quota" aria-hidden="true"><img src="../assets/openai-pro20x-bot-stickers/sticker-02.png" alt="" width="1536" height="1024" /></figure>
+            </section>
+
+            <section class="passage passage-reset">
+              <p data-paragraph="2">回头看看 OpenAI 最近的动作。9 月 3 日 Astra 正式发布，之后陆陆续续发了两次重置卡，加一次全局重置；9 月 10 日暂停了 Pro 20X 的订阅，Tibo 也发过算力紧张的文章。这里得先分清重置卡和 reset：重置卡是你自己决定什么时候用的，一张卡就是一次性把 5 小时额度和周额度全部刷新，用掉那天，你的下一次周重置日期也跟着变。所以它带来的不是更多额度，是算力挤在同一天被领走——很多中转站可能一天就把两张卡花完，那天 OpenAI 账面上就等于多了两个满负荷的 Pro 20X 用户。而普通的全局 reset 是被动刷新，存不下来，用不掉就作废，最多算多了一点消耗。</p>
+              <figure class="sticker sticker-reset" aria-hidden="true"><img src="../assets/openai-pro20x-bot-stickers/sticker-03.png" alt="" width="1312" height="1199" loading="lazy" /></figure>
+            </section>
+
+            <section class="passage passage-competition">
+              <p data-paragraph="3">再看友商 Anthropic。9 月 1 日刚发 Fable 5.1，9 月 3 日 Astra 就来了，第一的位置谁也没坐热几天；到 22 号 Opus 5.5 发布，AI 市场明显又活了一轮。相信大家都有看过或者听说过 Opus 做的宣传片，我觉得真的很牛，有些画面表现真的让人感慨：<mark class="author-mark">这真的是 AI 靠代码做出来的视频吗？</mark></p>
+              <p data-paragraph="4">回到正题。Anthropic 说 Opus 5.5 的典型任务成本降了 40%，28 号又跟上 Sonnet 5.5，更快、更便宜、体验更好。就在这种时候，<mark class="author-mark">OpenAI 还要砍掉 Pro 20X 的额度</mark>，还放话说 DevDay 会是一次大更新。</p>
+              <figure class="sticker sticker-anthropic" aria-hidden="true"><img src="../assets/openai-pro20x-bot-stickers/sticker-05.png" alt="" width="1075" height="1187" loading="lazy" /></figure>
+              <figure class="sticker sticker-video" aria-hidden="true"><img src="../assets/openai-pro20x-bot-stickers/sticker-06.png" alt="" width="1536" height="1024" loading="lazy" /></figure>
+            </section>
+
+            <section class="passage passage-bot">
+              <p data-paragraph="5">而 DevDay 的预热里出现了一个 Bot 的身影。官方没承认，但线索都往那儿指。Grok Bot 和 Muse 前段时间有多火不用我说，它们跟 Agent 不太一样：门槛更低，更像一个能直接帮你干活的 AI 助手，24 小时在线，你关掉 App 它还在跑。</p>
+              <p data-paragraph="6">如果 OpenAI 也出 Bot，<mark class="author-mark">这是否意味着 Bot 就是 Agent 的下一种形态？</mark></p>
+              <figure class="sticker sticker-bot" aria-hidden="true"><img src="../assets/openai-pro20x-bot-stickers/sticker-04.png" alt="" width="690" height="1387" loading="lazy" /></figure>
+            </section>
+
+            <section class="passage passage-ending">
+              <p data-paragraph="7">今天就先写到这吧，期待一下 DevDay 的更新。</p>
+            </section>
+          </div>
+
+          <footer class="article-footer"><a href="../preview.html#articles">返回文章 <span aria-hidden="true">↗</span></a></footer>
+        </article>
+      </main>
+
+      <footer class="page-footer"><span>BRIN</span><span>© 2026</span></footer>
+    </div>
+
+    <div class="highlight-toolbar" id="highlight-toolbar" hidden>
+      <button type="button" id="highlight-button" aria-label="将选中的文字标为黄色"><span class="marker-tip" aria-hidden="true"></span>标黄</button>
+    </div>
+    <div class="reading-toast" id="reading-toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

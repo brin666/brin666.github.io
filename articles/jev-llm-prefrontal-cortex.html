@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>Jev 会是 LLM 大脑的前额叶吗？ · 百乐</title>
+    <meta name="description" content="关于 Jev、快速判断与决策边界的一篇个人记录。" />
+    <link rel="stylesheet" href="./reading.css?v=jev-article-20261003-2" />
+    <script src="./reading.js?v=jev-article-20261003-2" defer></script>
+  </head>
+  <body>
+    <div class="reading-page">
+      <header class="page-header">
+        <a class="wordmark" href="../preview.html#articles" aria-label="返回百乐首页的文章栏目"><span class="wordmark-dot" aria-hidden="true"></span>BRIN</a>
+        <a class="back-link" href="../preview.html#articles"><span aria-hidden="true">←</span> 返回文章</a>
+      </header>
+
+      <main>
+        <article class="reading-article" aria-labelledby="article-title">
+          <header class="article-heading">
+            <p class="article-index">01 <span aria-hidden="true">/</span> 文章</p>
+            <h1 id="article-title">Jev 会是 LLM 大脑的前额叶吗？</h1>
+            <p class="article-byline">百乐</p>
+            <figure class="sticker sticker-brain" aria-hidden="true"><img src="../assets/jev-stickers/sticker-01.png" alt="" width="1078" height="920" /></figure>
+          </header>
+
+          <div class="article-body" id="article-body">
+            <section class="passage passage-intro">
+              <p data-paragraph="1">前额叶是我们大脑参与决策、行为调节、注意控制的重要部分。就像你收到一条女朋友的信息，大脑会告诉你：已读不回，晚上你就死翘翘了。这就是前额叶的作用。Jev 作为一个“快判断模型”，刚了解的时候，我感觉它和前额叶是差不多的角色，但仔细想想，也有很多不同。</p>
+              <p data-paragraph="2">前段时间 Jev 讨论度很高，但我忙着工作，没赶上第一波热潮。也让我有更多的时间来想想：它适合用在哪些地方？</p>
+              <p data-paragraph="3"><mark class="author-mark">“高频决策模型”</mark>这个概念很新鲜，也让我想到几个想用 Jev 试试的场景，先在这里分享。</p>
+              <figure class="sticker sticker-fast" aria-hidden="true"><img src="../assets/jev-stickers/sticker-02.png" alt="" width="574" height="209" /></figure>
+            </section>
+
+            <section class="passage passage-chat">
+              <p data-paragraph="4">先说企业微信和钉钉里的群机器人。不知道大家有没有遇到过这种情况：想让机器人调取信息，得先 @ 它；不 @，它就不会回复。</p>
+              <p data-paragraph="5">如果希望机器人在没被 @ 时也能判断哪些消息需要回应，就得先筛选群里的消息。我想到的做法是用一个小模型判断这条消息值不值得回复，再让机器人处理筛选出的消息。在这样的场景下，Jev 只判断的功能显得非常有效。</p>
+              <figure class="sticker sticker-chat" aria-hidden="true"><img src="../assets/jev-stickers/sticker-04.png" alt="" width="1250" height="900" loading="lazy" /></figure>
+            </section>
+
+            <section class="passage passage-safety">
+              <p data-paragraph="6">另一个方向是安全检查插件：在执行某一步操作前，先让 Jev 判断风险，再给出提示。我自己也做了一个“热点 Agent Skill 判断器”。我平时会关注 GitHub 上热门的 Skill，就让 Jev 先检查 Skill 内容，再判断大家对它所属主题的关注度。</p>
+              <p data-paragraph="7">这么一看，Jev 在其中确实有一点“前额叶”的味道。</p>
+              <p data-paragraph="8">但可惜的是，出于对速度的妥协，Jev 的思考并不深入，给出的答案也不够准确。</p>
+            </section>
+
+            <section class="passage passage-game">
+              <p data-paragraph="9">社区里也有人提出让 Jev 配合具身智能、参与股市交易或打游戏等等方向的想法。这些方向都挺有意思，大家可以去研究一下。</p>
+              <p data-paragraph="10">其中 Jev 游玩宝可梦的项目很吸引我。作者把 Jev 接入 harness，配合 Opus 5：Jev 负责选技能、换宝可梦、去哪里、和谁说话等等；Opus 5 负责查看游戏日志，修改 harness，为 Jev 提供选项。Jev 最终在不到一周的时间通关了初代《宝可梦 红》。Jev 负责做决策，Opus 则像一个站在背后的教练。我想，以后 Agent 的发展也会像这样吧。</p>
+              <figure class="sticker sticker-game" aria-hidden="true"><img src="../assets/jev-stickers/sticker-06.png" alt="" width="1508" height="947" loading="lazy" /></figure>
+            </section>
+
+            <section class="passage passage-ending">
+              <p data-paragraph="11">那么，Jev 会是 LLM 大脑的前额叶吗？我的想法是：<mark class="author-mark">至少目前还不是。</mark>高频和快速是它的特点，但是它的决策能力还不算优秀。</p>
+              <p data-paragraph="12">TypeSafe AI 的探索给了我们一个值得继续观察的方向。或许 AGI 到来时，Jev 会以一种新的姿态出现吧。</p>
+            </section>
+          </div>
+
+          <footer class="article-footer"><a href="../preview.html#articles">返回文章 <span aria-hidden="true">↗</span></a></footer>
+        </article>
+      </main>
+
+      <footer class="page-footer"><span>BRIN</span><span>© 2026</span></footer>
+    </div>
+
+    <div class="highlight-toolbar" id="highlight-toolbar" hidden>
+      <button type="button" id="highlight-button" aria-label="将选中的文字标为黄色"><span class="marker-tip" aria-hidden="true"></span>标黄</button>
+    </div>
+    <div class="reading-toast" id="reading-toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
