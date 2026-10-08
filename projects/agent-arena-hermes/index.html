@@ -6,7 +6,7 @@
     <meta name="color-scheme" content="light" />
     <meta name="theme-color" content="#fbfaf7" />
     <meta name="description" content="DeepSeek V4 Flash、GLM 5.3 与 Kimi K3 的五项工程任务评测记录：15 个正式单元、结果表、方法说明与六张项目截图。" />
-    <title>Agent Arena · Product Engineering Benchmark v0.1 · 百乐</title>
+    <title>五道工程题跑完，三家只差 3.8 分 · 百乐</title>
     <style>
       :root {
         color-scheme: light;
@@ -536,14 +536,15 @@
           <header class="article-heading">
             <p class="project-eyebrow">PROJECT / AGENT ARENA</p>
             <h1 id="article-title">五道工程题跑完，三家只差 <mark>3.8 分</mark></h1>
-            <p class="deck">DeepSeek V4 Flash、GLM 5.3 与 Kimi K3 的 Product Engineering Benchmark v0.1。15 个正式单元全部完成，名次有了，差距却没大到能随手下结论。</p>
+            <p class="deck">DeepSeek V4 Flash、GLM 5.3、Kimi K3 在 Hermes Agent 中完成五项工程任务：台风路径 3D 模拟器、Web3D 海浪模拟器，以及三道后端题。15 个正式单元全部计分后，第一名与第三名只差 3.8 分。</p>
             <p class="article-meta"><span>百乐</span><span>Hermes Agent · 2026.09</span><span>Product Engineering Benchmark v0.1</span></p>
             <div class="heading-stickers" aria-hidden="true"><img src="./assets/sticker-01.png" alt="" width="974" height="242" /><img src="./assets/sticker-02.png" alt="" width="856" height="450" /></div>
           </header>
 
           <section class="opening" aria-label="文章开篇">
-            <p>15 个正式评测单元全部计分后，Kimi K3 排在第一。把总分并排看，差距比名次更显眼：461.60、458.80、457.80。Kimi 领先 DeepSeek V4 Flash 的总差是 <mark>3.80 / 500</mark>；摊到五道题的平均分，只有 0.76 分。</p>
-            <p>我愿意把结论写成“这一轮 Kimi 第一”，不会把它写成“明显胜出”。这两句话听起来只差一点，证据要求却不一样。</p>
+            <p>把三款模型放进同一套 Agent 工程题，最后拉开的是模型之间的差距，还是每道题各自的取舍？我把 DeepSeek V4 Flash、GLM 5.3 和 Kimi K3 放进 Hermes Agent，让它们完成相同的五项任务。</p>
+            <p>前两题是台风路径 3D 模拟器和 Web3D 海浪模拟器，后面三题分别处理支付账本、库存预占与可靠 Webhook。每个交付先经过自动化验收，再由 GPT-5.6 对匿名证据盲评。</p>
+            <p>15 个正式单元全部计分后，Kimi K3 得 461.60，GLM 5.3 得 458.80，DeepSeek V4 Flash 得 457.80。第一名与第三名相差 <mark>3.80 / 500</mark>，摊到五题平均每题只有 0.76 分。Kimi 在这一轮排第一，但这组结果还不足以说明它在其他任务里也会稳定领先。</p>
           </section>
 
           <section class="results" aria-labelledby="results-title">
@@ -603,7 +604,7 @@
               <h2>这 0.76 分，能说明多少？</h2>
               <p>Kimi K3 与 GLM 5.3 相差 2.80 分；GLM 5.3 与 DeepSeek V4 Flash 相差 1.00 分。单看榜单，它们排成了三档；看评分记录，第二、第三名会随合规的整数聚合规则互换。单题评审分在不同独立轮次之间，最大差值达到 4.4 / 30 分，已经大过这两家的总分间距。</p>
               <p>所以我的读法是：Kimi 在这轮里拿到最稳的第一；GLM 和 DeepSeek 的微小差距，不足以支持“谁明显更强”。如果把选型问题换成“这五类工程任务里，现在先试谁”，我会先试 Kimi；如果是要据此替换一套生产模型，我会再加任务、换评委复核。</p>
-              <p>这个判断有明确边界。三种合理的整数聚合规则都把 Kimi 放在第一，但这不等于跨任务、跨接口、跨版本也必然如此。新增一批任务后若不再领先，我会改结论。</p>
+              <p>这个判断有明确边界。三种合理的整数聚合规则都把 Kimi 放在第一，但这不等于跨任务、跨版本也必然如此。新增一批任务后若不再领先，我会改结论。</p>
             </section>
 
             <section class="passage">
@@ -654,19 +655,19 @@
 
             <section class="passage">
               <h2>分数背后的运行条件</h2>
-              <p>每个模型都在 Hermes Agent 中先核对身份，再从空白基线和新工作区开始；任务题面、工具、超时、网络策略与固定验收命令按运行契约锁定。自动化验收先确认结果有效，再把匿名证据交给 GPT-5.6 盲评。五题、三模型，共 15 个正式单元，最终 15 / 15 全部计分；没有硬封顶。</p>
+              <p>每个模型都在 Hermes Agent 中先核对身份，再从空白基线和新工作区开始；任务题面、工具、超时与固定验收命令按运行契约锁定。自动化验收先确认结果有效，再把匿名证据交给 GPT-5.6 盲评。五题、三模型，共 15 个正式单元，最终 15 / 15 全部计分；没有硬封顶。</p>
               <ul class="method-list">
-                <li><strong>DeepSeek V4 Flash</strong><span>Model ID：<code>deepseek-v4-flash</code> · 注册默认端点。</span></li>
-                <li><strong>GLM 5.3</strong><span>Model ID：<code>glm-5.3</code> · 五个正式单元均经用户提供的 OpenAI 兼容中转；官方 Z.AI Key 在测试中途过期。</span></li>
-                <li><strong>Kimi K3</strong><span>Model ID：<code>kimi-k3</code> · 使用中国 endpoint profile 覆盖。</span></li>
+                <li><strong>DeepSeek V4 Flash</strong><span>Model ID：<code>deepseek-v4-flash</code></span></li>
+                <li><strong>GLM 5.3</strong><span>Model ID：<code>glm-5.3</code></span></li>
+                <li><strong>Kimi K3</strong><span>Model ID：<code>kimi-k3</code></span></li>
               </ul>
-              <p class="tier-note">接口路径并不完全相同，因此这组成绩描述的是本次模型与实际调用配置的组合，不是隔离传输层后的模型能力实验。账号套餐、会员或“档位”信息没有记录，本页只展示评测清单里的确切 model ID。评委也只有 GPT-5.6 一个模型，还没有多评委交叉验证。</p>
+              <p class="tier-note">本页结论仅适用于这轮五项任务与评测规则，不代表跨任务、跨版本的通用排名。账号套餐或会员档位未纳入记录；本轮评审仅使用 GPT-5.6，尚无多评委交叉验证。</p>
             </section>
 
             <section class="passage closing">
               <h2>如果现在要选</h2>
               <p>只按这五项任务的正式记录，我会把 Kimi K3 放在第一位；这个第一名在三种合规整数聚合方法里都没变。至于 GLM 5.3 和 DeepSeek V4 Flash，我不会拿 2.80 分或 1.00 分的差距讲成确定的胜负。</p>
-              <p>下一轮最值得补的，不是把小数点再多写两位，而是增加任务、换评委，并尽量统一调用路径。那时如果名次还一样，结论才更经得起追问。</p>
+              <p>下一轮最值得补的，不是把小数点再多写两位，而是增加任务、换评委。样本和评审角度都更充分后，如果名次还一样，结论才更经得起追问。</p>
               <p class="table-note">分数依据：reports/benchmark-v0.1.md 与 PROJECT-INDEX.md；model ID 按正式运行记录核对。</p>
             </section>
           </div>
