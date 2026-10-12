@@ -1,0 +1,69 @@
+{
+  "provenance": "Approved isolated Mock walkthrough; sample content, not user research or live model output.",
+  "originalIdea": "想做一个简历优化助手，展示修改理由和前后对比，不编造经历。",
+  "questions": [
+    {
+      "question": "这个功能主要服务哪类求职者：应届生、转行用户，还是已有工作经验的求职者？不同用户的简历问题会影响 PRD 的页面和规则设计。",
+      "answer": "优先服务应届生和转行求职者。"
+    },
+    {
+      "question": "用户完成一次简历优化后，期望获得什么可验证结果？例如匹配度分数提升、面试邀约增加，还是导出可投递的简历？",
+      "answer": "能看懂修改理由，逐条确认后导出可投递的简历。"
+    },
+    {
+      "question": "第一版明确不做哪些功能？例如自动投递、面试模拟、多人在线协作是否都不做？",
+      "answer": "第一版不做自动投递、面试预约和多人协作。"
+    },
+    {
+      "question": "如果 AI 生成结果不可信，系统应该如何提示或补救？例如展示修改理由、允许逐条驳回、提供人工重写入口？",
+      "answer": "展示修改理由，允许逐条驳回；不补写虚假经历。"
+    }
+  ],
+  "prd": {
+    "id": "f4fe94c0-dc32-41a2-bad4-1f30ee824f76",
+    "title": "JD 匹配简历优化工作台 - PRD",
+    "version": 1,
+    "sourceIds": [
+      "4dbe75b8-64c1-4937-a809-435837963a76",
+      "dbd79280-d49a-4b28-b5aa-d4e9a195ad7f"
+    ],
+    "interviewId": "06c96f3b-9882-4a56-b515-3c71237c5459",
+    "scope": "- 简历文件上传与解析\n- JD 文本输入与解析\n- 简历-JD 匹配度分析\n- 逐条优化建议与理由解释\n- 修改前后对比\n- 一键导出 Markdown/PDF 简历",
+    "outOfScope": "- 自动投递职位\n- 面试预约\n- 多人在线协作\n- 企业 HR 后台",
+    "acceptance": "- 上传简历后 10 秒内完成解析并展示结果\n- 每条建议均包含理由和修改前后对比\n- 用户可逐条采纳/忽略且状态实时保存\n- 可导出包含所有已采纳修改的新简历"
+  },
+  "prototype": {
+    "id": "3d1e5975-bb6b-4136-a796-03bed3b220eb",
+    "title": "JD 匹配简历优化工作台 - 原型说明",
+    "version": 1,
+    "sourceIds": [
+      "f4fe94c0-dc32-41a2-bad4-1f30ee824f76"
+    ],
+    "pages": [
+      {
+        "id": "home",
+        "name": "首页 / 上传简历页"
+      },
+      {
+        "id": "jd-input",
+        "name": "岗位 JD 输入页"
+      },
+      {
+        "id": "analyzing",
+        "name": "AI 分析中页面"
+      },
+      {
+        "id": "result",
+        "name": "优化结果页"
+      },
+      {
+        "id": "explain",
+        "name": "修改解释页"
+      },
+      {
+        "id": "export",
+        "name": "导出简历页"
+      }
+    ]
+  }
+}
