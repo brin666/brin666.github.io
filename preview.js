@@ -313,12 +313,9 @@
 
   const skillShowcase = document.querySelector('.skill-showcase');
   const skillToggle = skillShowcase?.querySelector('.skill-hitarea');
-  const skillDetails = document.querySelector('#skillbridge-details');
-  const skillHint = skillShowcase?.querySelector('.skill-hint');
   const skillVisual = skillShowcase?.querySelector('.skill-visual');
   const skillMotionLayer = skillShowcase?.querySelector('.skill-motion-layer');
   const fineSkillPointer = window.matchMedia('(hover: hover) and (pointer: fine)');
-  let skillFeedbackTimer;
   let skillMotionFrame = 0;
   let skillTargetX = 0;
   let skillTargetY = 0;
@@ -349,20 +346,6 @@
   skillToggle?.addEventListener('pointerleave', () => scheduleSkillMotion(0, 0));
   reducedMotion.addEventListener('change', event => {
     if (event.matches) scheduleSkillMotion(0, 0);
-  });
-
-  skillToggle?.addEventListener('click', () => {
-    const open = skillToggle.getAttribute('aria-expanded') !== 'true';
-    skillToggle.setAttribute('aria-expanded', String(open));
-    skillToggle.setAttribute('aria-label', `${open ? '收起' : '展开'} SkillBridge 简介`);
-    skillDetails.hidden = !open;
-    skillShowcase.classList.toggle('is-open', open);
-    if (skillHint?.firstChild) skillHint.firstChild.textContent = open ? '点击收起简介 ' : '点击查看简介 ';
-    clearTimeout(skillFeedbackTimer);
-    skillShowcase.classList.remove('is-activated');
-    void skillShowcase.offsetWidth;
-    skillShowcase.classList.add('is-activated');
-    skillFeedbackTimer = setTimeout(() => skillShowcase.classList.remove('is-activated'), 620);
   });
 
   if ('IntersectionObserver' in window && !reducedMotion.matches) {
