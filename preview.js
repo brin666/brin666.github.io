@@ -357,7 +357,7 @@
     skillToggle.setAttribute('aria-label', `${open ? '收起' : '展开'} SkillBridge 简介`);
     skillDetails.hidden = !open;
     skillShowcase.classList.toggle('is-open', open);
-    skillHint.firstChild.textContent = open ? '点击收起简介 ' : '点击查看简介 ';
+    if (skillHint?.firstChild) skillHint.firstChild.textContent = open ? '点击收起简介 ' : '点击查看简介 ';
     clearTimeout(skillFeedbackTimer);
     skillShowcase.classList.remove('is-activated');
     void skillShowcase.offsetWidth;
