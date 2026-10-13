@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f6f1">
+  <title>转录近景 · 14 秒动作样段</title>
+  <meta name="description" content="观察 DNA 局部打开、RNA 接入与 RNA 聚合酶前移的 14 秒三维动作样段。">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23e8eee7'/%3E%3Cpath d='M12 6C32 14 8 26 28 34M28 6C8 14 32 26 12 34M13 10h14M15 20h10M13 30h14' fill='none' stroke='%23546961' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./living.css">
+  <script type="importmap">{"imports":{"three":"../vendor/three.module.js"}}</script>
+  <script type="module" src="./living-app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#player">跳到播放控制</a>
+  <main class="page-shell">
+    <header class="page-header">
+      <a class="back-link" href="../">← 基因表达实验</a>
+      <span class="edition"><i></i> TRANSCRIPTION / STUDY 02</span>
+    </header>
+
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">转录 · 延长阶段</p>
+        <h1 id="page-title">转录近景<span>14 秒动作样段</span></h1>
+      </div>
+      <p class="intro-note">看核苷酸如何对位，接入不断延伸的 RNA。</p>
+    </section>
+
+    <section class="exhibit" aria-label="转录三维动作样段">
+      <div class="exhibit-head">
+        <span class="scene-label"><i aria-hidden="true"></i> DNA → RNA</span>
+        <div class="scene-actions" aria-label="场景设置">
+          <button id="perspective" type="button" aria-pressed="true" title="局部透视以查看内部链；关闭可观察完整外形" disabled>透视：开</button>
+          <button id="labels" type="button" aria-pressed="false" title="显示或隐藏结构标签" disabled>标签</button>
+          <button id="motion" type="button" aria-pressed="true" title="切换局部动态；连接过程保持一致" disabled>局部动态</button>
+          <button id="camera" type="button" title="复位视角" disabled>复位视角</button>
+        </div>
+      </div>
+      <div id="scene" class="scene" aria-label="可拖动旋转和缩放的转录模型">
+        <div id="loading" class="loading" role="status"><span aria-hidden="true"></span>正在准备三维场景…</div>
+        <div id="scene-error" class="scene-error" role="alert" hidden>聚合酶模型资源载入失败，播放控制已停用。请稍后刷新重试。</div>
+      </div>
+      <div id="selection" class="selection" role="status" aria-live="polite" hidden>
+        <strong id="selection-title"></strong><span id="selection-text"></span>
+      </div>
+    </section>
+
+    <section class="player" id="player" aria-label="14 秒样段播放控制">
+      <div class="player-line">
+        <div class="transport">
+          <button id="play" class="play-button" type="button" aria-label="播放样段" disabled>
+            <span id="play-icon" aria-hidden="true">▶</span><span id="play-label">播放</span>
+          </button>
+          <button id="replay" class="replay-button" type="button" aria-label="从头重播样段" disabled>↺ <span>重播</span></button>
+        </div>
+        <div class="direction-tools" aria-label="镜头方向">
+          <div class="direction-switch" role="group" aria-label="镜头与节奏">
+            <button id="direction-guided" type="button" aria-pressed="true" disabled>镜头引导</button>
+            <button id="direction-fixed" type="button" aria-pressed="false" disabled>固定对照</button>
+          </div>
+          <button id="resume-guide" class="resume-guide" type="button" hidden disabled>继续镜头引导</button>
+        </div>
+        <p class="action-note" id="action-note">观察局部 DNA 与聚合酶</p>
+        <output id="time" class="time-readout" for="progress">0.00 <span>/ 14.00 秒</span></output>
+      </div>
+      <div class="timeline">
+        <input id="progress" type="range" min="0" max="14" step="0.01" value="0" aria-label="样段时间" disabled>
+        <div class="timeline-ends" aria-hidden="true"><span>0 秒</span><span>14 秒</span></div>
+      </div>
+    </section>
+
+    <p class="model-comparison"><span id="model-status">聚合酶 · 实验结构简化</span><a id="model-compare" href="?model=illustrated">查看旧形体对照</a></p>
+
+    <details class="notes">
+      <summary>模型说明</summary>
+      <p>镜头引导会慢放并跟随工作区；固定对照沿用原镜头与原节奏。两种模式使用相同模型和材质。拖动或滚轮会接管镜头，可点“继续镜头引导”接回导览。画面的弹性和颜色用于教学示意，不代表真实分子运动速度；回拖用于教学回看，不表示反应逆向发生。</p>
+      <p>沿用 2019 人教必修 2 图 4-4 的教学转录关系。只有聚合酶的蛋白质轮廓由实验坐标生成：来源为酿酒酵母 RNA 聚合酶 II 延长复合物（<a href="https://www.rcsb.org/structure/1Y1W" target="_blank" rel="noopener">PDB 1Y1W · 4.00 Å</a>）。当前使用未剖切的简化曲面；开启“透视”后，工作区靠近观众的表面局部淡出，随视角调整，外围保留实体质感。关闭透视可以观察完整外形。这是教学观察方式，不表示真实聚合酶透明。</p>
+      <p>它代表这一种聚合酶及其已测得的部分，不是所有聚合酶的统一外形，也不是原子级精确表面。DNA、RNA 沿用教材示意序列、路径和放大比例，没有采用该实验的核酸坐标。颜色、光泽和慢放属于教学表现，十二个亚基保持静态。</p>
+      <p>“上一版对照”使用原绿色材质和固定剖切。两版镜头、时间点和配对过程相同；当前版同时更新表面材质与观察方式。拖动视角后切换版本，会恢复该时间点的预设镜头。</p>
+      <figure class="structure-reference"><a href="./assets/structural/full-envelope-preview.webp" target="_blank" rel="noopener"><img src="./assets/structural/full-envelope-preview.webp" width="850" height="779" loading="lazy" alt="由酵母 Pol II 实验坐标生成的未剖切蛋白简化曲面"></a><figcaption>未剖切的曲面参考。当前演示保留这些完整曲面，透视只改变工作区的可见程度。</figcaption></figure>
+      <nav aria-label="相关页面"><a href="../">返回实验入口</a><a href="../?sample=transcription">打开原转录样段</a></nav>
+    </details>
+  </main>
+</body>
+</html>

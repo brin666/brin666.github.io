@@ -1,0 +1,106 @@
+/* The molecular stage is the main visual. Controls use a quiet, warm paper frame. */
+:root{--page:#f8f7f3;--ink:#25352f;--muted:#6b756f;--rule:rgba(37,53,47,.14);--accent:#b39449;--exhibit-paper:#f8f7f3;--exhibit-dark:#142628;--exhibit-gold:#d9c78d}
+[hidden]{display:none!important}
+body{background:var(--page);color:var(--ink)}
+.lab-shell{width:min(1600px,calc(100% - 64px))}
+.lab-header{position:relative;min-height:66px;padding:10px 0;gap:24px}
+.identity{gap:28px}.title-line{gap:15px}.title-line h1{font-size:24px;font-weight:650;letter-spacing:-.6px}.title-line>span{font-size:12px;color:var(--muted)}
+.back-link{color:#6b756f}.back-link span{font-size:9px;letter-spacing:1.2px}
+.header-actions{display:flex;align-items:center;gap:12px}
+.details-toggle,.objects-toggle{min-height:40px;padding:8px 13px;font-size:12px;border-radius:7px}
+.objects-toggle{display:flex;gap:13px;align-items:center}.objects-toggle[aria-expanded=true]{background:#e9e8e0}
+.chapters{min-height:48px;gap:32px}.chapter-button{min-height:48px;font-size:12px;gap:9px}.chapter-button span{font-size:10px;color:#77817a}.chapter-button[aria-current=step]{color:#25352f}
+.stage{border-radius:12px}.stage-heading{left:25px;right:25px;top:22px}.stage-heading h2{font-size:21px;letter-spacing:-.3px}.stage-meta{gap:6px;font-size:10px}
+.chapter-book{display:inline-flex;align-items:center;min-height:28px;color:#d9c78d;font-size:11px;text-decoration:none;text-underline-offset:4px;pointer-events:auto}.chapter-book:hover{text-decoration:underline}
+.view-controls{border-radius:8px;gap:3px;bottom:16px;right:16px}.view-controls .view-button{font-size:11px;min-height:36px}.view-controls .icon-button{height:36px;width:34px}
+body[data-renderer=webgl] .view-controls .view-button[aria-pressed=true]{background:#d5ddce;color:#21372f}
+body[data-renderer=webgl] .view-controls .view-mode-group{background:transparent;padding:0}
+body[data-renderer=webgl] .view-controls .view-button[aria-pressed=false]{color:#c5d8ce}
+.stage-bottom{font-size:10px;left:25px;bottom:24px}.base-legend span{font-size:9px}
+.transport{padding:11px 0 10px;margin-top:10px}.transport-summary{gap:35px}.process-caption strong{font-weight:600;font-size:14px}.process-caption p{font-size:12px;color:#67756c;line-height:1.6}.phase-mark{background:#b39449}.progress-top{font-size:11px}.play-button{background:#2d4238;border-color:#2d4238;font-size:12px;min-height:38px;border-radius:7px}.play-button:hover{background:#41584b}.reset-button,.low-motion,.speed-group button{font-size:11px}.lab-footer{font-size:10px;color:#758077}
+.panel-heading{padding:18px 20px 14px}.panel-heading h2{font-size:18px}.panel-scroll{padding:0 20px 24px}.chapter-prompt .observation{font-size:13px;line-height:1.8}.sequence-hint,.inspector p{font-size:12px}.inspector h3{font-size:18px}.structure-access button{font-size:12px;min-height:36px;padding:6px 11px}.sequence-heading h2{font-size:14px}.panel-section>.eyebrow{font-size:10px}.text-button{font-size:12px}.inspector .text-button{margin-right:12px}.summary-questions p,.quiz-question p,.quiz summary{font-size:12px}
+.object-menu{position:absolute;top:calc(100% - 3px);right:0;z-index:30;width:min(510px,calc(100vw - 40px));padding:14px;background:#fdfcf8;border:1px solid #d4dacf;border-radius:12px;box-shadow:0 16px 44px rgba(23,43,33,.15);display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.object-menu button{display:flex;flex-direction:column;gap:5px;align-items:flex-start;text-align:left;min-height:66px;padding:12px 10px;border-top:1px solid var(--rule);border-radius:0;font-size:13px;font-weight:600}
+.object-menu button:nth-of-type(-n+2){border-top:0}
+.object-menu button:hover{background:#edf0e9}.object-menu small{font-size:10px;color:var(--muted);font-weight:400}
+.knowledge-tip{position:fixed;z-index:70;max-width:275px;display:flex;flex-direction:column;gap:6px;background:#f8f7f1;color:#263c31;border:1px solid #d2dacb;border-radius:8px;padding:13px 16px;box-shadow:0 8px 26px rgba(0,0,0,.15);pointer-events:none}
+.knowledge-tip strong{font-size:13px;font-weight:600}.knowledge-tip>span{font-size:12px;color:#6c5e33}.knowledge-tip small{font-size:10px;line-height:1.6;color:#738077}
+.object-lesson{position:fixed;inset:0;z-index:40;background:var(--exhibit-paper);padding:0 32px 24px;display:grid;grid-template-rows:74px minmax(0,1fr);overflow:hidden}
+body[data-object-lesson=true] .lab-shell{visibility:hidden;pointer-events:none}
+.object-header{display:flex;align-items:center;gap:26px;min-width:0;border-bottom:1px solid var(--rule);margin-bottom:16px}
+.object-back{display:flex;align-items:center;gap:14px;min-height:44px;font-size:13px;white-space:nowrap}.object-back>span{font-size:22px;font-weight:300}.object-back:hover{color:#97792d}
+.object-breadcrumb{font-size:11px;color:#738077;display:flex;gap:15px;align-items:center}.object-breadcrumb>span{color:#abb2a8}
+.book-link{margin-left:auto;display:flex;align-items:center;min-height:40px;font-size:12px;color:#796431;text-decoration:none}.book-link:hover{text-decoration:underline;text-underline-offset:4px}
+.object-layout{display:grid;grid-template-columns:minmax(0,1fr) 355px;gap:0;min-height:0}
+.object-stage{position:relative;min-height:0;background:var(--exhibit-dark);border-radius:12px;overflow:hidden;color:#e1e9df}
+.object-stage-heading{position:absolute;top:24px;left:25px;right:25px;display:flex;justify-content:space-between;gap:20px;pointer-events:none;z-index:2;font-size:12px}
+.object-stage-heading>span+span{font-size:10px;color:#9ab1a4}
+.object-scene{position:absolute;inset:0;width:100%;height:100%;touch-action:none}.object-scene>canvas{width:100%;height:100%;display:block;touch-action:none}
+.object-loading{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:13px;max-width:80%;line-height:1.8;text-align:center;color:#c8d8cb;pointer-events:none;z-index:3}
+.object-tools{position:absolute;bottom:54px;right:22px;display:flex;gap:4px;padding:4px;border:1px solid #53645c;border-radius:7px;background:#18302eea;z-index:2}
+.object-tools button{min-height:36px;padding:7px 12px;border-radius:4px;font-size:11px;color:#e2eadb}.object-tools button:hover{background:#3b5145}.object-tools button[aria-pressed=true]{background:#d3dbc8;color:#293d30}
+.object-model-note{position:absolute;bottom:20px;left:25px;right:25px;max-width:700px;font-size:10px;line-height:1.6;color:#9fb4a7;pointer-events:none;z-index:2}
+.object-teaching{display:flex;flex-direction:column;min-height:0;padding:20px 0 6px 35px;overflow:auto;scrollbar-width:thin;scrollbar-color:#b3bbad transparent}
+.object-introduction h1{font-size:36px;line-height:1.25;font-weight:600;letter-spacing:-1.2px;margin:0}
+.object-subtitle{font-size:14px;margin:13px 0 0;color:#526b58}.object-summary{font-size:13px;line-height:1.95;color:#778176;margin:18px 0 23px}
+.object-steps{border-top:1px solid #ccd4c7;border-bottom:1px solid #ccd4c7;margin-bottom:23px}
+.object-steps button{display:flex;width:100%;gap:15px;align-items:center;text-align:left;min-height:47px;font-size:12px;color:#778176;border-bottom:1px solid #e5e8de;padding:8px 0}
+.object-steps button:last-child{border-bottom:0}.object-steps button>span{font-size:10px;font-family:Consolas,monospace;color:#9ba492;min-width:19px}.object-steps button>i{margin-left:auto;font-style:normal;font-size:17px;opacity:0;color:#6e855c}.object-steps button[aria-current=step]{color:#29442e;font-weight:650}.object-steps button[aria-current=step]>span{color:#967e3a}.object-steps button[aria-current=step]>i{opacity:1}.object-steps button:hover{color:#29442e}
+.object-step-copy{min-height:135px}.object-step-copy>p:first-child{font-size:10px;font-family:Consolas,monospace;color:#8c966e;margin-bottom:10px}.object-step-copy h2{font-size:19px;line-height:1.5;font-weight:550;letter-spacing:-.4px;margin:0 0 12px}.object-step-copy>p:last-child{font-size:14px;line-height:1.9;color:#4f6553}
+.object-extension{font-size:11px;line-height:1.8;color:#7d8272;border-top:1px solid var(--rule);padding-top:13px;margin-top:18px}
+.object-navigation{margin-top:auto;display:flex;gap:10px;padding-top:25px}.object-navigation button{min-height:44px;border-radius:6px;font-size:12px}.object-navigation button:first-child{border:1px solid #c8d1c1;width:46px;flex-shrink:0;font-size:19px}.object-navigation button:disabled{opacity:.4;cursor:default}.object-navigation button+button{display:flex;align-items:center;justify-content:space-between;flex:1;background:#354b37;color:#f2f3e7;padding:10px 17px}.object-navigation button+button:hover{background:#4b624b}
+.object-scene .lesson-label{font-family:inherit!important}
+button:focus-visible,a:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px solid #a68841;outline-offset:3px}
+@media(min-width:1700px){.object-lesson{padding-right:max(32px,calc((100vw - 1600px)/2));padding-left:max(32px,calc((100vw - 1600px)/2))}.object-layout{grid-template-columns:minmax(0,1fr) 390px}.object-introduction h1{font-size:42px}}
+@media(max-width:1050px){.lab-shell{width:calc(100% - 40px)}.header-actions{gap:4px}.identity{gap:16px}.chapters{gap:22px}.stage-meta{font-size:9px}.view-controls{max-width:calc(100% - 28px)}.stage-bottom{bottom:64px}.object-lesson{padding:0 20px 20px}.object-layout{grid-template-columns:minmax(0,1fr) 310px}.object-teaching{padding-left:25px}.object-introduction h1{font-size:31px}.object-summary{font-size:12px}.object-stage-heading{left:20px;right:20px;top:20px}.object-stage-heading>span+span{display:none}}
+@media(max-width:760px){.lab-shell{width:calc(100% - 24px)}.lab-header{min-height:58px;gap:6px;padding:6px 0}.identity{gap:10px}.title-line h1{font-size:19px}.title-line>span{font-size:9px;margin-top:3px}.header-actions{gap:3px}.objects-toggle,.details-toggle{font-size:10px;min-height:44px;padding:6px 8px;gap:5px}.objects-toggle span{display:none}.chapters{min-height:45px;gap:0}.chapter-button{min-height:45px;font-size:10px;gap:5px}.chapter-button span{font-size:8px}.stage-heading{left:16px;right:16px;top:16px}.stage-heading h2{font-size:17px}.stage-meta{font-size:8px;gap:0}.chapter-book{font-size:9px;min-height:24px}.stage-meta .model-note{display:none}.view-controls .view-button,.view-controls .icon-button{min-height:44px;height:44px;font-size:10px}.stage-bottom{bottom:113px;left:16px;font-size:9px}.transport-summary{gap:4px}.process-caption strong{font-size:12px}.process-caption p{font-size:10px}.process-caption .mono{font-size:8px}.transport{padding:8px 0 calc(8px + env(safe-area-inset-bottom))}.play-button,.reset-button,.play-group .icon-button{min-height:44px}.progress-top{font-size:9px}.play-options{gap:6px}.reset-button,.speed-group button,.low-motion{font-size:10px}.panel-scroll{padding:0 12px 20px}.panel-heading{padding:6px 12px}.panel-heading h2{font-size:16px}.chapter-prompt .observation{font-size:12px}.object-menu{right:0;top:calc(100% + 2px);width:min(420px,calc(100vw - 24px));gap:0 6px;padding:10px}.object-menu button{font-size:12px;min-height:64px}.object-menu small{font-size:9px}.object-lesson{padding:0 12px;grid-template-rows:64px minmax(0,1fr)}.object-header{gap:7px;margin-bottom:9px}.object-back{font-size:11px;gap:9px}.object-breadcrumb{display:none}.book-link{font-size:10px}.object-layout{display:block;overflow:auto;padding-bottom:24px;overscroll-behavior:contain}.object-stage{height:max(300px,44svh);border-radius:10px}.object-stage-heading{top:16px;left:16px;right:16px;font-size:11px}.object-teaching{padding:25px 10px 12px;overflow:visible}.object-introduction h1{font-size:30px;letter-spacing:-.6px}.object-summary{font-size:13px;margin:15px 0 20px}.object-steps{display:flex;gap:12px;margin-bottom:22px}.object-steps button{flex:1;flex-direction:column;gap:6px;align-items:flex-start;min-height:65px;font-size:11px;border-bottom:0}.object-steps button>i{display:none}.object-step-copy{min-height:115px}.object-step-copy>p:last-child{font-size:14px}.object-navigation{padding-top:20px}.object-tools{bottom:60px;right:16px}.object-tools button{min-height:44px;font-size:11px}.object-model-note{left:16px;right:16px;bottom:16px;font-size:9px}.knowledge-tip{max-width:245px}.object-extension{font-size:11px}.lab-main[data-panel-open=true] .stage-meta{display:none}}
+@media(max-width:400px){.title-line>span{display:none}.details-toggle{padding:6px 7px}.details-toggle .toggle-mark{display:none}.objects-toggle{padding:6px}.chapter-button{font-size:9px}.stage-meta{display:none}.view-controls .view-button{font-size:9px}.object-header .book-link{max-width:145px;line-height:1.5;text-align:right}.object-stage{height:300px}}
+@media(prefers-reduced-motion:reduce){.object-lesson,.object-stage,.object-teaching{scroll-behavior:auto;transition:none}}
+/* Keep the chapter title and its sole textbook link visible at every viewport. */
+.stage-heading h2{margin:0}
+@media(max-width:760px){.stage-meta,.lab-main[data-panel-open=true] .stage-meta{display:flex}.chapter-book{white-space:nowrap}}
+
+/* Chapter journey: the marker follows the active title; a dashed path appears only during playback handoffs. */
+.chapters{position:relative}
+.chapter-button[aria-current=step]::after{content:none}
+.chapter-indicator,.chapter-route{position:absolute;pointer-events:none;z-index:1}
+.chapter-indicator{left:var(--chapter-cursor-x,-40px);bottom:0;width:28px;height:10px;transform:translateX(-50%)}
+.chapter-indicator::before{content:"";position:absolute;bottom:0;left:2px;right:2px;height:2px;border-radius:2px;background:var(--accent)}
+.chapter-indicator::after{content:"";position:absolute;bottom:3px;left:calc(50% - 4px);border-right:4px solid transparent;border-bottom:5px solid var(--accent);border-left:4px solid transparent}
+.chapter-indicator.is-traveling{transition:left 800ms cubic-bezier(.22,.75,.2,1)}
+.chapter-route{bottom:1px;height:2px;opacity:0;background:repeating-linear-gradient(90deg,var(--accent) 0 3px,transparent 3px 8px);background-size:16px 2px;transition:opacity 160ms ease}
+.chapter-route.is-visible{opacity:.7;animation:chapter-route-flow 550ms linear infinite}
+@keyframes chapter-route-flow{to{background-position:16px 0}}
+
+/* Both header destinations use the same button treatment and touch target. */
+.header-actions>.objects-toggle,.header-actions>.details-toggle{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 13px;border:1px solid var(--rule);border-radius:7px;background:transparent;color:var(--ink);font-size:12px;font-weight:500;line-height:1.2;white-space:nowrap}
+.header-actions>.objects-toggle:hover,.header-actions>.details-toggle:hover{background:#f0f1eb}
+.header-actions>.objects-toggle[aria-expanded=true],.header-actions>.details-toggle[aria-expanded=true]{background:#e9e8e0;border-color:#bcc5b8}
+@media(max-width:760px){.header-actions>.objects-toggle,.header-actions>.details-toggle{font-size:10px;padding:6px 8px}}
+@media(max-width:400px){.header-actions>.objects-toggle,.header-actions>.details-toggle{padding:6px 7px}}
+@media(prefers-reduced-motion:reduce){.chapter-indicator.is-traveling{transition:none}.chapter-route,.chapter-route.is-visible{display:none;animation:none}}
+
+/* Separate the whiteboard entry from camera/display controls. */
+.stage-control-dock{position:absolute;right:16px;bottom:16px;z-index:4;display:flex;align-items:center;justify-content:flex-end;gap:12px;max-width:calc(100% - 32px)}
+.stage-control-dock>.view-controls{position:static;left:auto;right:auto;bottom:auto;max-width:none;min-width:0;margin:0;padding:5px;gap:4px;border-radius:10px;box-shadow:0 6px 18px #07191d24}
+.stage-control-dock .view-mode-group{margin-right:3px}
+.stage-control-dock .view-button,.stage-control-dock .icon-button{border-radius:6px}
+.stage-control-dock #protein-perspective{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-width:58px;padding-inline:9px;border:1px solid #afc1a959;background:#dde5d4;color:#284538}
+.stage-control-dock #protein-perspective::before{content:"";width:6px;height:6px;flex:none;border-radius:50%;background:#759b6a;box-shadow:0 0 0 2px #759b6a38}
+.stage-control-dock #protein-perspective[aria-pressed=false]{border-color:transparent;background:transparent;color:#8fa49c}
+.stage-control-dock #protein-perspective[aria-pressed=false]::before{background:#788a83;box-shadow:none}
+body[data-renderer=webgl] .stage-control-dock #protein-perspective[aria-pressed=true]{background:#cddbc5;border-color:#dfe7d6;color:#223d31}
+body[data-renderer=webgl] .stage-control-dock #protein-perspective[aria-pressed=false]{background:#203734;border-color:#34504b;color:#9fb4ab}
+@media(max-width:760px){
+  .stage-control-dock{left:12px;right:12px;bottom:12px;max-width:none;flex-direction:column;align-items:flex-end;gap:8px}
+  .stage-control-dock>.view-controls{order:2;width:100%;justify-content:center;flex-wrap:wrap;gap:3px;padding:4px}
+  .stage-control-dock>#whiteboard-open{order:1}
+  .stage-control-dock .view-mode-group{margin-right:0}
+  .lab-main[data-panel-open=true] .stage-control-dock{display:none}
+}
+@media(max-width:400px){
+  .stage-control-dock{left:9px;right:9px;bottom:9px}
+  .stage-control-dock>.view-controls{column-gap:2px;row-gap:3px}
+  .stage-control-dock .view-button{padding-inline:6px}
+  .stage-control-dock #protein-perspective{min-width:52px;padding-inline:6px}
+}

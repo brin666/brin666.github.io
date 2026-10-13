@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>转录近景 · 材质对照</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111d21'/%3E%3Cpath d='M9 5C24 12 8 20 23 27M23 5C8 12 24 20 9 27' fill='none' stroke='%23bad0b9' stroke-width='2'/%3E%3C/svg%3E"><link rel="stylesheet" href="./materials.css"><script type="importmap">{"imports":{"three":"../vendor/three.module.js"}}</script></head>
+<body>
+  <main class="study-shell">
+    <header><a href="./">← 转录样段</a><span>GENE EXPRESSION / MATERIAL STUDY 01</span><a href="../">完整实验 ↗</a></header>
+    <div class="intro"><div><p class="eyebrow">生物教学展品 · 模型与运动</p><h1>看清结构，也看清接合。</h1></div><p>观察通道层次与分子运动<br>切换保留当前视角与播放进度。</p></div>
+    <nav class="study-tabs" aria-label="材质与照明方案">
+      <button data-study="baseline" aria-pressed="false"><span>原版</span><strong>原材质与照明</strong></button>
+      <button data-study="A" aria-pressed="false"><span>A</span><strong>细腻哑光</strong></button>
+      <button data-study="B" aria-pressed="true"><span>B</span><strong>生物教学展品</strong></button>
+      <button data-study="C" aria-pressed="false"><span>C</span><strong>清晰插画质感</strong></button>
+    </nav>
+    <div class="structure-controls" role="group" aria-label="模型版本"><span>模型版本</span><button data-structure="exhibit" aria-pressed="true">展品新版</button><button data-structure="blender" aria-pressed="false">上一版精修</button><button data-structure="refined" aria-pressed="false">结构修正版</button><button data-structure="legacy" aria-pressed="false">旧模型</button><button id="dna-view">看闭合双螺旋 ↗</button></div>
+    <p id="asset-status" class="structure-note" role="status" hidden></p>
+    <p id="structure-note" class="structure-note">环状碱基与大小沟为教学结构示意。</p>
+    <section class="viewer" aria-label="可旋转的转录材质近景">
+      <div class="viewer-heading"><span id="view-title">B / 生物教学展品</span><span id="view-context">RNA 聚合酶 · 局部 DNA · 延伸中的 RNA</span></div>
+      <div id="scene" class="scene"><p class="loading">正在准备转录近景…</p></div>
+      <div class="viewer-bottom"><span>拖动旋转 · 滚轮缩放</span><span>教学示意，颜色与光泽用于表达结构</span></div>
+      <aside id="selection" hidden><span id="selection-text"></span><button id="selection-close" aria-label="关闭结构信息">×</button></aside>
+    </section>
+    <div class="controls"><button id="play" class="play">▶ 播放</button><button id="sample">比较时刻 · 7.30 s</button><button id="reset-view">恢复视角</button><label><input id="labels" type="checkbox" checked> 结构标签</label><output id="time">7.30 / 14.00 s</output></div>
+    <label class="timeline"><span class="sr-only">拖动动画时间</span><input id="progress" type="range" min="0" max="14" step="0.001" value="7.3"></label>
+    <div id="motion-stages" class="motion-stages" aria-label="转录延长的观察顺序"><span data-phase="read">读取</span><span data-phase="arrive">靠近与对准</span><span data-phase="bond">接入 3′ 端</span><span data-phase="advance">前移</span></div>
+    <section class="description" aria-live="polite"><div><p class="eyebrow">这一方案如何表达结构</p><h2 id="study-title">细腻哑光</h2><p id="study-description"></p></div><ul id="study-factors"></ul></section>
+    <p class="pairing-legend">虚线示意氢键：DNA 的 A–T 为两条、G–C 为三条；转录时模板 A 与 RNA 的 U 配对。RNA 骨架的实线连接表示链的延长。</p>
+    <section class="comparisons"><div class="comparison-heading"><h2>展品新版 · 模型与表面对照</h2><span>同机位 · 同时间 · B 方案</span></div><div class="comparison-grid structure-grid">
+      <figure><img src="./exhibit-captures/before.png" alt="上一版 Blender 精修的转录近景" loading="lazy"><figcaption><b>上一版精修</b><span>7.30 s · 转录近景</span></figcaption></figure>
+      <figure><img src="./exhibit-captures/after.png" alt="展品新版的分层聚合酶内壁和连续 DNA RNA 骨架" loading="lazy"><figcaption><b>展品新版</b><span>7.30 s · 通道层次与连续骨架</span></figcaption></figure>
+      <figure><img src="./exhibit-captures/before-closed.png" alt="上一版精修的闭合 DNA 双螺旋" loading="lazy"><figcaption><b>上一版精修 · 闭合段</b><span>0 s · 结构观察</span></figcaption></figure>
+      <figure><img src="./exhibit-captures/after-closed.png" alt="展品新版闭合 DNA 的连续曲线与哑光环状碱基" loading="lazy"><figcaption><b>展品新版 · 闭合段</b><span>0 s · 曲线与表面层次</span></figcaption></figure>
+    </div></section>
+    <section class="comparisons"><div class="comparison-heading"><h2>上一轮 · Blender 精修对照</h2><span>同材质 · 同机位 · 同时间</span></div><div class="comparison-grid structure-grid">
+      <figure><img src="./blender-captures/before.png" alt="精修前的结构修正版转录近景" loading="lazy"><figcaption><b>精修前</b><span>7.30 s · 结构修正版</span></figcaption></figure>
+      <figure><img src="./blender-captures/after.png" alt="Blender精修后的连续聚合酶曲面与碱基边缘" loading="lazy"><figcaption><b>Blender 精修</b><span>7.30 s · 连续曲面与沟槽</span></figcaption></figure>
+      <figure><img src="./blender-captures/before-closed.png" alt="精修前的闭合DNA结构观察" loading="lazy"><figcaption><b>精修前 · 闭合段</b><span>0 s · 结构观察</span></figcaption></figure>
+      <figure><img src="./blender-captures/after-closed.png" alt="Blender精修后的闭合DNA碱基和糖磷酸骨架" loading="lazy"><figcaption><b>Blender 精修 · 闭合段</b><span>0 s · 结构观察</span></figcaption></figure>
+    </div></section>
+    <section class="comparisons"><div class="comparison-heading"><h2>B 方案 · 结构修改对照</h2><span>同材质 · 同机位 · 同时间</span></div><div class="comparison-grid structure-grid">
+      <figure><img src="./structure-captures/before.png" alt="旧模型的转录近景" loading="lazy"><figcaption><b>旧模型</b><span>7.30 s · 叶片式碱基</span></figcaption></figure>
+      <figure><img src="./structure-captures/after.png" alt="结构修正版的转录近景" loading="lazy"><figcaption><b>结构修正版</b><span>7.30 s · 环状碱基与并列配对线</span></figcaption></figure>
+      <figure><img src="./structure-captures/before-closed.png" alt="旧模型的闭合DNA结构观察" loading="lazy"><figcaption><b>旧模型 · 闭合段</b><span>0 s · 结构观察</span></figcaption></figure>
+      <figure><img src="./structure-captures/after-closed.png" alt="结构修正版的闭合DNA结构观察，宽窄沟槽与较紧密的碱基堆叠" loading="lazy"><figcaption><b>结构修正版 · 闭合段</b><span>0 s · 结构观察</span></figcaption></figure>
+    </div></section>
+    <section class="comparisons"><div class="comparison-heading"><h2>上一轮材质样品</h2><span>旧模型截图 · 统一 7.30 s</span></div><div class="comparison-grid">
+      <figure><img src="./material-captures/A.png" alt="细腻哑光方案，同角度转录近景" loading="lazy"><figcaption><b>A · 细腻哑光</b><span>温润、体块与沟槽</span></figcaption></figure>
+      <figure><img src="./material-captures/B.png" alt="生物教学展品方案，同角度转录近景" loading="lazy"><figcaption><b>B · 生物教学展品</b><span>边缘透光、前后层次</span></figcaption></figure>
+      <figure><img src="./material-captures/C.png" alt="清晰插画方案，同角度转录近景" loading="lazy"><figcaption><b>C · 清晰插画质感</b><span>功能色区、投影辨认</span></figcaption></figure>
+    </div></section>
+    <footer><p>沿用原转录机制、序列和 14 秒时间轴。精修版经 Blender 加工；聚合酶为理想化功能体块，碱基沿用理想化环拓扑。大小沟、比例、氢键位置和展开角度为教学示意，未使用实测原子坐标；颜色、光泽及边缘透光属于教学表现。结构参考：<a href="https://pdb101.rcsb.org/motm/23" target="_blank" rel="noopener">RCSB PDB-101 · DNA ↗</a></p><p>教材依据：2019 版人教生物学必修 2，第 4 章第 1 节，P65 图 4-4。<a href="https://zxkeben.szxuexiao.com/html/9535.html" target="_blank" rel="noopener">查看教材入口 ↗</a></p></footer>
+  </main>
+  <script type="module" src="./materials-app.js"></script>
+</body>
+</html>

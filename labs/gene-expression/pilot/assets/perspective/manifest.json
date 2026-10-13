@@ -1,0 +1,1532 @@
+{
+  "asset": "polymerase-full.glb",
+  "authoringBlend": "design/gene-expression/blender-perspective/polymerase-full.blend",
+  "authoringScript": "scripts/gene-expression/export-polymerase-full.py",
+  "blenderVersion": "5.2.1 LTS",
+  "partNames": [
+    "RNAP_RPB1",
+    "RNAP_RPB2",
+    "RNAP_RPB3",
+    "RNAP_RPB4",
+    "RNAP_RPB5",
+    "RNAP_RPB6",
+    "RNAP_RPB7",
+    "RNAP_RPB8",
+    "RNAP_RPB9",
+    "RNAP_RPB10",
+    "RNAP_RPB11",
+    "RNAP_RPB12"
+  ],
+  "parts": {
+    "RNAP_RPB1": {
+      "authChain": "A",
+      "subunit": "Rpb1",
+      "sourceHeavyAtoms": 11140,
+      "modeledResidues": 1416,
+      "sourceResidueRanges": [
+        2,
+        1455
+      ],
+      "rawTriangles": 40196,
+      "color": "#b6b1a3",
+      "role": "protein",
+      "preparedSignedVolume": 0.8164606567541753,
+      "densityComponents": 1,
+      "discardedDensityVoxels": 0,
+      "finalComponentSignedVolumes": [
+        0.3602996911814957
+      ],
+      "signedVolume": 0.8125782994063456,
+      "teachingCut": false,
+      "vertices": 12243,
+      "triangles": 24518,
+      "bounds": {
+        "min": [
+          -1.0463769435882568,
+          -0.4289613366127014,
+          -0.47233814001083374
+        ],
+        "max": [
+          0.8036848902702332,
+          1.3078924417495728,
+          1.0676095485687256
+        ]
+      },
+      "AO": {
+        "range": [
+          0.88,
+          1.0
+        ],
+        "samples": 12
+      }
+    },
+    "RNAP_RPB2": {
+      "authChain": "B",
+      "subunit": "Rpb2",
+      "sourceHeavyAtoms": 8836,
+      "modeledResidues": 1112,
+      "sourceResidueRanges": [
+        20,
+        1224
+      ],
+      "rawTriangles": 29680,
+      "color": "#b6b1a3",
+      "role": "protein",
+      "preparedSignedVolume": 0.6504649071873395,
+      "densityComponents": 1,
+      "discardedDensityVoxels": 0,
+      "finalComponentSignedVolumes": [
+        0.17953190887508663
+      ],
+      "signedVolume": 0.6478046892292217,
+      "teachingCut": false,
+      "vertices": 9048,
+      "triangles": 18104,
+      "bounds": {
+        "min": [
+          -0.7613446712493896,
+          -0.45808956027030945,
+          0.1365566849708557
+        ],
+        "max": [
+          0.8033378720283508,
+          1.2070657014846802,
+          1.605997920036316
+        ]
+      },
+      "AO": {
+        "range": [
+          0.88,
+          1.0
+        ],
+        "samples": 12
+      }
+    },
+    "RNAP_RPB3": {
+      "authChain": "C",
+      "subunit": "Rpb3",
+      "sourceHeavyAtoms": 2095,
+      "modeledResidues": 266,
+      "sourceResidueRanges": [
+        3,
+        268
+      ],
+      "rawTriangles": 9116,
+      "color": "#b6b1a3",
+      "role": "protein",
+      "preparedSignedVolume": 0.14793146228415235,
+      "densityComponents": 1,
+      "discardedDensityVoxels": 0,
+      "finalComponentSignedVolumes": [
+        0.14669882602222145
+      ],
+      "signedVolume": 0.14669852620383075,
+      "teachingCut": false,
+      "vertices": 2778,
+      "triangles": 5560,
+      "bounds": {
+        "min": [
+          0.47681447863578796,
+          -0.06202919781208038,
+          0.11927873641252518
+        ],
+        "max": [
+          1.174998164176941,
+          1.0694133043289185,
+          1.3204691410064697
+        ]
+      },
+      "AO": {
+        "range": [
+          0.88,
+          1.0
+        ],
+        "samples": 12
+      }
+    },
+    "RNAP_RPB4": {
+      "authChain": "D",
+      "subunit": "Rpb4",
+      "sourceHeavyAtoms": 1356,
+      "modeledResidues": 177,
+      "sourceResidueRanges": [
+        4,
+        221
+      ],
+      "rawTriangles": 6496,
+      "color": "#b6b1a3",
+      "role": "protein",
+      "preparedSignedVolume": 0.09518356170760324,
+      "densityComponents": 1,
+      "discardedDensityVoxels": 0,
+      "finalComponentSignedVolumes": [
+        0.09418606680054298
+      ],
+      "signedVolume": 0.09418609372997919,
+      "teachingCut": false,
+      "vertices": 1981,
+      "triangles": 3962,
+      "bounds": {
+        "min": [
+          -0.6801764965057373,
+          -0.8129057884216309,
+          -0.3551839590072632
+        ],
+        "max": [
+          0.2758464515209198,
+          -0.10445316135883331,
+          0.4013972580432892
+        ]
+      },
+      "AO": {
+        "range": [
+          0.88,
+          1.0
+        ],
+        "samples": 12
+      }
+    },
+    "RNAP_RPB5": {
+      "authChain": "E",
+      "subunit": "Rpb5",
+      "sourceHeavyAtoms": 1752,
+      "modeledResidues": 214,
+      "sourceResidueRanges": [
+        2,
+        215
+      ],
+      "rawTriangles": 6968,
+      "color": "#b6b1a3",
+      "role": "protein",
+      "preparedSignedVolume": 0.12688207807942886,
+      "densityComponents": 1,
+      "discardedDensityVoxels": 0,
+      "finalComponentSignedVolumes": [
+        0.125949107369818
+      ],
+      "signedVolume": 0.12594899700118325,
+      "teachingCut": false,
+      "vertices": 2127,
+      "triangles": 4250,
+      "bounds": {
+        "min": [
+          -0.9601470232009888,
+          0.17169219255447388,
+          -0.17544886469841003
+        ],
+        "max": [
+          -0.055251091718673706,
+          1.0932838916778564,
+          0.48044252395629883
+        ]
+      },
+      "AO": {
+        "range": [
+          0.88,
+          1.0
+        ],
+        "samples": 12
+      }
+    },
+    "RNAP_RPB6": {
+      "authChain": "F",
+      "subunit": "Rpb6",
+      "sourceHeavyAtoms": 679,
+      "modeledResidues": 84,
+      "sourceResidueRanges": [
+        72,
+        155
+      ],
+      "rawTriangles": 3120,
+      "color": "#b6b1a3",
+      "role": "protein",
+      "preparedSignedVolume": 0.04640290551824941,
+      "densityComponents": 1,
+      "discardedDensityVoxels": 0,
+      "finalComponentSignedVolumes": [
+        0.04585089743553479
+      ],
+      "signedVolume": 0.045850896260132834,
+      "teachingCut": false,
+      "vertices": 953,
+      "triangles": 1902,
+      "bounds": {
+        "min": [
+          -0.27750757336616516,
+          -0.14042748510837555,
+          -0.18945084512233734
+        ],
+        "max": [
+          0.48175016045570374,
+          0.36620602011680603,
+          0.23521533608436584
+        ]
+      },
+      "AO": {
+        "range": [
+          0.88,
+          1.0
+        ],
+        "samples": 12
+      }
+    },
+    "RNAP_RPB7": {
+      "authChain": "G",
+      "subunit": "Rpb7",
+      "sourceHeavyAtoms": 1340,
+      "modeledResidues": 171,
+      "sourceResidueRanges": [
+        1,
+        171
+      ],
+      "rawTriangles": 5656,
+      "color": "#b6b1a3",
+      "role": "protein",
+      "preparedSignedVolume": 0.09420304165181952,
+      "densityComponents": 1,
+      "discardedDensityVoxels": 0,
+      "finalComponentSignedVolumes": [
+        0.09339052482260535
+      ],
+      "signedVolume": 0.09339055409023923,
+      "teachingCut": false,
+      "vertices": 1727,
+      "triangles": 3450,
+      "bounds": {
+        "min": [
+          -0.5412485599517822,
+          -1.0409890413284302,
+          -0.18968915939331055
+        ],
+        "max": [
+          0.24956044554710388,
+          0.03531695157289505,
+          0.39186060428619385
+        ]
+      },
+      "AO": {
+        "range": [
+          0.88,
+          1.0
+        ],
+        "samples": 12
+      }
+    },
+    "RNAP_RPB8": {
+      "authChain": "H",
+      "subunit": "Rpb8",
+      "sourceHeavyAtoms": 1068,
+      "modeledResidues": 133,
+      "sourceResidueRanges": [
+        2,
+        146
+      ],
+      "rawTriangles": 4708,
+      "color": "#b6b1a3",
+      "role": "protein",
+      "preparedSignedVolume": 0.0759629056488784,
+      "densityComponents": 1,
+      "discardedDensityVoxels": 0,
+      "finalComponentSignedVolumes": [
+        0.0752636040239404
+      ],
+      "signedVolume": 0.07526357787042479,
+      "teachingCut": false,
+      "vertices": 1435,
+      "triangles": 2870,
+      "bounds": {
+        "min": [
+          0.24822136759757996,
+          0.5355284214019775,
+          -0.2855471670627594
+        ],
+        "max": [
+          0.9767465591430664,
+          1.2081029415130615,
+          0.4088785648345947
+        ]
+      },
+      "AO": {
+        "range": [
+          0.88,
+          1.0
+        ],
+        "samples": 12
+      }
+    },
+    "RNAP_RPB9": {
+      "authChain": "I",
+      "subunit": "Rpb9",
+      "sourceHeavyAtoms": 971,
+      "modeledResidues": 119,
+      "sourceResidueRanges": [
+        2,
+        120
+      ],
+      "rawTriangles": 5108,
+      "color": "#b6b1a3",
+      "role": "protein",
+      "preparedSignedVolume": 0.06759527318619099,
+      "densityComponents": 1,
+      "discardedDensityVoxels": 0,
+      "finalComponentSignedVolumes": [
+        0.06673814125197933
+      ],
+      "signedVolume": 0.06673848080659109,
+      "teachingCut": false,
+      "vertices": 1559,
+      "triangles": 3114,
+      "bounds": {
+        "min": [
+          -1.0150266885757446,
+          0.7367589473724365,
+          0.7560413479804993
+        ],
+        "max": [
+          0.03668518364429474,
+          1.3729702234268188,
+          1.368009328842163
+        ]
+      },
+      "AO": {
+        "range": [
+          0.88,
+          1.0
+        ],
+        "samples": 12
+      }
+    },
+    "RNAP_RPB10": {
+      "authChain": "J",
+      "subunit": "Rpb10",
+      "sourceHeavyAtoms": 532,
+      "modeledResidues": 65,
+      "sourceResidueRanges": [
+        1,
+        65
+      ],
+      "rawTriangles": 2612,
+      "color": "#b6b1a3",
+      "role": "protein",
+      "preparedSignedVolume": 0.03537287259511817,
+      "densityComponents": 1,
+      "discardedDensityVoxels": 0,
+      "finalComponentSignedVolumes": [
+        0.03488302033068186
+      ],
+      "signedVolume": 0.03488287856351332,
+      "teachingCut": false,
+      "vertices": 798,
+      "triangles": 1592,
+      "bounds": {
+        "min": [
+          0.47930482029914856,
+          0.16922219097614288,
+          0.6998597383499146
+        ],
+        "max": [
+          0.8826894164085388,
+          0.7880240678787231,
+          1.2507429122924805
+        ]
+      },
+      "AO": {
+        "range": [
+          0.88,
+          1.0
+        ],
+        "samples": 12
+      }
+    },
+    "RNAP_RPB11": {
+      "authChain": "K",
+      "subunit": "Rpb11",
+      "sourceHeavyAtoms": 919,
+      "modeledResidues": 114,
+      "sourceResidueRanges": [
+        1,
+        114
+      ],
+      "rawTriangles": 4516,
+      "color": "#b6b1a3",
+      "role": "protein",
+      "preparedSignedVolume": 0.06143080458826546,
+      "densityComponents": 1,
+      "discardedDensityVoxels": 0,
+      "finalComponentSignedVolumes": [
+        0.060623620054556626
+      ],
+      "signedVolume": 0.06062348294976498,
+      "teachingCut": false,
+      "vertices": 1379,
+      "triangles": 2754,
+      "bounds": {
+        "min": [
+          0.4479580521583557,
+          0.04548027366399765,
+          -0.06210866570472717
+        ],
+        "max": [
+          1.210724115371704,
+          0.6890498995780945,
+          0.8196202516555786
+        ]
+      },
+      "AO": {
+        "range": [
+          0.88,
+          1.0
+        ],
+        "samples": 12
+      }
+    },
+    "RNAP_RPB12": {
+      "authChain": "L",
+      "subunit": "Rpb12",
+      "sourceHeavyAtoms": 363,
+      "modeledResidues": 46,
+      "sourceResidueRanges": [
+        25,
+        70
+      ],
+      "rawTriangles": 2268,
+      "color": "#b6b1a3",
+      "role": "protein",
+      "preparedSignedVolume": 0.02335030807261969,
+      "densityComponents": 1,
+      "discardedDensityVoxels": 0,
+      "finalComponentSignedVolumes": [
+        0.02286874931194423
+      ],
+      "signedVolume": 0.02286870314833329,
+      "teachingCut": false,
+      "vertices": 693,
+      "triangles": 1382,
+      "bounds": {
+        "min": [
+          0.31959766149520874,
+          -0.23991143703460693,
+          0.7021505832672119
+        ],
+        "max": [
+          0.7565121650695801,
+          0.27839261293411255,
+          1.4078946113586426
+        ]
+      },
+      "AO": {
+        "range": [
+          0.88,
+          1.0
+        ],
+        "samples": 12
+      }
+    }
+  },
+  "meshes": {
+    "RNAP_RPB1": {
+      "authChain": "A",
+      "subunit": "Rpb1",
+      "sourceHeavyAtoms": 11140,
+      "modeledResidues": 1416,
+      "sourceResidueRanges": [
+        2,
+        1455
+      ],
+      "rawTriangles": 40196,
+      "color": "#b6b1a3",
+      "role": "protein",
+      "preparedSignedVolume": 0.8164606567541753,
+      "densityComponents": 1,
+      "discardedDensityVoxels": 0,
+      "finalComponentSignedVolumes": [
+        0.3602996911814957
+      ],
+      "signedVolume": 0.8125782994063456,
+      "teachingCut": false,
+      "vertices": 12243,
+      "triangles": 24518,
+      "bounds": {
+        "min": [
+          -1.0463769435882568,
+          -0.4289613366127014,
+          -0.47233814001083374
+        ],
+        "max": [
+          0.8036848902702332,
+          1.3078924417495728,
+          1.0676095485687256
+        ]
+      },
+      "AO": {
+        "range": [
+          0.88,
+          1.0
+        ],
+        "samples": 12
+      }
+    },
+    "RNAP_RPB2": {
+      "authChain": "B",
+      "subunit": "Rpb2",
+      "sourceHeavyAtoms": 8836,
+      "modeledResidues": 1112,
+      "sourceResidueRanges": [
+        20,
+        1224
+      ],
+      "rawTriangles": 29680,
+      "color": "#b6b1a3",
+      "role": "protein",
+      "preparedSignedVolume": 0.6504649071873395,
+      "densityComponents": 1,
+      "discardedDensityVoxels": 0,
+      "finalComponentSignedVolumes": [
+        0.17953190887508663
+      ],
+      "signedVolume": 0.6478046892292217,
+      "teachingCut": false,
+      "vertices": 9048,
+      "triangles": 18104,
+      "bounds": {
+        "min": [
+          -0.7613446712493896,
+          -0.45808956027030945,
+          0.1365566849708557
+        ],
+        "max": [
+          0.8033378720283508,
+          1.2070657014846802,
+          1.605997920036316
+        ]
+      },
+      "AO": {
+        "range": [
+          0.88,
+          1.0
+        ],
+        "samples": 12
+      }
+    },
+    "RNAP_RPB3": {
+      "authChain": "C",
+      "subunit": "Rpb3",
+      "sourceHeavyAtoms": 2095,
+      "modeledResidues": 266,
+      "sourceResidueRanges": [
+        3,
+        268
+      ],
+      "rawTriangles": 9116,
+      "color": "#b6b1a3",
+      "role": "protein",
+      "preparedSignedVolume": 0.14793146228415235,
+      "densityComponents": 1,
+      "discardedDensityVoxels": 0,
+      "finalComponentSignedVolumes": [
+        0.14669882602222145
+      ],
+      "signedVolume": 0.14669852620383075,
+      "teachingCut": false,
+      "vertices": 2778,
+      "triangles": 5560,
+      "bounds": {
+        "min": [
+          0.47681447863578796,
+          -0.06202919781208038,
+          0.11927873641252518
+        ],
+        "max": [
+          1.174998164176941,
+          1.0694133043289185,
+          1.3204691410064697
+        ]
+      },
+      "AO": {
+        "range": [
+          0.88,
+          1.0
+        ],
+        "samples": 12
+      }
+    },
+    "RNAP_RPB4": {
+      "authChain": "D",
+      "subunit": "Rpb4",
+      "sourceHeavyAtoms": 1356,
+      "modeledResidues": 177,
+      "sourceResidueRanges": [
+        4,
+        221
+      ],
+      "rawTriangles": 6496,
+      "color": "#b6b1a3",
+      "role": "protein",
+      "preparedSignedVolume": 0.09518356170760324,
+      "densityComponents": 1,
+      "discardedDensityVoxels": 0,
+      "finalComponentSignedVolumes": [
+        0.09418606680054298
+      ],
+      "signedVolume": 0.09418609372997919,
+      "teachingCut": false,
+      "vertices": 1981,
+      "triangles": 3962,
+      "bounds": {
+        "min": [
+          -0.6801764965057373,
+          -0.8129057884216309,
+          -0.3551839590072632
+        ],
+        "max": [
+          0.2758464515209198,
+          -0.10445316135883331,
+          0.4013972580432892
+        ]
+      },
+      "AO": {
+        "range": [
+          0.88,
+          1.0
+        ],
+        "samples": 12
+      }
+    },
+    "RNAP_RPB5": {
+      "authChain": "E",
+      "subunit": "Rpb5",
+      "sourceHeavyAtoms": 1752,
+      "modeledResidues": 214,
+      "sourceResidueRanges": [
+        2,
+        215
+      ],
+      "rawTriangles": 6968,
+      "color": "#b6b1a3",
+      "role": "protein",
+      "preparedSignedVolume": 0.12688207807942886,
+      "densityComponents": 1,
+      "discardedDensityVoxels": 0,
+      "finalComponentSignedVolumes": [
+        0.125949107369818
+      ],
+      "signedVolume": 0.12594899700118325,
+      "teachingCut": false,
+      "vertices": 2127,
+      "triangles": 4250,
+      "bounds": {
+        "min": [
+          -0.9601470232009888,
+          0.17169219255447388,
+          -0.17544886469841003
+        ],
+        "max": [
+          -0.055251091718673706,
+          1.0932838916778564,
+          0.48044252395629883
+        ]
+      },
+      "AO": {
+        "range": [
+          0.88,
+          1.0
+        ],
+        "samples": 12
+      }
+    },
+    "RNAP_RPB6": {
+      "authChain": "F",
+      "subunit": "Rpb6",
+      "sourceHeavyAtoms": 679,
+      "modeledResidues": 84,
+      "sourceResidueRanges": [
+        72,
+        155
+      ],
+      "rawTriangles": 3120,
+      "color": "#b6b1a3",
+      "role": "protein",
+      "preparedSignedVolume": 0.04640290551824941,
+      "densityComponents": 1,
+      "discardedDensityVoxels": 0,
+      "finalComponentSignedVolumes": [
+        0.04585089743553479
+      ],
+      "signedVolume": 0.045850896260132834,
+      "teachingCut": false,
+      "vertices": 953,
+      "triangles": 1902,
+      "bounds": {
+        "min": [
+          -0.27750757336616516,
+          -0.14042748510837555,
+          -0.18945084512233734
+        ],
+        "max": [
+          0.48175016045570374,
+          0.36620602011680603,
+          0.23521533608436584
+        ]
+      },
+      "AO": {
+        "range": [
+          0.88,
+          1.0
+        ],
+        "samples": 12
+      }
+    },
+    "RNAP_RPB7": {
+      "authChain": "G",
+      "subunit": "Rpb7",
+      "sourceHeavyAtoms": 1340,
+      "modeledResidues": 171,
+      "sourceResidueRanges": [
+        1,
+        171
+      ],
+      "rawTriangles": 5656,
+      "color": "#b6b1a3",
+      "role": "protein",
+      "preparedSignedVolume": 0.09420304165181952,
+      "densityComponents": 1,
+      "discardedDensityVoxels": 0,
+      "finalComponentSignedVolumes": [
+        0.09339052482260535
+      ],
+      "signedVolume": 0.09339055409023923,
+      "teachingCut": false,
+      "vertices": 1727,
+      "triangles": 3450,
+      "bounds": {
+        "min": [
+          -0.5412485599517822,
+          -1.0409890413284302,
+          -0.18968915939331055
+        ],
+        "max": [
+          0.24956044554710388,
+          0.03531695157289505,
+          0.39186060428619385
+        ]
+      },
+      "AO": {
+        "range": [
+          0.88,
+          1.0
+        ],
+        "samples": 12
+      }
+    },
+    "RNAP_RPB8": {
+      "authChain": "H",
+      "subunit": "Rpb8",
+      "sourceHeavyAtoms": 1068,
+      "modeledResidues": 133,
+      "sourceResidueRanges": [
+        2,
+        146
+      ],
+      "rawTriangles": 4708,
+      "color": "#b6b1a3",
+      "role": "protein",
+      "preparedSignedVolume": 0.0759629056488784,
+      "densityComponents": 1,
+      "discardedDensityVoxels": 0,
+      "finalComponentSignedVolumes": [
+        0.0752636040239404
+      ],
+      "signedVolume": 0.07526357787042479,
+      "teachingCut": false,
+      "vertices": 1435,
+      "triangles": 2870,
+      "bounds": {
+        "min": [
+          0.24822136759757996,
+          0.5355284214019775,
+          -0.2855471670627594
+        ],
+        "max": [
+          0.9767465591430664,
+          1.2081029415130615,
+          0.4088785648345947
+        ]
+      },
+      "AO": {
+        "range": [
+          0.88,
+          1.0
+        ],
+        "samples": 12
+      }
+    },
+    "RNAP_RPB9": {
+      "authChain": "I",
+      "subunit": "Rpb9",
+      "sourceHeavyAtoms": 971,
+      "modeledResidues": 119,
+      "sourceResidueRanges": [
+        2,
+        120
+      ],
+      "rawTriangles": 5108,
+      "color": "#b6b1a3",
+      "role": "protein",
+      "preparedSignedVolume": 0.06759527318619099,
+      "densityComponents": 1,
+      "discardedDensityVoxels": 0,
+      "finalComponentSignedVolumes": [
+        0.06673814125197933
+      ],
+      "signedVolume": 0.06673848080659109,
+      "teachingCut": false,
+      "vertices": 1559,
+      "triangles": 3114,
+      "bounds": {
+        "min": [
+          -1.0150266885757446,
+          0.7367589473724365,
+          0.7560413479804993
+        ],
+        "max": [
+          0.03668518364429474,
+          1.3729702234268188,
+          1.368009328842163
+        ]
+      },
+      "AO": {
+        "range": [
+          0.88,
+          1.0
+        ],
+        "samples": 12
+      }
+    },
+    "RNAP_RPB10": {
+      "authChain": "J",
+      "subunit": "Rpb10",
+      "sourceHeavyAtoms": 532,
+      "modeledResidues": 65,
+      "sourceResidueRanges": [
+        1,
+        65
+      ],
+      "rawTriangles": 2612,
+      "color": "#b6b1a3",
+      "role": "protein",
+      "preparedSignedVolume": 0.03537287259511817,
+      "densityComponents": 1,
+      "discardedDensityVoxels": 0,
+      "finalComponentSignedVolumes": [
+        0.03488302033068186
+      ],
+      "signedVolume": 0.03488287856351332,
+      "teachingCut": false,
+      "vertices": 798,
+      "triangles": 1592,
+      "bounds": {
+        "min": [
+          0.47930482029914856,
+          0.16922219097614288,
+          0.6998597383499146
+        ],
+        "max": [
+          0.8826894164085388,
+          0.7880240678787231,
+          1.2507429122924805
+        ]
+      },
+      "AO": {
+        "range": [
+          0.88,
+          1.0
+        ],
+        "samples": 12
+      }
+    },
+    "RNAP_RPB11": {
+      "authChain": "K",
+      "subunit": "Rpb11",
+      "sourceHeavyAtoms": 919,
+      "modeledResidues": 114,
+      "sourceResidueRanges": [
+        1,
+        114
+      ],
+      "rawTriangles": 4516,
+      "color": "#b6b1a3",
+      "role": "protein",
+      "preparedSignedVolume": 0.06143080458826546,
+      "densityComponents": 1,
+      "discardedDensityVoxels": 0,
+      "finalComponentSignedVolumes": [
+        0.060623620054556626
+      ],
+      "signedVolume": 0.06062348294976498,
+      "teachingCut": false,
+      "vertices": 1379,
+      "triangles": 2754,
+      "bounds": {
+        "min": [
+          0.4479580521583557,
+          0.04548027366399765,
+          -0.06210866570472717
+        ],
+        "max": [
+          1.210724115371704,
+          0.6890498995780945,
+          0.8196202516555786
+        ]
+      },
+      "AO": {
+        "range": [
+          0.88,
+          1.0
+        ],
+        "samples": 12
+      }
+    },
+    "RNAP_RPB12": {
+      "authChain": "L",
+      "subunit": "Rpb12",
+      "sourceHeavyAtoms": 363,
+      "modeledResidues": 46,
+      "sourceResidueRanges": [
+        25,
+        70
+      ],
+      "rawTriangles": 2268,
+      "color": "#b6b1a3",
+      "role": "protein",
+      "preparedSignedVolume": 0.02335030807261969,
+      "densityComponents": 1,
+      "discardedDensityVoxels": 0,
+      "finalComponentSignedVolumes": [
+        0.02286874931194423
+      ],
+      "signedVolume": 0.02286870314833329,
+      "teachingCut": false,
+      "vertices": 693,
+      "triangles": 1382,
+      "bounds": {
+        "min": [
+          0.31959766149520874,
+          -0.23991143703460693,
+          0.7021505832672119
+        ],
+        "max": [
+          0.7565121650695801,
+          0.27839261293411255,
+          1.4078946113586426
+        ]
+      },
+      "AO": {
+        "range": [
+          0.88,
+          1.0
+        ],
+        "samples": 12
+      }
+    }
+  },
+  "partColors": {
+    "RNAP_RPB1": "#b6b1a3",
+    "RNAP_RPB2": "#b6b1a3",
+    "RNAP_RPB3": "#b6b1a3",
+    "RNAP_RPB4": "#b6b1a3",
+    "RNAP_RPB5": "#b6b1a3",
+    "RNAP_RPB6": "#b6b1a3",
+    "RNAP_RPB7": "#b6b1a3",
+    "RNAP_RPB8": "#b6b1a3",
+    "RNAP_RPB9": "#b6b1a3",
+    "RNAP_RPB10": "#b6b1a3",
+    "RNAP_RPB11": "#b6b1a3",
+    "RNAP_RPB12": "#b6b1a3"
+  },
+  "materialRoles": {
+    "RNAP_RPB1": "body-B",
+    "RNAP_RPB2": "body-B",
+    "RNAP_RPB3": "body-B",
+    "RNAP_RPB4": "body-B",
+    "RNAP_RPB5": "body-B",
+    "RNAP_RPB6": "body-B",
+    "RNAP_RPB7": "body-B",
+    "RNAP_RPB8": "body-B",
+    "RNAP_RPB9": "body-B",
+    "RNAP_RPB10": "body-B",
+    "RNAP_RPB11": "body-B",
+    "RNAP_RPB12": "body-B"
+  },
+  "pivots": {
+    "RNAP_RPB1": {
+      "pivot": [
+        -0.12134602665901184,
+        0.43946555256843567,
+        0.2976357042789459
+      ],
+      "rotationAxis": [
+        0,
+        1,
+        0
+      ],
+      "maxRadians": 0
+    },
+    "RNAP_RPB2": {
+      "pivot": [
+        0.02099660038948059,
+        0.37448807060718536,
+        0.8712773025035858
+      ],
+      "rotationAxis": [
+        0,
+        1,
+        0
+      ],
+      "maxRadians": 0
+    },
+    "RNAP_RPB3": {
+      "pivot": [
+        0.8259063214063644,
+        0.503692053258419,
+        0.7198739387094975
+      ],
+      "rotationAxis": [
+        0,
+        1,
+        0
+      ],
+      "maxRadians": 0
+    },
+    "RNAP_RPB4": {
+      "pivot": [
+        -0.20216502249240875,
+        -0.4586794748902321,
+        0.023106649518013
+      ],
+      "rotationAxis": [
+        0,
+        1,
+        0
+      ],
+      "maxRadians": 0
+    },
+    "RNAP_RPB5": {
+      "pivot": [
+        -0.5076990574598312,
+        0.6324880421161652,
+        0.1524968296289444
+      ],
+      "rotationAxis": [
+        0,
+        1,
+        0
+      ],
+      "maxRadians": 0
+    },
+    "RNAP_RPB6": {
+      "pivot": [
+        0.10212129354476929,
+        0.11288926750421524,
+        0.02288224548101425
+      ],
+      "rotationAxis": [
+        0,
+        1,
+        0
+      ],
+      "maxRadians": 0
+    },
+    "RNAP_RPB7": {
+      "pivot": [
+        -0.14584405720233917,
+        -0.5028360448777676,
+        0.10108572244644165
+      ],
+      "rotationAxis": [
+        0,
+        1,
+        0
+      ],
+      "maxRadians": 0
+    },
+    "RNAP_RPB8": {
+      "pivot": [
+        0.6124839633703232,
+        0.8718156814575195,
+        0.061665698885917664
+      ],
+      "rotationAxis": [
+        0,
+        1,
+        0
+      ],
+      "maxRadians": 0
+    },
+    "RNAP_RPB9": {
+      "pivot": [
+        -0.48917075246572495,
+        1.0548645853996277,
+        1.0620253384113312
+      ],
+      "rotationAxis": [
+        0,
+        1,
+        0
+      ],
+      "maxRadians": 0
+    },
+    "RNAP_RPB10": {
+      "pivot": [
+        0.6809971183538437,
+        0.478623129427433,
+        0.9753013253211975
+      ],
+      "rotationAxis": [
+        0,
+        1,
+        0
+      ],
+      "maxRadians": 0
+    },
+    "RNAP_RPB11": {
+      "pivot": [
+        0.8293410837650299,
+        0.36726508662104607,
+        0.3787557929754257
+      ],
+      "rotationAxis": [
+        0,
+        1,
+        0
+      ],
+      "maxRadians": 0
+    },
+    "RNAP_RPB12": {
+      "pivot": [
+        0.5380549132823944,
+        0.019240587949752808,
+        1.0550225973129272
+      ],
+      "rotationAxis": [
+        0,
+        1,
+        0
+      ],
+      "maxRadians": 0
+    }
+  },
+  "coordinateSystem": "Three.js Y-up, DNA long axis X, viewer +Z",
+  "coordinateTransform": "PDB rigid rotation plus uniform scale as recorded; Three (x,y,z) -> Blender (x,-z,y); glTF export_yup returns Three coordinates",
+  "source": {
+    "id": "PDB 1Y1W",
+    "title": "Complete RNA Polymerase II elongation complex",
+    "organism": "Saccharomyces cerevisiae",
+    "method": "X-RAY DIFFRACTION",
+    "experimentalResolutionAngstrom": 4.0,
+    "entryURL": "https://www.rcsb.org/structure/1Y1W",
+    "coordinateURL": "https://files.rcsb.org/download/1Y1W.pdb",
+    "sourceFile": "design/gene-expression/blender-structural/source/1y1w.pdb",
+    "sourceBytes": 2750598,
+    "sourceSHA256": "4225117bfc9f1dbb2c2edd278c7087cbf4acffe6af8654a74466726dbba9ca6f",
+    "primaryCitationDOI": "10.1016/j.molcel.2004.11.040",
+    "downloadDate": "2026-10-12",
+    "authProteinChains": "ABCDEFGHIJKL",
+    "nucleicAcidAuthChains": {
+      "T": "template DNA, 19 deposited nucleotides",
+      "N": "non-template DNA, 7 deposited nucleotides",
+      "P": "RNA, 10 deposited nucleotides; P10 is 3-prime growing end"
+    }
+  },
+  "references": [
+    {
+      "id": "PDB 1Y1W",
+      "title": "Complete RNA Polymerase II elongation complex",
+      "organism": "Saccharomyces cerevisiae",
+      "method": "X-RAY DIFFRACTION",
+      "experimentalResolutionAngstrom": 4.0,
+      "entryURL": "https://www.rcsb.org/structure/1Y1W",
+      "coordinateURL": "https://files.rcsb.org/download/1Y1W.pdb",
+      "sourceFile": "design/gene-expression/blender-structural/source/1y1w.pdb",
+      "sourceBytes": 2750598,
+      "sourceSHA256": "4225117bfc9f1dbb2c2edd278c7087cbf4acffe6af8654a74466726dbba9ca6f",
+      "primaryCitationDOI": "10.1016/j.molcel.2004.11.040",
+      "downloadDate": "2026-10-12",
+      "authProteinChains": "ABCDEFGHIJKL",
+      "nucleicAcidAuthChains": {
+        "T": "template DNA, 19 deposited nucleotides",
+        "N": "non-template DNA, 7 deposited nucleotides",
+        "P": "RNA, 10 deposited nucleotides; P10 is 3-prime growing end"
+      }
+    }
+  ],
+  "sourceTransform": {
+    "rotationRows": [
+      [
+        0.18896124424730662,
+        -0.7195182889660968,
+        0.6682717112191794
+      ],
+      [
+        0.11759586002738578,
+        0.6922149664654071,
+        0.7120461037781998
+      ],
+      [
+        -0.9749178744268305,
+        -0.05596313111858306,
+        0.215414173346312
+      ]
+    ],
+    "uniformScaleSceneUnitsPerAngstrom": 0.015503210802151243,
+    "translationSceneUnits": [
+      0.33856840812648414,
+      -0.3297765760555451,
+      2.242744044389991
+    ],
+    "matrixConvention": "p_scene = scale * R @ p_PDB + translation",
+    "orientationMethod": "X parallel to native downstream duplex direction T10/N7 minus T16/N1. Z points from protein coordinate centroid toward native active-site RNA P10, orthogonal to X. Sign of X chosen so RNA P1 is below P10 in Y. Y = Z cross X. No anisotropic scaling.",
+    "nativeRNAGrowingEnd": [
+      0.2,
+      0.4,
+      0.64
+    ],
+    "nativeRNAExit": [
+      0.11151218793364615,
+      -0.03338530717903637,
+      0.7993566113578097
+    ],
+    "frontDotActiveMinusProteinCenterAngstrom": 4.530751453034051
+  },
+  "coarseGraining": {
+    "method": "trilinear heavy-atom splat, Gaussian density, per-chain marching cubes",
+    "gridSpacingAngstrom": 1.8,
+    "GaussianSigmaAngstrom": 2.4,
+    "isoDensityAtomsPerCubicAngstrom": 0.022,
+    "componentPolicy": "largest above-threshold density component per chain; removed unsupported small islands; no synthetic joining geometry",
+    "scope": "Coarse envelope, not solvent-excluded or atomically exact surface; absent residues are not reconstructed"
+  },
+  "teachingCutaway": {
+    "enabled": false
+  },
+  "nativeNucleicAcidSugarPaths": {
+    "T": [
+      [
+        -0.5282616201481797,
+        0.48079637251711826,
+        0.7488246563157517
+      ],
+      [
+        -0.48973823181578824,
+        0.42346541878661137,
+        0.7810370488799234
+      ],
+      [
+        -0.4426220846380846,
+        0.36578039215239977,
+        0.7759598431187655
+      ],
+      [
+        -0.391693111833908,
+        0.3203966659734483,
+        0.742430358366734
+      ],
+      [
+        -0.3307654813868628,
+        0.3045432467284549,
+        0.6982284210636256
+      ],
+      [
+        -0.25920341637202193,
+        0.29776599876857435,
+        0.666962230585924
+      ],
+      [
+        -0.18904643592713122,
+        0.3352551808499703,
+        0.6638688825582684
+      ],
+      [
+        -0.1222104872621097,
+        0.36369061224782184,
+        0.685675732624182
+      ],
+      [
+        0.006741976269569128,
+        0.36819921559911006,
+        0.6207148130534357
+      ],
+      [
+        0.06805726733343115,
+        0.3184651700615637,
+        0.5959727411266691
+      ],
+      [
+        0.12796810964002536,
+        0.2793475357863654,
+        0.6205972106696469
+      ],
+      [
+        0.18266884284030835,
+        0.25874046894002845,
+        0.6760542628322397
+      ],
+      [
+        0.2281214366046885,
+        0.24603849308544912,
+        0.7501205674518017
+      ],
+      [
+        0.22880890543592133,
+        0.23849879875887192,
+        0.8275348375364513
+      ],
+      [
+        0.2066396737681924,
+        0.208186426442885,
+        0.9046735872538214
+      ],
+      [
+        0.14667949172699063,
+        0.17732896348273053,
+        0.9584243613559911
+      ],
+      [
+        0.08705042543587832,
+        0.12744888932855203,
+        0.9950763471227713
+      ],
+      [
+        0.03619316090458058,
+        0.07527213759543755,
+        1.0005204347020478
+      ],
+      [
+        -0.03920316746311614,
+        0.02201560492256527,
+        0.9936835875067094
+      ]
+    ],
+    "N": [
+      [
+        -0.21826476971798991,
+        0.4721243642909785,
+        0.7772356794656334
+      ],
+      [
+        -0.2512931579306601,
+        0.47590361176665574,
+        0.7117525404312017
+      ],
+      [
+        -0.29707109857176994,
+        0.46398618447095064,
+        0.6553739470436075
+      ],
+      [
+        -0.34853630134030655,
+        0.41900659127701634,
+        0.6196981866734366
+      ],
+      [
+        -0.40909708388597443,
+        0.3760351245661828,
+        0.6122226850115908
+      ],
+      [
+        -0.4609028330673459,
+        0.33545739800646357,
+        0.6406360538666116
+      ],
+      [
+        -0.5243287454888043,
+        0.32658317262383074,
+        0.6922799057081503
+      ]
+    ],
+    "P": [
+      [
+        0.11151218793364615,
+        -0.03338530717903637,
+        0.7993566113578097
+      ],
+      [
+        0.03738586020028717,
+        0.017499228142051126,
+        0.8027514149165367
+      ],
+      [
+        0.003986070967183009,
+        0.08150959155819931,
+        0.8374249376801826
+      ],
+      [
+        -0.0057683940060034855,
+        0.16555294879501314,
+        0.8879076134183832
+      ],
+      [
+        0.037331417202902006,
+        0.2312426869952422,
+        0.9077787855047132
+      ],
+      [
+        0.09677991455457965,
+        0.2855596177586921,
+        0.911429858186013
+      ],
+      [
+        0.1642285084075533,
+        0.3271656448378728,
+        0.8796685171304286
+      ],
+      [
+        0.1946462475114205,
+        0.34706890419831693,
+        0.8101242981506558
+      ],
+      [
+        0.22247212992433224,
+        0.3582706827210632,
+        0.7216789777998212
+      ],
+      [
+        0.2,
+        0.4,
+        0.6400000000000001
+      ]
+    ]
+  },
+  "colorScope": "Muted warm pearl teaching palette; colors and sheen do not represent experimentally measured appearance.",
+  "scientificScope": "Uncut Gaussian coarse protein envelopes derived from the same PDB 1Y1W coordinates as V8. View-dependent shader transparency is a teaching aid; no measured biological transparency or molecular motion claim. DNA/RNA overlay remains diagrammatic.",
+  "motionScope": "All 12 subunits are static; maxRadians=0. Runtime teaching animation concerns symbolic nucleic acids only.",
+  "runtimeExtraction": "Clone mesh geometry and apply matrixWorld; preserve AO COLOR_0. Replace preview materials with the local pearl surface and view-dependent two-pass teaching window.",
+  "bounds": {
+    "min": [
+      -1.0463769435882568,
+      -1.0409890413284302,
+      -0.47233814001083374
+    ],
+    "max": [
+      1.210724115371704,
+      1.3729702234268188,
+      1.605997920036316
+    ]
+  },
+  "totalTriangles": 73458,
+  "totalVertices": 36721,
+  "glbBytes": 1631532,
+  "glbSha256": "1e1de916aea4271c3bbef8e47b46d3ed7ce152204b5c3ac27402c62cd6a2dea0",
+  "fullEnvelopePreview": {
+    "asset": "full-envelope-preview.webp",
+    "sourceRender": "design/gene-expression/blender-structural/preview-full-source-reference.png",
+    "bytes": 13450,
+    "scope": "Actual Blender render of the uncut coarse envelopes; no AI image generation, no atomic-precision surface claim"
+  },
+  "sourceBlendSHA256": "5112a81f657adcb696e1e69a961f46c62aea4dc2b8a3d6ba87e4ff9273852032",
+  "postprocessing": {
+    "sourceEnvelope": "unchanged uncut reference from V8 authoring file; same rigid orientation and uniform scale",
+    "normalCorrection": "closed manifold surface, outward winding, Blender face normals recalculated",
+    "AO": "12 deterministic outward hemisphere rays, range .88-1",
+    "geometricCut": false
+  }
+}

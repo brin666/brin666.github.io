@@ -1,0 +1,1002 @@
+{
+  "asset": "gene-expression-exhibit.glb",
+  "blend": "gene-expression-exhibit.blend",
+  "blenderVersion": "4.5.9 LTS",
+  "blenderBuildHash": "8bf95cbd38d1",
+  "source": "design/gene-expression/blender/authoring-source.json",
+  "sourceSha256": "81c5ecc7c003c795715913f6109f4948555d290493c94c98ac6e803f06efc41b",
+  "interpretive": true,
+  "scientificScope": "Procedural teaching illustration; no measured atomic coordinates or claim of exact RNA-polymerase structure.",
+  "coordinateTransform": "Import Three (x,y,z) -> Blender (x,-z,y); glTF export_yup returns Y-up.",
+  "runtimeMaterial": "Body includes the fused rounded front edge and uses browser-owned B. Optional RNAP_INNER uses a darker, rougher B-derived inner-wall material.",
+  "materialRoles": {
+    "RNAP_BODY": "body-B",
+    "RNAP_INNER": "inner-wall-dark-rough"
+  },
+  "frontEdgeFusedIntoBody": true,
+  "collections": [
+    "Protein",
+    "NucleicParts",
+    "AuthoringSources"
+  ],
+  "authoringPreview": [
+    "preview-polymerase.png",
+    "preview-front.png"
+  ],
+  "inletExcludedFromAsset": true,
+  "excludedSources": [
+    "SOURCE_enzyme_part_5"
+  ],
+  "AO": "Actual deterministic cosine-hemisphere BVH visibility against combined body and rounded inner-wall geometry (front edge fused into body), bounded grayscale .86..1 in COLOR_0; no random shading noise.",
+  "processing": [
+    {
+      "mesh": "RNAP_BODY",
+      "operation": "voxel-union",
+      "parts": 5,
+      "voxelSize": 0.046,
+      "inputTriangles": 27008,
+      "remeshedTriangles": 40936,
+      "insetExcluded": [
+        "SOURCE_enzyme_part_5"
+      ]
+    },
+    {
+      "mesh": "RNAP_BODY",
+      "operation": "Smooth",
+      "iterations": 5,
+      "factor": 0.32
+    },
+    {
+      "mesh": "RNAP_BODY",
+      "operation": "bounded-local-surface-sculpt",
+      "maxNormalDisplacement": 0.09866568906951731,
+      "grooveCount": 2,
+      "wideDomainCount": 3,
+      "sculptNormalMinLength": 0.999999845866102,
+      "domainDepthOffsets": [
+        0.036,
+        0.082,
+        -0.06
+      ],
+      "note": "broad connected hood, clamp and rear hinge domains; no random micro-noise"
+    },
+    {
+      "mesh": "RNAP_BODY",
+      "operation": "Decimate",
+      "inputTriangles": 40936,
+      "targetTriangles": 32000,
+      "outputTriangles": 32000
+    },
+    {
+      "mesh": "RNAP_INNER",
+      "operation": "original-rounded-partial-crescent-layer",
+      "minimumCentralRadius": 0.8680127482264668,
+      "arcRadians": [
+        0.9,
+        3.7
+      ],
+      "note": "layered channel illustration, not measured polymerase structure"
+    },
+    {
+      "mesh": "RNAP_RIDGE",
+      "operation": "original-rounded-partial-crescent-layer",
+      "minimumCentralRadius": 0.911937510768607,
+      "arcRadians": [
+        -0.95,
+        0.61
+      ],
+      "note": "layered channel illustration, not measured polymerase structure"
+    },
+    {
+      "mesh": "RNAP_BODY",
+      "operation": "Smooth",
+      "iterations": 2,
+      "factor": 0.2
+    },
+    {
+      "mesh": "RNAP_BODY",
+      "operation": "front-edge-voxel-fusion",
+      "mergedSource": "RNAP_RIDGE",
+      "voxelSize": 0.044,
+      "outputTriangles": 32000,
+      "note": "front edge joins are continuous surface; no separate near-tangent overlap"
+    },
+    {
+      "mesh": "BASE_A",
+      "operation": "Smooth",
+      "iterations": 2,
+      "factor": 0.075
+    },
+    {
+      "mesh": "BASE_T",
+      "operation": "Smooth",
+      "iterations": 2,
+      "factor": 0.075
+    },
+    {
+      "mesh": "BASE_G",
+      "operation": "Smooth",
+      "iterations": 2,
+      "factor": 0.075
+    },
+    {
+      "mesh": "BASE_C",
+      "operation": "Smooth",
+      "iterations": 2,
+      "factor": 0.075
+    },
+    {
+      "mesh": "BASE_U",
+      "operation": "Smooth",
+      "iterations": 2,
+      "factor": 0.075
+    },
+    {
+      "mesh": "SUGAR",
+      "operation": "Smooth",
+      "iterations": 4,
+      "factor": 0.25
+    },
+    {
+      "mesh": "PHOSPHATE",
+      "operation": "Smooth",
+      "iterations": 4,
+      "factor": 0.28
+    }
+  ],
+  "meshes": {
+    "RNAP_BODY": {
+      "triangles": 32000,
+      "bounds": {
+        "min": [
+          -1.7110124826431274,
+          -1.9118292331695557,
+          -1.447993278503418
+        ],
+        "max": [
+          1.9199177026748657,
+          1.8231596946716309,
+          0.16636653244495392
+        ],
+        "size": [
+          3.630930185317993,
+          3.7349889278411865,
+          1.6143598109483719
+        ]
+      },
+      "sourceBounds": {
+        "min": [
+          -1.7110124826431274,
+          -1.9118292331695557,
+          -1.447993278503418
+        ],
+        "max": [
+          1.9199177026748657,
+          1.8231596946716309,
+          0.16636653244495392
+        ],
+        "size": [
+          3.630930185317993,
+          3.7349889278411865,
+          1.6143598109483719
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonManifoldEdges": 0,
+        "euler": 0
+      },
+      "openingBefore": {
+        "method": "parallel-rays-through-central-observation-opening",
+        "sampleRadius": 0.5,
+        "rays": 73,
+        "unobstructed": 73,
+        "clearFraction": 1.0
+      },
+      "openingAfter": {
+        "method": "parallel-rays-through-central-observation-opening",
+        "sampleRadius": 0.5,
+        "rays": 73,
+        "unobstructed": 73,
+        "clearFraction": 1.0
+      },
+      "AO": {
+        "method": "actual-BVH-cosine-weighted-hemisphere-ray-occlusion",
+        "samplesPerVertex": 16,
+        "rayDistance": 0.46,
+        "originOffset": 0.004,
+        "min": 0.86,
+        "max": 1.0,
+        "boundedRange": [
+          0.86,
+          1
+        ],
+        "occludedRays": 15619,
+        "totalRays": 256000,
+        "colorAttribute": "AO",
+        "gltfAttribute": "COLOR_0",
+        "occluders": [
+          "RNAP_BODY",
+          "RNAP_INNER"
+        ]
+      }
+    },
+    "RNAP_INNER": {
+      "triangles": 3108,
+      "bounds": {
+        "min": [
+          -1.2642470598220825,
+          -0.664976179599762,
+          -0.5263255834579468
+        ],
+        "max": [
+          0.7717637419700623,
+          1.2094687223434448,
+          -0.2624358534812927
+        ],
+        "size": [
+          2.0360108017921448,
+          1.8744449019432068,
+          0.26388972997665405
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonManifoldEdges": 0,
+        "euler": 2
+      },
+      "defaultMaterialRole": "inner-wall-dark-rough",
+      "AO": {
+        "method": "actual-BVH-cosine-weighted-hemisphere-ray-occlusion",
+        "samplesPerVertex": 16,
+        "rayDistance": 0.46,
+        "originOffset": 0.003,
+        "min": 0.86,
+        "max": 1.0,
+        "boundedRange": [
+          0.86,
+          1
+        ],
+        "occludedRays": 6063,
+        "totalRays": 24896,
+        "colorAttribute": "AO",
+        "gltfAttribute": "COLOR_0",
+        "occluders": [
+          "RNAP_BODY",
+          "RNAP_INNER"
+        ]
+      }
+    },
+    "BASE_A": {
+      "triangles": 2848,
+      "bounds": {
+        "min": [
+          -0.36000001430511475,
+          -0.02499999850988388,
+          -0.2800000011920929
+        ],
+        "max": [
+          0.36000001430511475,
+          0.02499999850988388,
+          0.2800000011920929
+        ],
+        "size": [
+          0.7200000286102295,
+          0.04999999701976776,
+          0.5600000023841858
+        ]
+      },
+      "sourceBounds": {
+        "min": [
+          -0.36000001430511475,
+          -0.02499999850988388,
+          -0.2800000011920929
+        ],
+        "max": [
+          0.36000001430511475,
+          0.02499999850988388,
+          0.2800000011920929
+        ],
+        "size": [
+          0.7200000286102295,
+          0.04999999701976776,
+          0.5600000023841858
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonManifoldEdges": 0,
+        "euler": 2
+      },
+      "teachingMetadata": {
+        "interpretive": true,
+        "molecularKind": "base-A",
+        "ringCount": 2,
+        "attachment": [
+          -0.36,
+          0,
+          0
+        ],
+        "pairingSites": [
+          {
+            "point": [
+              0.36,
+              0,
+              -0.12
+            ],
+            "atom": "N6"
+          },
+          {
+            "point": [
+              0.36,
+              0,
+              0.12
+            ],
+            "atom": "N1"
+          }
+        ],
+        "pairingLayout": "schematic-aligned-functional-edge",
+        "ringTopology": {
+          "rings": [
+            [
+              "C4",
+              "N9",
+              "C8",
+              "N7",
+              "C5"
+            ],
+            [
+              "C4",
+              "N3",
+              "C2",
+              "N1",
+              "C6",
+              "C5"
+            ]
+          ],
+          "sharedEdges": [
+            [
+              "C4",
+              "C5"
+            ]
+          ],
+          "graphVertexCount": 9,
+          "graphEdgeCount": 10,
+          "cycleRank": 2,
+          "outlineComponents": 1,
+          "outlineHoles": 0
+        },
+        "source": {
+          "url": "https://www.rcsb.org/ligand/DA",
+          "use": "ring-connectivity-and-atom-names-only",
+          "coordinates": "local-programmatic-schematic; neither CCD model nor ideal coordinates"
+        }
+      },
+      "AO": {
+        "method": "actual-BVH-cosine-weighted-hemisphere-ray-occlusion",
+        "samplesPerVertex": 8,
+        "rayDistance": 0.055,
+        "originOffset": 0.001,
+        "min": 1.0,
+        "max": 1.0,
+        "boundedRange": [
+          0.86,
+          1
+        ],
+        "occludedRays": 0,
+        "totalRays": 11408,
+        "colorAttribute": "AO",
+        "gltfAttribute": "COLOR_0",
+        "occluders": [
+          "BASE_A"
+        ]
+      }
+    },
+    "BASE_T": {
+      "triangles": 1848,
+      "bounds": {
+        "min": [
+          -0.27000001072883606,
+          -0.02500000037252903,
+          -0.25999999046325684
+        ],
+        "max": [
+          0.27000001072883606,
+          0.02500000037252903,
+          0.25999999046325684
+        ],
+        "size": [
+          0.5400000214576721,
+          0.05000000074505806,
+          0.5199999809265137
+        ]
+      },
+      "sourceBounds": {
+        "min": [
+          -0.27000001072883606,
+          -0.02500000037252903,
+          -0.25999999046325684
+        ],
+        "max": [
+          0.27000001072883606,
+          0.02500000037252903,
+          0.25999999046325684
+        ],
+        "size": [
+          0.5400000214576721,
+          0.05000000074505806,
+          0.5199999809265137
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonManifoldEdges": 0,
+        "euler": 2
+      },
+      "teachingMetadata": {
+        "interpretive": true,
+        "molecularKind": "base-T",
+        "ringCount": 1,
+        "attachment": [
+          -0.27,
+          0,
+          0
+        ],
+        "pairingSites": [
+          {
+            "point": [
+              0.27,
+              0,
+              -0.12
+            ],
+            "atom": "N3"
+          },
+          {
+            "point": [
+              0.27,
+              0,
+              0.12
+            ],
+            "atom": "O4"
+          }
+        ],
+        "pairingLayout": "schematic-aligned-functional-edge",
+        "ringTopology": {
+          "rings": [
+            [
+              "N1",
+              "C2",
+              "N3",
+              "C4",
+              "C5",
+              "C6"
+            ]
+          ],
+          "sharedEdges": [],
+          "graphVertexCount": 6,
+          "graphEdgeCount": 6,
+          "cycleRank": 1,
+          "outlineComponents": 1,
+          "outlineHoles": 0
+        },
+        "source": {
+          "url": "https://www.rcsb.org/ligand/DT",
+          "use": "ring-connectivity-and-atom-names-only",
+          "coordinates": "local-programmatic-schematic; neither CCD model nor ideal coordinates"
+        }
+      },
+      "AO": {
+        "method": "actual-BVH-cosine-weighted-hemisphere-ray-occlusion",
+        "samplesPerVertex": 8,
+        "rayDistance": 0.055,
+        "originOffset": 0.001,
+        "min": 1.0,
+        "max": 1.0,
+        "boundedRange": [
+          0.86,
+          1
+        ],
+        "occludedRays": 0,
+        "totalRays": 7408,
+        "colorAttribute": "AO",
+        "gltfAttribute": "COLOR_0",
+        "occluders": [
+          "BASE_T"
+        ]
+      }
+    },
+    "BASE_G": {
+      "triangles": 2848,
+      "bounds": {
+        "min": [
+          -0.36000001430511475,
+          -0.02499999850988388,
+          -0.2800000011920929
+        ],
+        "max": [
+          0.36000001430511475,
+          0.02499999850988388,
+          0.2800000011920929
+        ],
+        "size": [
+          0.7200000286102295,
+          0.04999999701976776,
+          0.5600000023841858
+        ]
+      },
+      "sourceBounds": {
+        "min": [
+          -0.36000001430511475,
+          -0.02499999850988388,
+          -0.2800000011920929
+        ],
+        "max": [
+          0.36000001430511475,
+          0.02499999850988388,
+          0.2800000011920929
+        ],
+        "size": [
+          0.7200000286102295,
+          0.04999999701976776,
+          0.5600000023841858
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonManifoldEdges": 0,
+        "euler": 2
+      },
+      "teachingMetadata": {
+        "interpretive": true,
+        "molecularKind": "base-G",
+        "ringCount": 2,
+        "attachment": [
+          -0.36,
+          0,
+          0
+        ],
+        "pairingSites": [
+          {
+            "point": [
+              0.36,
+              0,
+              -0.16
+            ],
+            "atom": "O6"
+          },
+          {
+            "point": [
+              0.36,
+              0,
+              0
+            ],
+            "atom": "N1"
+          },
+          {
+            "point": [
+              0.36,
+              0,
+              0.16
+            ],
+            "atom": "N2"
+          }
+        ],
+        "pairingLayout": "schematic-aligned-functional-edge",
+        "ringTopology": {
+          "rings": [
+            [
+              "C4",
+              "N9",
+              "C8",
+              "N7",
+              "C5"
+            ],
+            [
+              "C4",
+              "N3",
+              "C2",
+              "N1",
+              "C6",
+              "C5"
+            ]
+          ],
+          "sharedEdges": [
+            [
+              "C4",
+              "C5"
+            ]
+          ],
+          "graphVertexCount": 9,
+          "graphEdgeCount": 10,
+          "cycleRank": 2,
+          "outlineComponents": 1,
+          "outlineHoles": 0
+        },
+        "source": {
+          "url": "https://www.rcsb.org/ligand/DG",
+          "use": "ring-connectivity-and-atom-names-only",
+          "coordinates": "local-programmatic-schematic; neither CCD model nor ideal coordinates"
+        }
+      },
+      "AO": {
+        "method": "actual-BVH-cosine-weighted-hemisphere-ray-occlusion",
+        "samplesPerVertex": 8,
+        "rayDistance": 0.055,
+        "originOffset": 0.001,
+        "min": 1.0,
+        "max": 1.0,
+        "boundedRange": [
+          0.86,
+          1
+        ],
+        "occludedRays": 0,
+        "totalRays": 11408,
+        "colorAttribute": "AO",
+        "gltfAttribute": "COLOR_0",
+        "occluders": [
+          "BASE_G"
+        ]
+      }
+    },
+    "BASE_C": {
+      "triangles": 1848,
+      "bounds": {
+        "min": [
+          -0.27000001072883606,
+          -0.02500000037252903,
+          -0.25999999046325684
+        ],
+        "max": [
+          0.27000001072883606,
+          0.02500000037252903,
+          0.25999999046325684
+        ],
+        "size": [
+          0.5400000214576721,
+          0.05000000074505806,
+          0.5199999809265137
+        ]
+      },
+      "sourceBounds": {
+        "min": [
+          -0.27000001072883606,
+          -0.02500000037252903,
+          -0.25999999046325684
+        ],
+        "max": [
+          0.27000001072883606,
+          0.02500000037252903,
+          0.25999999046325684
+        ],
+        "size": [
+          0.5400000214576721,
+          0.05000000074505806,
+          0.5199999809265137
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonManifoldEdges": 0,
+        "euler": 2
+      },
+      "teachingMetadata": {
+        "interpretive": true,
+        "molecularKind": "base-C",
+        "ringCount": 1,
+        "attachment": [
+          -0.27,
+          0,
+          0
+        ],
+        "pairingSites": [
+          {
+            "point": [
+              0.27,
+              0,
+              -0.16
+            ],
+            "atom": "O2"
+          },
+          {
+            "point": [
+              0.27,
+              0,
+              0
+            ],
+            "atom": "N3"
+          },
+          {
+            "point": [
+              0.27,
+              0,
+              0.16
+            ],
+            "atom": "N4"
+          }
+        ],
+        "pairingLayout": "schematic-aligned-functional-edge",
+        "ringTopology": {
+          "rings": [
+            [
+              "N1",
+              "C2",
+              "N3",
+              "C4",
+              "C5",
+              "C6"
+            ]
+          ],
+          "sharedEdges": [],
+          "graphVertexCount": 6,
+          "graphEdgeCount": 6,
+          "cycleRank": 1,
+          "outlineComponents": 1,
+          "outlineHoles": 0
+        },
+        "source": {
+          "url": "https://www.rcsb.org/ligand/DC",
+          "use": "ring-connectivity-and-atom-names-only",
+          "coordinates": "local-programmatic-schematic; neither CCD model nor ideal coordinates"
+        }
+      },
+      "AO": {
+        "method": "actual-BVH-cosine-weighted-hemisphere-ray-occlusion",
+        "samplesPerVertex": 8,
+        "rayDistance": 0.055,
+        "originOffset": 0.001,
+        "min": 1.0,
+        "max": 1.0,
+        "boundedRange": [
+          0.86,
+          1
+        ],
+        "occludedRays": 0,
+        "totalRays": 7408,
+        "colorAttribute": "AO",
+        "gltfAttribute": "COLOR_0",
+        "occluders": [
+          "BASE_C"
+        ]
+      }
+    },
+    "BASE_U": {
+      "triangles": 1848,
+      "bounds": {
+        "min": [
+          -0.27000001072883606,
+          -0.02500000037252903,
+          -0.25999999046325684
+        ],
+        "max": [
+          0.27000001072883606,
+          0.02500000037252903,
+          0.25999999046325684
+        ],
+        "size": [
+          0.5400000214576721,
+          0.05000000074505806,
+          0.5199999809265137
+        ]
+      },
+      "sourceBounds": {
+        "min": [
+          -0.27000001072883606,
+          -0.02500000037252903,
+          -0.25999999046325684
+        ],
+        "max": [
+          0.27000001072883606,
+          0.02500000037252903,
+          0.25999999046325684
+        ],
+        "size": [
+          0.5400000214576721,
+          0.05000000074505806,
+          0.5199999809265137
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonManifoldEdges": 0,
+        "euler": 2
+      },
+      "teachingMetadata": {
+        "interpretive": true,
+        "molecularKind": "base-U",
+        "ringCount": 1,
+        "attachment": [
+          -0.27,
+          0,
+          0
+        ],
+        "pairingSites": [
+          {
+            "point": [
+              0.27,
+              0,
+              -0.12
+            ],
+            "atom": "N3"
+          },
+          {
+            "point": [
+              0.27,
+              0,
+              0.12
+            ],
+            "atom": "O4"
+          }
+        ],
+        "pairingLayout": "schematic-aligned-functional-edge",
+        "ringTopology": {
+          "rings": [
+            [
+              "N1",
+              "C2",
+              "N3",
+              "C4",
+              "C5",
+              "C6"
+            ]
+          ],
+          "sharedEdges": [],
+          "graphVertexCount": 6,
+          "graphEdgeCount": 6,
+          "cycleRank": 1,
+          "outlineComponents": 1,
+          "outlineHoles": 0
+        },
+        "source": {
+          "url": "https://www.rcsb.org/ligand/U",
+          "use": "ring-connectivity-and-atom-names-only",
+          "coordinates": "local-programmatic-schematic; neither CCD model nor ideal coordinates"
+        }
+      },
+      "AO": {
+        "method": "actual-BVH-cosine-weighted-hemisphere-ray-occlusion",
+        "samplesPerVertex": 8,
+        "rayDistance": 0.055,
+        "originOffset": 0.001,
+        "min": 1.0,
+        "max": 1.0,
+        "boundedRange": [
+          0.86,
+          1
+        ],
+        "occludedRays": 0,
+        "totalRays": 7408,
+        "colorAttribute": "AO",
+        "gltfAttribute": "COLOR_0",
+        "occluders": [
+          "BASE_U"
+        ]
+      }
+    },
+    "SUGAR": {
+      "triangles": 2160,
+      "bounds": {
+        "min": [
+          -0.07559411972761154,
+          -0.06714571267366409,
+          -0.08125386387109756
+        ],
+        "max": [
+          0.07871727645397186,
+          0.06820101290941238,
+          0.07881350815296173
+        ],
+        "size": [
+          0.1543113961815834,
+          0.13534672558307648,
+          0.1600673720240593
+        ]
+      },
+      "sourceBounds": {
+        "min": [
+          -0.07559411972761154,
+          -0.06714571267366409,
+          -0.08125386387109756
+        ],
+        "max": [
+          0.07871727645397186,
+          0.06820101290941238,
+          0.07881350815296173
+        ],
+        "size": [
+          0.1543113961815834,
+          0.13534672558307648,
+          0.1600673720240593
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonManifoldEdges": 0,
+        "euler": 2
+      },
+      "AO": {
+        "method": "actual-BVH-cosine-weighted-hemisphere-ray-occlusion",
+        "samplesPerVertex": 8,
+        "rayDistance": 0.075,
+        "originOffset": 0.001,
+        "min": 1.0,
+        "max": 1.0,
+        "boundedRange": [
+          0.86,
+          1
+        ],
+        "occludedRays": 0,
+        "totalRays": 8656,
+        "colorAttribute": "AO",
+        "gltfAttribute": "COLOR_0",
+        "occluders": [
+          "SUGAR"
+        ]
+      }
+    },
+    "PHOSPHATE": {
+      "triangles": 720,
+      "bounds": {
+        "min": [
+          -0.0530662015080452,
+          -0.04740314558148384,
+          -0.05696675926446915
+        ],
+        "max": [
+          0.055134087800979614,
+          0.0476391464471817,
+          0.055328309535980225
+        ],
+        "size": [
+          0.10820028930902481,
+          0.09504229202866554,
+          0.11229506880044937
+        ]
+      },
+      "sourceBounds": {
+        "min": [
+          -0.0530662015080452,
+          -0.04740314558148384,
+          -0.05696675926446915
+        ],
+        "max": [
+          0.055134087800979614,
+          0.0476391464471817,
+          0.055328309535980225
+        ],
+        "size": [
+          0.10820028930902481,
+          0.09504229202866554,
+          0.11229506880044937
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonManifoldEdges": 0,
+        "euler": 2
+      },
+      "AO": {
+        "method": "actual-BVH-cosine-weighted-hemisphere-ray-occlusion",
+        "samplesPerVertex": 8,
+        "rayDistance": 0.075,
+        "originOffset": 0.001,
+        "min": 1.0,
+        "max": 1.0,
+        "boundedRange": [
+          0.86,
+          1
+        ],
+        "occludedRays": 0,
+        "totalRays": 2896,
+        "colorAttribute": "AO",
+        "gltfAttribute": "COLOR_0",
+        "occluders": [
+          "PHOSPHATE"
+        ]
+      }
+    }
+  },
+  "totalTriangles": 49228,
+  "glbBytes": 1272048,
+  "blendBytes": 6735264,
+  "elapsedSeconds": 5.144
+}

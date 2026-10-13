@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fbfaf7">
+  <meta name="description" content="追踪同一段人工教学序列：从 DNA 模板到 RNA，再到五个氨基酸组成的多肽。可暂停、逐步观察与双向追踪。">
+  <title>基因表达 · 从 DNA 到多肽</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23f1dfac'/%3E%3Cpath d='M12 6C32 14 8 26 28 34M28 6C8 14 32 26 12 34M13 10h14M15 20h10M13 30h14' fill='none' stroke='%2354554c' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./exhibit-ui.css">
+  <link rel="stylesheet" href="./entrance.css">
+  <link rel="stylesheet" href="./whiteboard.css">
+  <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+  <script>
+    (() => {
+      const query = new URLSearchParams(location.search);
+      const route = new URLSearchParams(location.hash.replace(/^#/, ''));
+      const eligible = query.get('intro') !== 'off'
+        && query.get('sample') !== 'transcription'
+        && query.get('view') !== '2d'
+        && !route.has('object')
+        && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!eligible) return;
+      document.documentElement.dataset.geneEntrance = 'waiting';
+      const watchdog = setTimeout(() => {
+        if (document.documentElement.dataset.geneEntrance === 'waiting') delete document.documentElement.dataset.geneEntrance;
+      }, 20000);
+      addEventListener('gene-expression-entrance-ready', () => clearTimeout(watchdog), { once: true });
+    })();
+  </script>
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <section id="entrance-ui" data-phase="idle" aria-label="基因表达开场" aria-live="polite">
+    <div id="entrance-copy"><h1 id="entrance-title">基因表达</h1><p id="entrance-status">正在准备分子序列…</p></div>
+    <button id="entrance-skip" type="button">跳过开场</button>
+  </section>
+  <a class="skip-link" href="#transport">跳到播放控制</a>
+  <main class="lab-shell">
+    <header class="lab-header">
+      <div class="identity"><a class="back-link" href="../../.." aria-label="返回博客">↖ <span>BRIN / LABS</span></a><div class="title-line"><h1>基因表达</h1><span>从 DNA 到多肽</span></div></div>
+      <div class="header-actions"><button id="objects-toggle" class="quiet-button objects-toggle" type="button" aria-controls="object-menu" aria-expanded="false">认识分子</button><button id="details-toggle" class="quiet-button details-toggle" type="button" aria-controls="learning-panel" aria-expanded="false">说明与序列</button></div>
+      <nav id="object-menu" class="object-menu" aria-label="独立对象教学" hidden></nav>
+    </header>
+    <nav id="chapters" class="chapters" aria-label="教学章节"></nav>
+
+    <div id="lab-main" class="lab-main" data-panel-open="false">
+      <section class="stage" aria-labelledby="stage-title">
+        <div class="stage-heading"><div><h2 id="stage-title">DNA 双链</h2></div><div class="stage-meta"><a id="chapter-book" class="chapter-book" target="_blank" rel="noopener noreferrer">教材定位 ↗</a></div></div>
+        <div id="scene" class="scene" aria-label="基因表达三维教学场景"><div id="scene-loading" class="scene-loading">正在建立序列模型…</div></div>
+        <div class="stage-control-dock">
+        <div class="view-controls" aria-label="场景视角与显示">
+          <div id="view-mode-group" class="view-mode-group" role="group" aria-label="分子视角">
+            <button id="view-reaction" class="view-button" type="button" aria-pressed="false">近景</button>
+            <button id="view-overview" class="view-button" type="button" aria-pressed="true">全景</button>
+          </div>
+          <button id="expand" class="view-button" type="button" aria-pressed="false">局部展开</button>
+          <button id="dna-idle" class="view-button" type="button" aria-pressed="true" title="DNA 双螺旋绕长轴缓慢旋转；教学进度保持不变">暂停旋转</button>
+          <button id="protein-perspective" class="view-button" type="button" aria-label="透视效果" aria-pressed="true" hidden>透视</button>
+          <button id="zoom-in" class="icon-button" type="button" aria-label="放大视角">＋</button>
+          <button id="zoom-out" class="icon-button" type="button" aria-label="缩小视角">−</button>
+          <button id="view-reset" class="view-button" type="button">恢复视角</button>
+          <button id="labels" class="view-button" type="button" aria-pressed="false">详细标签</button>
+        </div>
+        <button id="whiteboard-open" type="button" disabled aria-label="进入白板，冻结当前教学步骤" title="白板 · 冻结当前构象"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4H4v16h16V10M10 15l1-4 8-8 3 3-8 8zM17 5l3 3"/></svg></button>
+        </div>
+      </section>
+
+      <aside id="learning-panel" class="learning-panel" aria-labelledby="panel-title" data-open="false" aria-hidden="true" inert>
+        <div class="panel-heading"><div><h2 id="panel-title" tabindex="-1">说明与序列</h2></div><button id="panel-close" class="icon-button" type="button" aria-label="关闭说明面板">×</button></div>
+        <div class="panel-scroll">
+          <div class="chapter-prompt"><p class="eyebrow" id="stage-kicker-panel">观察提示</p><p id="observation" class="observation"></p></div>
+          <p id="translation-site-note" class="sequence-hint" hidden>拓展标注：本页保留 A/P/E 位点；教材图 4-7 采用位点 1、位点 2 的简化表示。</p>
+          <aside id="inspector" class="inspector" aria-labelledby="inspector-title" hidden><div class="inspector-top"><span class="eyebrow">你选中的结构</span><button id="inspector-close" class="icon-button" type="button" aria-label="关闭结构说明">×</button></div><h3 id="inspector-title"></h3><p id="inspector-role"></p><p id="inspector-now" class="inspector-now"></p><div id="trace-detail"></div><button id="inspector-lesson" class="text-button" type="button">单独了解这个对象 ↗</button><button id="inspector-return" class="text-button" type="button">返回整体视角 ↗</button></aside>
+          <div class="panel-section"><p class="eyebrow">可查看结构</p><div id="structure-access" class="structure-access" aria-label="可聚焦的结构入口"></div></div>
+          <section class="sequence-panel" aria-labelledby="sequence-title"><div class="sequence-heading"><h2 id="sequence-title">同一段序列</h2><div class="counts"><span>RNA <b id="rna-count">0</b><small>/30</small></span><span>多肽 <b id="peptide-count">0</b><small>/5</small></span></div></div><p class="sequence-hint" id="sequence-hint">点击任一碱基，查看它在两条 DNA 链中的配对。</p><div class="sequence-scroller" tabindex="0" aria-label="序列区域，可横向滚动"><div id="sequences"></div></div><div id="amino-row" class="amino-row" hidden></div><p id="trace-message" class="trace-message" role="status" aria-live="polite"></p></section>
+          <section id="comparison-notes" class="comparison-notes" hidden><div class="summary-questions"><p><b>转录读取什么？</b>当前基因的 DNA 模板链。</p><p><b>翻译读取什么？</b>mRNA 上指定读框的密码子。</p><p><b>排列顺序如何对应？</b>每个编码密码子指定一个残基，终止密码子结束读取。</p></div><details class="quiz"><summary>用三个小问题检验理解 <span>＋</span></summary><div id="quiz-content"></div></details></section>
+          <div class="panel-resources"><p class="sequence-hint">拖动进度用于回看教学过程，不代表反应逆向进行。</p><button id="sources-open" class="quiet-button source-button" type="button">资料来源与模型说明 <span aria-hidden="true">↗</span></button></div>
+        </div>
+      </aside>
+    </div>
+
+    <section id="transport" class="transport" aria-label="播放控制">
+      <div class="transport-summary"><section class="process-caption" aria-label="当前教学步骤"><div class="phase-mark" aria-hidden="true"></div><div><strong id="step-title"></strong><p id="step-description"></p></div></section><div class="progress-block"><div class="progress-top"><span id="progress-label">认识 DNA</span><output id="progress-value" for="progress">0%</output></div><input id="progress" type="range" min="0" max="66" step="0.01" value="0" aria-label="全程教学进度"></div></div>
+      <div class="transport-bottom"><div class="play-group"><button id="previous" class="icon-button" type="button" aria-label="上一步">❮</button><button id="play" class="play-button" type="button" aria-label="播放"><span id="play-icon" aria-hidden="true">▶</span><span id="play-text">播放</span></button><button id="next" class="icon-button" type="button" aria-label="下一步">❯</button><button id="reset" class="quiet-button reset-button" type="button">重置演示</button></div><div class="play-options"><div class="speed-group" role="group" aria-label="播放速度"><button type="button" data-speed="0.5" aria-pressed="false">0.5×</button><button type="button" data-speed="1" aria-pressed="true">1×</button><button type="button" data-speed="2" aria-pressed="false">2×</button></div></div>
+    </section>
+    <noscript><p class="no-script">此教学实验需要 JavaScript。人工 RNA 序列为 GCC ACC AUG GCU UUU GAA CCG UAA GAC CUG，翻译产物为 Met–Ala–Phe–Glu–Pro，共五个残基；UAA 不对应氨基酸。</p></noscript>
+  </main>
+
+  <section id="object-lesson" class="object-lesson" aria-labelledby="object-title" hidden>
+    <header class="object-header"><button id="object-back" class="object-back" type="button"><span aria-hidden="true">←</span> 返回整体过程</button><span class="object-breadcrumb">基因表达 <span aria-hidden="true">/</span> 分子特写</span><a id="object-book" class="book-link" target="_blank" rel="noopener noreferrer"></a></header>
+    <div class="object-layout">
+      <div class="object-stage"><div class="object-stage-heading"><span id="object-stage-name"></span><span>拖动旋转 · 滚轮缩放</span></div><div id="object-scene" class="object-scene" aria-label="独立对象三维教学模型"></div><div id="object-loading" class="object-loading" role="status">正在准备分子展台…</div><div class="object-tools"><button id="object-perspective" type="button" aria-pressed="false" hidden>透视：关</button><button id="object-reset" type="button">恢复视角</button></div><p id="object-model-note" class="object-model-note"></p></div>
+      <aside class="object-teaching">
+        <div class="object-introduction"><h1 id="object-title" tabindex="-1"></h1><p id="object-subtitle" class="object-subtitle"></p><p id="object-summary" class="object-summary"></p></div>
+        <nav id="object-steps" class="object-steps" aria-label="对象教学步骤"></nav>
+        <div id="object-step-copy" class="object-step-copy" aria-live="polite"><p id="object-step-count"></p><h2 id="object-step-title"></h2><p id="object-step-text"></p></div>
+        <p id="object-extension" class="object-extension" hidden></p>
+        <div class="object-navigation"><button id="object-previous" type="button" aria-label="上一个对象教学步骤">←</button><button id="object-next" type="button">下一步 <span aria-hidden="true">→</span></button></div>
+      </aside>
+    </div>
+  </section>
+  <div id="knowledge-tip" class="knowledge-tip" role="tooltip" hidden><strong id="knowledge-name"></strong><span id="knowledge-page"></span><small id="knowledge-action"></small></div>
+
+  <dialog id="sources" class="source-dialog" aria-labelledby="source-title"><div class="dialog-header"><div><span class="eyebrow">ABOUT THE MODEL</span><h2 id="source-title">资料来源与模型说明</h2></div><button id="sources-close" class="icon-button" aria-label="关闭模型说明">×</button></div><div class="source-content"><p>本页演示典型动物细胞环境中，一个核基因的蛋白质编码信息如何表达。基因表达也可以产生功能性 RNA，并非所有 RNA 都会被翻译。</p><h3>这是一段人工教学序列</h3><p>展示窗口共 30 个核苷酸，前后各含 6 个非翻译区核苷酸。读取从位置 7 的 AUG 开始，到位置 22–24 的 UAA 终止，得到 5 个氨基酸残基。它不是已知天然基因，也不代表真实基因的典型长度。上下游调控与转录终止背景不在这个窗口中；AUG 和 UAA 是本例的翻译信号，不能作为转录起止信号。</p><h3>空间与时间经过教学化调整</h3><p>RNA 聚合酶外形参考 <a href="https://www.rcsb.org/structure/1Y1W" target="_blank" rel="noopener noreferrer">PDB 1Y1W（酵母 RNA 聚合酶 II 延伸复合物）</a> 的实验坐标，保留十二亚基并生成简化曲面；用于真核转录教学，不是本页人工序列的实验复合物。DNA、RNA、核糖体和多肽为教学示意，非原子级结构；颜色、光泽、透视、相对大小、运动路径与速度均为教学表现。为使配对与转移清晰可见，分子之间的尺度比例与时间均有所调整。三维中的字母及下方序列共同标记信息位置，追踪不意味着 DNA 碱基本身变成氨基酸。</p><h3>RNA 加工与起始过程有所简化</h3><p>本页聚焦转录与翻译，RNA 加工的细节已简化。典型真核前体 mRNA 的加工可涉及加帽、剪接及 3′端加工等，部分加工可以与转录同时发生。章节顺序用于教学组织，不表示所有加工都严格等到转录结束才开始。</p><p>本例不含内含子，因此不播放剪接动画；编码链与 RNA 在此窗口内同向对照时，主要字母差别为 T 与 U。这个关系不能无条件推广到所有完整真核基因与成熟 mRNA。帽和 poly(A) 尾未纳入 30 个核苷酸的计数，poly(A) 尾也不是从本例 DNA 模板逐个转录来的。</p><p>翻译从 5′端附近识别起始位置的过程为示意，起始因子等细节省略。采用标准遗传密码与理想互补反密码子，不展开特殊遗传密码与摆动配对，也不表示每个密码子必然对应一种独立 tRNA。真实蛋白质形成还涉及折叠，部分需要进一步加工；本页结束于示例多肽的释放。</p><h3>概念与规则参考</h3><ul><li><a href="https://www.genome.gov/genetics-glossary/Transcription" target="_blank" rel="noopener noreferrer">NHGRI · 转录概念</a></li><li><a href="https://www.genome.gov/genetics-glossary/Translation" target="_blank" rel="noopener noreferrer">NHGRI · 翻译概念</a></li><li><a href="https://www.genome.gov/genetics-glossary/Transfer-RNA-tRNA" target="_blank" rel="noopener noreferrer">NHGRI · tRNA</a></li><li><a href="https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi#SG1" target="_blank" rel="noopener noreferrer">NCBI · 标准遗传密码（表中 T 在 RNA 中对应 U）</a></li><li><a href="https://openstax.org/books/biology-2e/pages/15-3-eukaryotic-transcription" target="_blank" rel="noopener noreferrer">OpenStax Biology 2e · 真核转录</a></li><li><a href="https://openstax.org/books/biology-2e/pages/15-4-rna-processing-in-eukaryotes" target="_blank" rel="noopener noreferrer">OpenStax Biology 2e · RNA 加工</a></li><li><a href="https://openstax.org/books/biology-2e/pages/15-5-ribosomes-and-protein-synthesis" target="_blank" rel="noopener noreferrer">OpenStax Biology 2e · 核糖体与蛋白质合成</a></li></ul><h3>原创内容与软件许可</h3><p>模型曲面、备用 SVG、教学文案和界面由本项目制作；聚合酶的结构坐标来源为上述 RCSB PDB 条目，核糖体曲面与残基外形为原创教学示意。交互需求参考 <a href="https://wedulab.com/labs/cell?lang=zh-CN#1" target="_blank" rel="noopener noreferrer">WeduLab</a> 的空间探索方向，实际观察结果见本地验收记录，没有复制其代码、模型和文案。</p><p>本地随页面提供 Three.js 0.160.0 与其 OrbitControls，遵循 <a href="./vendor/THREE-LICENSE.txt" target="_blank" rel="noopener noreferrer">MIT 许可</a>。所有教学计算在浏览器本地完成，无付费 API、登录或运行时大模型。</p></div></dialog>
+</body>
+</html>

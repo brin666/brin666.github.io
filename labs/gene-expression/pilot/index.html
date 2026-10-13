@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f6f1">
+  <title>转录 · 14 秒模型样段</title>
+  <meta name="description" content="DNA 局部解旋、RNA 核苷酸接入与聚合酶前移的可回看三维样段。">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23e8eee7'/%3E%3Cpath d='M12 6C32 14 8 26 28 34M28 6C8 14 32 26 12 34M13 10h14M15 20h10M13 30h14' fill='none' stroke='%23546961' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./style.css">
+  <script type="importmap">{"imports":{"three":"../vendor/three.module.js"}}</script>
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#play">跳到播放控制</a>
+  <main class="pilot-shell">
+    <header class="page-header">
+      <a class="back-link" href="../">← 基因表达实验</a>
+      <span class="edition">MODEL STUDY <i></i> 02</span>
+    </header>
+    <div class="intro">
+      <div><p class="eyebrow">从序列，到一段连续的运动</p><h1>转录，近一点看。<span>14 秒样段</span></h1></div>
+      <p class="intro-note">DNA 局部打开 · RNA 接入 · 聚合酶前移<br>教学展品风 / 人工序列 / 局部示意</p>
+    </div>
+    <section class="exhibit" aria-label="转录三维样段">
+      <div class="exhibit-top"><span><i class="live-dot"></i> TRANSCRIPTION / ELONGATION</span><div class="exhibit-actions"><button id="labels" aria-pressed="true" title="显示或隐藏结构标签">结构标签</button><button id="camera" title="恢复导演视角">恢复视角 ↗</button></div></div>
+      <div id="scene" class="scene" aria-label="可拖动旋转的 DNA 与 RNA 模型"><div id="loading" class="loading"><span></span>正在建立分子模型…</div></div>
+      <div class="exhibit-bottom"><div class="legend"><span><i class="coding-color"></i>编码链</span><span><i class="template-color"></i>模板链</span><span><i class="rna-color"></i>RNA</span></div><span class="orbit-hint">拖动旋转 · 滚轮缩放</span></div>
+      <div id="inspect" class="inspect" hidden><span id="inspect-title"></span><p id="inspect-text"></p><button id="inspect-close" aria-label="关闭结构说明">×</button></div>
+    </section>
+    <section class="player" aria-label="播放控制">
+      <div class="player-line"><div class="main-controls"><button id="play" class="play" aria-label="播放样段"><span id="play-icon">▶</span><span id="play-label">播放</span></button><button id="restart" class="restart" aria-label="从头播放样段">↺ <span>重播</span></button></div><div class="phase-copy"><strong id="phase-title">一条 DNA，两条反向的链</strong><p id="phase-description">先看完整双螺旋，再靠近正在延长 RNA 的局部。</p></div><output id="time" class="time" for="progress">00.0 <span>/ 14.0 s</span></output></div>
+      <div class="timeline"><input id="progress" type="range" min="0" max="14" step="0.001" value="0" aria-label="样段时间"><div class="timeline-marks" aria-hidden="true"><span>整体</span><span>局部打开</span><span>连续延长</span><span>回看结果</span></div></div>
+    </section>
+    <section class="reading" aria-labelledby="reading-title">
+      <div class="reading-heading"><div><p class="eyebrow">同一个碱基，在三个位置</p><h2 id="reading-title">配对关系，随时可核对。</h2></div><div class="count"><b id="count">6</b><span>nt <small>RNA 长度</small></span><em id="added">本段 +0</em></div></div>
+      <div class="sequence-scroll" tabindex="0" aria-label="DNA 和 RNA 序列，可横向滚动"><div id="sequence"></div></div>
+      <div class="reading-foot"><p id="pair-detail">模板链上的碱基，决定接入 RNA 的互补碱基。</p><span>已有 6 nt · 本段新增 AUGGC</span></div>
+    </section>
+    <footer><p>模型保留碱基顺序、互补关系与链的方向；尺寸、形状和反应节奏经过教学简化。回看不会表示化学反应逆向发生。</p><a href="https://pdb101.rcsb.org/motm/023" target="_blank" rel="noopener">结构参考：PDB-101 ↗</a></footer>
+  </main>
+</body>
+</html>

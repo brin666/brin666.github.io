@@ -1,0 +1,20 @@
+/* A small loading cover prevents the finished teaching pose from flashing before
+   the local model is ready. The paper interface returns after the same canvas lands. */
+#entrance-ui{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-items:center;padding:28px;background:#132427;color:#e4ece7;pointer-events:none}
+#entrance-ui[data-phase="waiting"],html[data-gene-entrance="waiting"] #entrance-ui,#entrance-ui[data-phase="loading"],html[data-gene-entrance="loading"] #entrance-ui,#entrance-ui[data-phase="active"],html[data-gene-entrance="active"] #entrance-ui,#entrance-ui[data-phase="handoff"],html[data-gene-entrance="handoff"] #entrance-ui{display:grid}
+html[data-gene-entrance="waiting"] .lab-shell,html[data-gene-entrance="loading"] .lab-shell,html[data-gene-entrance="active"] .lab-shell{visibility:hidden}
+html[data-gene-entrance="handoff"] .lab-shell{visibility:visible}
+html[data-gene-entrance="waiting"] .skip-link,html[data-gene-entrance="loading"] .skip-link,html[data-gene-entrance="active"] .skip-link,html[data-gene-entrance="handoff"] .skip-link{visibility:hidden}
+#entrance-copy{grid-area:1/1;text-align:center;align-self:center;max-width:min(92vw,580px)}
+#entrance-title{font-size:clamp(34px,4.3vw,60px);font-weight:500;letter-spacing:.02em}
+#entrance-status{margin-top:13px;font-size:clamp(12px,1.6vw,16px);line-height:1.8;color:#aec0b7}
+#entrance-skip{position:absolute;top:calc(16px + env(safe-area-inset-top));right:calc(16px + env(safe-area-inset-right));min-height:44px;padding:7px 14px;border:1px solid #668078;border-radius:7px;background:#142427;color:#e4ece7;font-size:12px;pointer-events:auto}
+#entrance-skip:hover{background:#223a38}
+html[data-gene-entrance="active"] #entrance-ui{background:transparent}
+html[data-gene-entrance="handoff"] #entrance-ui{background:transparent}
+html[data-gene-entrance="active"] #entrance-copy,html[data-gene-entrance="handoff"] #entrance-copy{align-self:start;margin-top:10vh}
+html[data-gene-entrance="active"] #entrance-title,html[data-gene-entrance="handoff"] #entrance-title{font-size:clamp(44px,5vw,64px)}
+#scene.gene-expression-entrance{touch-action:none!important}
+html[data-gene-entrance="loading"] #entrance-skip{display:block}
+@media(max-width:700px){#entrance-ui{padding:20px}#entrance-copy{align-self:start;margin-top:11vh}#entrance-title,html[data-gene-entrance="active"] #entrance-title,html[data-gene-entrance="handoff"] #entrance-title{font-size:34px}#entrance-skip{top:calc(10px + env(safe-area-inset-top));right:calc(10px + env(safe-area-inset-right));min-height:44px}}
+@media(prefers-reduced-motion:reduce){#entrance-ui{transition:none!important}}
