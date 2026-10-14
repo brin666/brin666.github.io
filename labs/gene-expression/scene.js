@@ -19,6 +19,7 @@ import { createMolecularLivingMotion } from './molecular-living-motion.js';
 import { createDnaIdleRotation } from './dna-idle-rotation.js';
 import { createStrandPoseBlend } from './strand-pose-blend.js';
 import { createDnaEntrance, entranceEase, entranceSpin, ENTRANCE_HANDOFF, ENTRANCE_DURATION } from './dna-entrance.js';
+import { createProteinOcclusion } from './protein-occlusion-bvh.js';
 import { derive } from './state.mjs';
 
 // The shared timeline owns biology. This module owns only presentation and camera rendering.
@@ -49,9 +50,35 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
   let proteinView = null, proteinVisual = null, perspectiveEnabled = true;
   let proteinShells = [];
   let fallbackProteinShells = [];
+  const proteinOcclusion = createProteinOcclusion();
   const labelOcclusionRaycaster = new THREE.Raycaster();
   const labelOcclusionDirection = new THREE.Vector3();
   const labelOccluderCenter = new THREE.Vector3();
+  const proteinOcclusionOpacity = point => proteinView ? proteinView.opacityAt(point) : 1;
+  const occlusionWaiters = new Set();
+  function waitForOcclusionIdle() {
+    return new Promise(resolve => {
+      const waiter = { resolve, idle: typeof requestIdleCallback === 'function', handle: 0 };
+      const finish = () => { occlusionWaiters.delete(waiter); resolve(); };
+      occlusionWaiters.add(waiter);
+      waiter.handle = waiter.idle ? requestIdleCallback(finish, { timeout: 120 }) : setTimeout(finish, 0);
+    });
+  }
+  async function prepareProteinOcclusion(shells, stillRelevant = () => true) {
+    for (const shell of shells) {
+      if (disposed || !stillRelevant()) return;
+      // Build one mesh per idle turn so loading a detailed protein cannot
+      // monopolize the frame that first shows the transcription chapter.
+      await waitForOcclusionIdle();
+      if (disposed || !stillRelevant()) return;
+      proteinOcclusion.buildMesh(shell);
+    }
+  }
+  function prepareProteinOcclusionInBackground(shells, stillRelevant = () => true) {
+    void prepareProteinOcclusion(shells, stillRelevant).catch(error => {
+      if (!disposed && stillRelevant()) console.info('基因表达：聚合酶遮挡索引未能预建，将沿用原有检测。', error);
+    });
+  }
   container.dataset.visual = classic ? 'classic' : 'exhibit';
   container.dataset.modelEdition = refinedModels ? 'exhibit-v12' : bioSurface ? 'bio-materials-v10' : exhibitLighting ? 'exhibit-v5' : detailed ? 'full-v4' : classic ? 'classic' : 'previous';
   let renderer;
@@ -1451,8 +1478,11 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
         labelOcclusionRaycaster.set(camera.position, labelOcclusionDirection.subVectors(position, camera.position).normalize());
         // Match the visible cutaway rather than hiding every letter behind the
         // whole enzyme: transparent front-wall regions still expose the bases.
-        const blocked = labelOcclusionRaycaster.intersectObjects(occlusionShells, false)
-          .some(hit => hit.distance < distance - .035 && (!proteinView || proteinView.opacityAt(hit.point) > .35));
+        const indexed = occlusionShells.every(shell => proteinOcclusion.hasMesh(shell));
+        const blocked = indexed
+          ? proteinOcclusion.isBlocked(camera.position, position, occlusionShells, proteinOcclusionOpacity)
+          : labelOcclusionRaycaster.intersectObjects(occlusionShells, false)
+            .some(hit => hit.distance < distance - .035 && proteinOcclusionOpacity(hit.point) > .35);
         if (blocked) { label.element.hidden = true; continue; }
       }
       let x = (projected.x * 0.5 + 0.5) * width + label.offset[0];
@@ -1910,6 +1940,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
   }
   const fallbackMeshes = polymerase.children.slice();
   fallbackProteinShells = fallbackMeshes.filter(object => object.isMesh);
+  prepareProteinOcclusionInBackground(fallbackProteinShells);
   let exhibitVisual = null, exhibitMaterials = [];
   if (!classic) {
     // DNA geometry is the only remote model needed for the opening. Apply it
@@ -1948,6 +1979,8 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
         if (disposed) return;
         polymerase.add(exhibitVisual);
         fallbackProteinShells = exhibitVisual.children.filter(object => object.isMesh);
+        const currentShells = fallbackProteinShells;
+        prepareProteinOcclusionInBackground(currentShells, () => fallbackProteinShells === currentShells);
         fallbackMeshes.forEach(object => {
           object.visible = false;
           const index = pickables.indexOf(object);
@@ -1983,10 +2016,22 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
         catch (error) { polymeraseAssetError = `完整模型载入失败，保留旧展品：${error.message}`; }
       }
       if (disposed) { full?.dispose(); return; }
+      let fullShells = null;
+      if (full) {
+        try {
+          fullShells = full.group.children.filter(object => object.userData.proteinWindow);
+          if (fullShells.length !== 12) throw new Error('聚合酶遮挡外壳数量异常');
+          await prepareProteinOcclusion(fullShells);
+        } catch (error) {
+          full.dispose(); full = null;
+          polymeraseAssetError = `遮挡索引构建失败，保留备用展品：${error.message}`;
+        }
+      }
+      if (disposed) { full?.dispose(); return; }
       if (full) {
         const visual = full.group;
         proteinView = full.view; proteinVisual = visual;
-        proteinShells = visual.children.filter(object => object.userData.proteinWindow);
+        proteinShells = fullShells;
         fallbackProteinShells = [];
         proteinView.setEnabled(perspectiveEnabled);
         full.geometries.forEach(g => resources.add(g)); full.materials.forEach(m => materials.add(m));
@@ -2012,6 +2057,9 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
         if (snapshot) update(snapshot);
         invalidate();
       }
+      // A failed or intentionally skipped full-model load still needs the
+      // same indexed occlusion before the chapter-ready promise resolves.
+      if (!full && fallbackProteinShells.length) await prepareProteinOcclusion(fallbackProteinShells);
       if (refinedModels) await warmTeachingPrograms();
     }).catch((error) => {
       if (disposed) return;
@@ -2488,9 +2536,16 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
       renderer.domElement.removeEventListener('webglcontextlost', contextLost);
       if (whiteboardCameraChangeTimer) clearTimeout(whiteboardCameraChangeTimer);
       if (deferredAssetTimer) clearTimeout(deferredAssetTimer);
+      for (const waiter of occlusionWaiters) {
+        if (waiter.idle) cancelIdleCallback(waiter.handle);
+        else clearTimeout(waiter.handle);
+        waiter.resolve();
+      }
+      occlusionWaiters.clear();
       hydrogenDashes?.object.dispose(); dnaAttachments?.dispose();
       entrance.dispose();
       livingControllers.forEach(motion => motion.dispose());
+      proteinOcclusion.dispose();
       resources.forEach((g) => g.dispose()); materials.forEach((m) => m.dispose());warmMaterials.forEach(m=>m.dispose());warmMaterials.clear();
       disposeMolecularResources();
       scene.environment = null;

@@ -535,18 +535,25 @@ function clearChapterLoading() {
   waitingForChapter = false;
   $('play').disabled = false;
 }
+function showChapterLoading(request) {
+  if (request !== pendingSeek || sceneDisposed || objectLesson.isActive() || whiteboard?.isActive() || $('chapter-loading')) return;
+  const notice = document.createElement('div');
+  notice.id = 'chapter-loading';
+  notice.className = 'scene-loading';
+  notice.setAttribute('role', 'status');
+  notice.textContent = '正在准备转录模型…';
+  notice.style.cssText = 'z-index:20;background:#132427;color:#c3d2c8;pointer-events:none;';
+  $('scene').append(notice);
+  $('scene').setAttribute('aria-busy', 'true');
+}
 function scheduleChapterLoading(request) {
-  return setTimeout(() => {
-    if (request !== pendingSeek || sceneDisposed || objectLesson.isActive() || whiteboard?.isActive()) return;
-    const notice = document.createElement('div');
-    notice.id = 'chapter-loading';
-    notice.className = 'scene-loading';
-    notice.setAttribute('role', 'status');
-    notice.textContent = '正在准备转录模型…';
-    notice.style.cssText = 'z-index:20;background:#132427;color:#c3d2c8;pointer-events:none;';
-    $('scene').append(notice);
-    $('scene').setAttribute('aria-busy', 'true');
-  }, 150);
+  return setTimeout(() => showChapterLoading(request), 150);
+}
+async function paintChapterLoading(request) {
+  showChapterLoading(request);
+  // Let the loading state reach the screen before decoding a model or compiling shaders.
+  await new Promise(resolve => document.hidden ? setTimeout(resolve, 0)
+    : requestAnimationFrame(() => setTimeout(resolve, 0)));
 }
 async function seekWhenReady(time, { resetView = false } = {}) {
   if (whiteboard?.isActive()) return;
@@ -554,13 +561,16 @@ async function seekWhenReady(time, { resetView = false } = {}) {
   clearChapterLoading();
   interruptEntrance('seek');
   const targetTime = clampTime(time);
-  if (scene && derive(targetTime).chapter.id === 1 && !scene.isDeferredAssetsReady?.()) {
+  // The polymerase already enters the DNA shot at 3.25 s, before the chapter
+  // boundary at 4 s. A direct scrub there needs the same preparation as Play.
+  if (scene && targetTime >= 3.25 && derive(targetTime).chapter.id <= 1 && !scene.isDeferredAssetsReady?.()) {
     waitingForChapter = true;
     $('play').disabled = true;
-    const loadingTimer = scheduleChapterLoading(request);
+    await paintChapterLoading(request);
+    if (request !== pendingSeek || sceneDisposed || objectLesson.isActive() || whiteboard?.isActive()) return;
     try { await scene.startDeferredAssets?.(); }
     catch (error) { console.info('基因表达：后续章节模型未能完整载入。', error); }
-    finally { clearTimeout(loadingTimer); if (request === pendingSeek) clearChapterLoading(); }
+    finally { if (request === pendingSeek) clearChapterLoading(); }
     if (request !== pendingSeek || sceneDisposed || objectLesson.isActive()) return;
   }
   if (request !== pendingSeek || whiteboard?.isActive()) return;
@@ -627,7 +637,7 @@ function requestSceneFrame() {
   if (entrance.phase === 'loading' || (entrance.active && entrance.paused)) return;
   if (!clockFrame && !document.hidden && !objectLesson.isActive()) clockFrame = requestAnimationFrame(tick);
 }
-function play() {
+async function play() {
   if(whiteboard?.isActive())return;
   if (waitingForChapter) {
     if (store.playing) { pause(); render(); }
@@ -638,8 +648,21 @@ function play() {
   if (store.reducedMotion) { void seekWhenReady(nextStep(store.time)); return; }
   if (store.playing) { pause(); render(); return; }
   if (store.time === TOTAL) { store.selected = null; setTime(0); }
+  // Full protein geometry and its shader variants must be ready before the
+  // DNA-to-transcription camera move begins. Otherwise their first compilation
+  // blocks visible playback near 3.25 s, even when the network response is fast.
+  if (scene && derive(store.time).chapter.id === 0 && !scene.isDeferredAssetsReady?.()) {
+    const request = ++pendingSeek;
+    waitingForChapter = true;
+    $('play').disabled = true;
+    await paintChapterLoading(request);
+    if (request !== pendingSeek || sceneDisposed || objectLesson.isActive() || whiteboard?.isActive()) return;
+    try { await scene.startDeferredAssets?.(); }
+    catch (error) { console.info('基因表达：转录模型载入失败，沿用备用展品。', error); }
+    finally { if (request === pendingSeek) clearChapterLoading(); }
+    if (request !== pendingSeek || sceneDisposed || objectLesson.isActive() || whiteboard?.isActive()) return;
+  }
   scene?.beginPlayback?.(store.speed/1.65);
-  if (scene && derive(store.time).chapter.id === 0 && !scene.isDeferredAssetsReady?.()) void scene.startDeferredAssets?.();
   store.playing = true; store.ambientMotion = false; previousStamp = 0;
   $('play-text').textContent = '暂停'; $('play-icon').textContent = 'Ⅱ'; $('play').setAttribute('aria-label', '暂停');
   requestSceneFrame();
@@ -824,7 +847,7 @@ window.addEventListener('pagehide', () => { sceneDisposed=true;pause();cancelAni
 render();
 try {
   if (new URLSearchParams(location.search).get('view') === '2d') throw new Error('二维观察模式');
-  const { createScene } = await import('./scene.js?v=20261014-base-labels');
+  const { createScene } = await import('./scene.js?v=20261014-transcription-smooth');
   if (sceneDisposed) throw new Error('页面已离开');
   pendingScene = createScene({ container: $('scene'), onSelect: selectScene, onHover: knowledgeHints.onHover, onInvalidate: requestSceneFrame });
   const loading=$('scene-loading');
