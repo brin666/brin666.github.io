@@ -362,21 +362,28 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
       },
     };
   };
+  const canTraceSelection = selection => currentKey === 'comparison'
+    && Number.isInteger(selection?.index)
+    && ['base', 'coding', 'template', 'rna', 'peptide'].includes(selection.type);
   const domLabel = (text, anchor, { kind = 'structure', selection = null, index = null, offset = [0, 0] } = {}) => {
-    const element = document.createElement(selection ? 'button' : 'span');
+    const element = document.createElement('span');
     element.textContent = text;
     element.className = `scene-label scene-label--${kind}`;
     element.dataset.kind = kind;
     if (index !== null) element.dataset.index = String(index);
     if (selection) {
-      element.type = 'button';
-      element.dataset.selectType = selection.type;
-      element.setAttribute('aria-label', `${text}，查看说明`);
-      element.addEventListener('click', (event) => { event.stopPropagation(); onSelect({ ...label.selection }); });
+      element.addEventListener('click', (event) => {
+        if (!canTraceSelection(label.selection)) return;
+        event.stopPropagation(); onSelect({ ...label.selection });
+      });
+      element.addEventListener('keydown', (event) => {
+        if (!canTraceSelection(label.selection) || !['Enter', ' '].includes(event.key)) return;
+        event.preventDefault(); onSelect({ ...label.selection });
+      });
     }
     const isBase = kind.includes('base') || kind === 'anticodon';
     const isEnd = kind === 'endpoint';
-    element.style.cssText = `position:absolute;left:0;top:0;transform:translate(-50%,-50%);white-space:nowrap;border:1px solid ${isBase ? 'rgba(211,230,223,.22)' : 'rgba(211,230,223,.30)'};padding:${isBase ? '0 2px' : isEnd ? '2px 5px' : '4px 7px'};border-radius:${isBase ? '3px' : '6px'};background:${isBase ? 'rgba(20,34,38,.84)' : 'rgba(23,38,42,.91)'};color:#f0f4e8;font-family:ui-sans-serif,system-ui,sans-serif;font-size:${isBase ? '10px' : isEnd ? '10px' : '11px'};font-weight:${isBase || isEnd ? '700' : '600'};line-height:1.25;box-shadow:${isBase ? 'none' : '0 2px 9px rgba(0,0,0,.15)'};pointer-events:${selection ? 'auto' : 'none'};cursor:${selection ? 'pointer' : 'default'};`;
+    element.style.cssText = `position:absolute;left:0;top:0;transform:translate(-50%,-50%);white-space:nowrap;border:1px solid ${isBase ? 'rgba(211,230,223,.22)' : 'rgba(211,230,223,.30)'};padding:${isBase ? '0 2px' : isEnd ? '2px 5px' : '4px 7px'};border-radius:${isBase ? '3px' : '6px'};background:${isBase ? 'rgba(20,34,38,.84)' : 'rgba(23,38,42,.91)'};color:#f0f4e8;font-family:ui-sans-serif,system-ui,sans-serif;font-size:${isBase ? '10px' : isEnd ? '10px' : '11px'};font-weight:${isBase || isEnd ? '700' : '600'};line-height:1.25;box-shadow:${isBase ? 'none' : '0 2px 9px rgba(0,0,0,.15)'};pointer-events:none;cursor:default;`;
     overlay.append(element);
     if (detailed && isBase) {
       // Letter glyphs belong to the schematic bases. Opaque badge rectangles
@@ -394,6 +401,23 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     labels.push(label);
     return label;
   };
+  function syncLabelInteractions() {
+    for (const label of labels) {
+      const interactive = canTraceSelection(label.selection);
+      label.element.style.pointerEvents = interactive ? 'auto' : 'none';
+      label.element.style.cursor = interactive ? 'pointer' : 'default';
+      if (interactive) {
+        label.element.setAttribute('role', 'button');
+        label.element.tabIndex = 0;
+        label.element.dataset.selectType = label.selection.type;
+      } else {
+        label.element.removeAttribute('role');
+        label.element.removeAttribute('tabindex');
+        label.element.removeAttribute('data-select-type');
+        label.element.removeAttribute('aria-label');
+      }
+    }
+  }
   const objectAnchor = (object, local = vec(0, 0, 0)) => () => object.localToWorld(local.clone());
   const fixedLabel = (text, group, position, options) => domLabel(text, objectAnchor(group, position), options);
 
@@ -1347,6 +1371,10 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     const previousKey=currentKey;
     const chapterChanged = key !== currentKey;
     currentKey = key;
+    if (chapterChanged) {
+      syncLabelInteractions();
+      pointerLeave();
+    }
     hydrogenDashes?.reset();
     setDna(key, snapshot);
     setRna(key, snapshot);
@@ -1466,9 +1494,9 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
       if (width < 600 && height < 260) enabled = label.visible && !!selectedLabel;
       if (!enabled) { label.element.hidden = true; continue; }
       const position = label.anchor();
-      if (label.selection) label.element.setAttribute('aria-label', label.kind === 'incoming-base'
-        ? `游离 RNA 核苷酸 ${label.element.textContent}，查看说明`
-        : `${label.element.textContent}，查看说明`);
+      if (canTraceSelection(label.selection)) {
+        label.element.setAttribute('aria-label', `第 ${label.selection.index + 1} 位 ${label.element.textContent}，反查序列位置`);
+      }
       projected.copy(position).project(camera);
       const inView = projected.z > -1 && projected.z < 1 && Math.abs(projected.x) < 1.13 && Math.abs(projected.y) < 1.12;
       label.element.hidden = !inView;
@@ -1752,11 +1780,11 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
   let hoverTimer = 0, hoverPoint = null, lastHoverAt = 0;
   function pointerLeave() { clearTimeout(hoverTimer); hoverTimer=0; hoverPoint=null; pointerStart=null; onHover(null); }
   function pointerDown(event) {
-    if (whiteboardActive) return;
+    if (whiteboardActive || currentKey !== 'comparison') return;
     pointerLeave(); pointerStart = { x: event.clientX, y: event.clientY, id: event.pointerId };
   }
   function pickAt(x,y) {
-    if(entranceActive)return null;
+    if(entranceActive || currentKey !== 'comparison')return null;
     const rect = renderer.domElement.getBoundingClientRect();
     pointer.set((x - rect.left) / rect.width * 2 - 1, -(y - rect.top) / rect.height * 2 + 1);
     raycaster.setFromCamera(pointer, camera);
@@ -1764,11 +1792,12 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
       let object = hit.object;
       while (object) { if (!object.visible) return false; object = object.parent; }
       const window=hit.object.userData.proteinWindow==='pore' ? exportExhibit?.window : hit.object.userData.proteinWindow==='ribosome' ? ribosomeView : proteinView;
-      return !hit.object.userData.proteinWindow || !window || window.opacityAt(hit.point) > .30;
+      return canTraceSelection(hit.object.userData.selection)
+        && (!hit.object.userData.proteinWindow || !window || window.opacityAt(hit.point) > .30);
     });
   }
   function pointerMove(event) {
-    if (whiteboardActive) return;
+    if (whiteboardActive || currentKey !== 'comparison') return;
     if (event.pointerType==='touch' || pointerStart) return;
     hoverPoint={x:event.clientX,y:event.clientY};
     if(hoverTimer)return;
@@ -1780,7 +1809,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     },Math.max(0,80-(performance.now()-lastHoverAt)));
   }
   function pointerUp(event) {
-    if (whiteboardActive) return;
+    if (whiteboardActive || currentKey !== 'comparison') return;
     if (!pointerStart || pointerStart.id !== event.pointerId) return;
     const travel = Math.hypot(event.clientX - pointerStart.x, event.clientY - pointerStart.y);
     pointerStart = null;

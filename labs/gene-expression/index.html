@@ -49,7 +49,7 @@
     <div id="entrance-copy"><h1 id="entrance-title">基因表达</h1><p id="entrance-status">正在准备分子序列…</p></div>
     <button id="entrance-skip" type="button">跳过开场</button>
   </section>
-  <a class="skip-link" href="#transport">跳到播放控制</a>
+  <a class="skip-link" href="#play">跳到开始演示按钮</a>
   <main class="lab-shell">
     <header class="lab-header">
       <div class="identity"><a class="back-link" href="../../.." aria-label="返回博客">↖ <span>BRIN / LABS</span></a><div class="title-line"><h1>基因表达</h1><span>从 DNA 到多肽</span></div></div>
@@ -62,6 +62,7 @@
       <section class="stage" aria-labelledby="stage-title">
         <div class="stage-heading"><div><h2 id="stage-title">DNA 双链</h2></div><div class="stage-meta"><a id="chapter-book" class="chapter-book" target="_blank" rel="noopener noreferrer">教材定位 ↗</a></div></div>
         <div id="scene" class="scene" aria-label="基因表达三维教学场景"><div id="scene-loading" class="scene-loading">正在建立序列模型…</div></div>
+        <button id="play" class="play-button stage-play" type="button" aria-label="开始演示" aria-pressed="false"><span id="play-icon" aria-hidden="true">▶</span><span id="play-text">开始演示</span></button>
         <div class="stage-control-dock">
         <div class="view-controls" aria-label="场景视角与显示">
           <div id="view-mode-group" class="view-mode-group" role="group" aria-label="分子视角">
@@ -96,7 +97,7 @@
 
     <section id="transport" class="transport" aria-label="播放控制">
       <div class="transport-summary"><section class="process-caption" aria-label="当前教学步骤"><div class="phase-mark" aria-hidden="true"></div><div><strong id="step-title"></strong><p id="step-description"></p></div></section><div class="progress-block"><div class="progress-top"><span id="progress-label">认识 DNA</span><output id="progress-value" for="progress">0%</output></div><input id="progress" type="range" min="0" max="66" step="0.01" value="0" aria-label="全程教学进度"></div></div>
-      <div class="transport-bottom"><div class="play-group"><button id="previous" class="icon-button" type="button" aria-label="上一步">❮</button><button id="play" class="play-button" type="button" aria-label="播放"><span id="play-icon" aria-hidden="true">▶</span><span id="play-text">播放</span></button><button id="next" class="icon-button" type="button" aria-label="下一步">❯</button><button id="reset" class="quiet-button reset-button" type="button">重置演示</button></div><div class="play-options"><div class="speed-group" role="group" aria-label="播放速度"><button type="button" data-speed="0.5" aria-pressed="false">0.5×</button><button type="button" data-speed="1" aria-pressed="true">1×</button><button type="button" data-speed="2" aria-pressed="false">2×</button></div></div>
+      <div class="transport-bottom"><div class="play-group"><button id="previous" class="icon-button" type="button" aria-label="上一步">❮</button><button id="next" class="icon-button" type="button" aria-label="下一步">❯</button><button id="reset" class="quiet-button reset-button" type="button">重置演示</button></div><div class="play-options"><div class="speed-group" role="group" aria-label="播放速度"><button type="button" data-speed="0.5" aria-pressed="false">0.5×</button><button type="button" data-speed="1" aria-pressed="true">1×</button><button type="button" data-speed="2" aria-pressed="false">2×</button></div></div>
     </section>
     <noscript><p class="no-script">此教学实验需要 JavaScript。人工 RNA 序列为 GCC ACC AUG GCU UUU GAA CCG UAA GAC CUG，翻译产物为 Met–Ala–Phe–Glu–Pro，共五个残基；UAA 不对应氨基酸。</p></noscript>
   </main>

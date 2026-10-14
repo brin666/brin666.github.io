@@ -35,9 +35,12 @@ $('objects-toggle').addEventListener('click',()=>{objectMenu.hidden=!objectMenu.
 objectMenu.addEventListener('click',event=>{const button=event.target.closest('[data-lesson]');if(button)objectLesson.open(button.dataset.lesson,$('objects-toggle'));});
 document.addEventListener('pointerdown',event=>{if(!event.target.closest('#object-menu,#objects-toggle'))closeObjectMenu();});
 document.addEventListener('focusin',event=>{if(!event.target.closest('#object-menu,#objects-toggle'))closeObjectMenu();});
-function selectScene(value) {
-  if (OBJECT_LESSONS[value.type] && (['polymerase','ribosome','pore','trna'].includes(value.type) || (value.index == null && !value.indices?.length))) objectLesson.open(value.type);
-  else select(value);
+function selectScene(value, trigger = null) {
+  // The model is for observing and orbiting. Only the final sequence comparison
+  // asks learners to click individual nucleotides or amino acids to trace them.
+  if (snapshot.chapter.id !== 4 || !Number.isInteger(value?.index)) return;
+  if (!['base', 'coding', 'template', 'rna', 'peptide'].includes(value.type)) return;
+  select(value, trigger);
 }
 
 function setPanelOpen(open, { returnFocus = false } = {}) {
@@ -527,7 +530,7 @@ function replayEntrance() {
   return startEntrance({ replay: true });
 }
 
-function setTime(time) { if(whiteboard?.isActive())return; pendingSeek++; clearChapterLoading(); interruptEntrance('seek'); scene?.resetAmbient?.(); store.time = clampTime(time); render(); }
+function setTime(time) { if(whiteboard?.isActive())return; pendingSeek++; clearChapterLoading(); interruptEntrance('seek'); scene?.resetAmbient?.(); store.time = clampTime(time); render(); updatePlayControl(); }
 let pendingSeek = 0, waitingForChapter = false;
 function clearChapterLoading() {
   $('chapter-loading')?.remove();
@@ -577,10 +580,17 @@ async function seekWhenReady(time, { resetView = false } = {}) {
   if (resetView) scene?.resetView();
   setTime(targetTime);
 }
+function updatePlayControl() {
+  const label = store.playing ? '暂停' : store.time >= TOTAL ? '重播演示' : store.time <= 0.01 ? '开始演示' : '继续播放';
+  $('play-text').textContent = label;
+  $('play-icon').textContent = store.playing ? 'Ⅱ' : '▶';
+  $('play').setAttribute('aria-label', label);
+  $('play').setAttribute('aria-pressed', String(store.playing));
+}
 function pause() {
   if (waitingForChapter) { pendingSeek++; clearChapterLoading(); }
   store.playing = false; store.ambientMotion = false; previousStamp = 0;
-  $('play-text').textContent = '播放'; $('play-icon').textContent = '▶'; $('play').setAttribute('aria-label', '播放');
+  updatePlayControl();
 }
 function waitForTranscriptionDuringPlayback() {
   const request = ++pendingSeek;
@@ -664,7 +674,7 @@ async function play() {
   }
   scene?.beginPlayback?.(store.speed/1.65);
   store.playing = true; store.ambientMotion = false; previousStamp = 0;
-  $('play-text').textContent = '暂停'; $('play-icon').textContent = 'Ⅱ'; $('play').setAttribute('aria-label', '暂停');
+  updatePlayControl();
   requestSceneFrame();
 }
 $('play').addEventListener('click', play);
@@ -760,7 +770,7 @@ function createFallback(reason) {
       markup += `<line x1="90" x2="900" y1="${y}" y2="${y}" stroke="#c3b99d" stroke-width="2"/><text x="57" y="${y+6}" font-size="14" fill="#7b7160">${left}</text><text x="915" y="${y+6}" font-size="14" fill="#7b7160">${right}</text>`;
       for (let i = 0; i < count; i++) {
         const x = 90 + i * 27, selected = options.selected?.indices?.includes(i) || state.activeIndices.includes(i);
-        markup += `<g data-svg-type="${type}" data-svg-index="${i}" tabindex="0" role="button" aria-label="${type} 第${i+1}位 ${sequence[i]}"><rect x="${x-9}" y="${y-11}" width="21" height="24" rx="5" fill="${selected ? '#e2cb8a' : BASE_COLORS[sequence[i]]}" stroke="${selected ? '#9b7730' : '#ffffff'}"/><text x="${x+1}" y="${y+6}" text-anchor="middle" font-size="14" fill="#423e33">${sequence[i]}</text></g>`;
+        markup += `<g data-svg-type="${type}" data-svg-index="${i}" ${comparison ? `tabindex="0" role="button" aria-label="${type} 第${i+1}位 ${sequence[i]}"` : ''}><rect x="${x-9}" y="${y-11}" width="21" height="24" rx="5" fill="${selected ? '#e2cb8a' : BASE_COLORS[sequence[i]]}" stroke="${selected ? '#9b7730' : '#ffffff'}"/><text x="${x+1}" y="${y+6}" text-anchor="middle" font-size="14" fill="#423e33">${sequence[i]}</text></g>`;
       }
     }
     if (exportStage) {
@@ -776,7 +786,7 @@ function createFallback(reason) {
       const aWorld = 90 + (7 + (t.aCodonIndex ?? 5) * 3) * 27;
       let chainAnchor = pWorld + 20;
       const drawTrna = (tx,ty,codonIndex,label,empty=false) => {
-        markup += `<g data-svg-type="trna" data-svg-index="${codonIndex}" tabindex="0" role="button" aria-label="${label}"><path d="M${tx} ${ty+55}V${ty}H${tx+20}" fill="none" stroke="${empty ? '#c0c3b9' : '#b39bb9'}" stroke-width="8"/><text x="${tx-16}" y="${ty-9}" font-size="10" fill="#8c728e">${label}</text></g>`;
+        markup += `<g><path d="M${tx} ${ty+55}V${ty}H${tx+20}" fill="none" stroke="${empty ? '#c0c3b9' : '#b39bb9'}" stroke-width="8"/><text x="${tx-16}" y="${ty-9}" font-size="10" fill="#8c728e">${label}</text></g>`;
       };
       if (!['complete'].includes(t.mode)) {
         const split = t.mode === 'disassemble' ? t.phase*55 : 0;
@@ -803,7 +813,7 @@ function createFallback(reason) {
       for (let i = 0; i < state.peptideCount; i++) {
         const ax = anchorX-(state.peptideCount-1-i)*49, ay = anchorY-(state.peptideCount-1-i)*12;
         if (i) markup += `<path d="M${ax-49} ${ay-12}L${ax} ${ay}" stroke="#b9a471" stroke-width="3"/>`;
-        markup += `<g data-svg-type="peptide" data-svg-index="${i}" role="button" tabindex="0"><circle cx="${ax}" cy="${ay}" r="19" fill="#e7d8ad" stroke="#b7a578"/><text x="${ax}" y="${ay+4}" text-anchor="middle" font-size="11">${AMINO_ACIDS[i].short}</text></g>`;
+        markup += `<g><circle cx="${ax}" cy="${ay}" r="19" fill="#e7d8ad" stroke="#b7a578"/><text x="${ax}" y="${ay+4}" text-anchor="middle" font-size="11">${AMINO_ACIDS[i].short}</text></g>`;
       }
     } else {
       strand(CODING_DNA, 30, 190, 'coding', '5′', '3′'); strand(TEMPLATE_DNA, 30, 238, 'template', '3′', '5′');
@@ -814,7 +824,7 @@ function createFallback(reason) {
     }
     svg.innerHTML = markup;
   }
-  const handler = (event) => { const target = event.target.closest('[data-svg-type]'); if (target) select({type:target.dataset.svgType,index:Number(target.dataset.svgIndex)},target); };
+  const handler = (event) => { const target = event.target.closest('[data-svg-type]'); if (target) selectScene({type:target.dataset.svgType,index:Number(target.dataset.svgIndex)},target); };
   svg.addEventListener('click', handler); svg.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); handler(event); } });
   return { update };
 }
@@ -845,6 +855,7 @@ whiteboard=createWhiteboard({getScene:()=>scene,trigger:$('whiteboard-open'),
 });
 window.addEventListener('pagehide', () => { sceneDisposed=true;pause();cancelAnimationFrame(clockFrame);whiteboard?.dispose();scene?.dispose();pendingScene?.dispose(); }, {once:true});
 render();
+updatePlayControl();
 try {
   if (new URLSearchParams(location.search).get('view') === '2d') throw new Error('二维观察模式');
   const { createScene } = await import('./scene.js?v=20261014-transcription-smooth');

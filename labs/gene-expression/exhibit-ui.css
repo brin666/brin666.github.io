@@ -104,3 +104,19 @@ body[data-renderer=webgl] .stage-control-dock #protein-perspective[aria-pressed=
   .stage-control-dock .view-button{padding-inline:6px}
   .stage-control-dock #protein-perspective{min-width:52px;padding-inline:6px}
 }
+
+/* The demonstration starts from the exhibit itself; timeline tools remain below. */
+.stage>.stage-play{position:absolute;z-index:5;left:20px;bottom:16px;flex:none;min-width:158px;min-height:54px;max-width:none;padding:8px 18px 8px 11px;gap:11px;border:1px solid #e9dba8;border-radius:10px;background:#e4d08d;color:#20392f;font-size:14px;font-weight:650;letter-spacing:.01em;box-shadow:0 6px 20px #07191d40;transition:background-color 160ms ease,box-shadow 160ms ease,transform 160ms ease}
+.stage>.stage-play #play-icon{display:grid;place-items:center;flex:none;width:30px;height:30px;padding-left:2px;border-radius:50%;background:#f6eaca;color:#284337;font-size:13px;font-weight:700;line-height:1}
+.stage>.stage-play[aria-label="暂停"] #play-icon{padding-left:0;font-size:17px}
+.stage>.stage-play:not(:disabled):hover{background:#f0dc9b;box-shadow:0 9px 24px #07191d50;transform:translateY(-1px)}
+.stage>.stage-play:focus-visible{outline:3px solid #f9e9ae;outline-offset:3px}
+.lab-main[data-panel-open=true] .stage>.stage-play{top:76px;bottom:auto}
+@media(min-width:761px) and (max-width:900px){.stage>.stage-play{top:76px;bottom:auto}}
+@media(max-width:760px){
+  .stage>.stage-play{top:62px;bottom:auto;left:14px;min-width:148px;min-height:50px;padding:7px 14px 7px 9px;font-size:13px}
+  .stage>.stage-play #play-icon{width:29px;height:29px}
+  .lab-main[data-panel-open=true] .stage>.stage-play{top:48px;bottom:auto;min-height:44px}
+}
+@media(max-width:400px){.stage>.stage-play{left:12px}}
+@media(prefers-reduced-motion:reduce){.stage>.stage-play{transition:none}.stage>.stage-play:not(:disabled):hover{transform:none}}
