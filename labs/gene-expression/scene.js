@@ -47,6 +47,11 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
   const bioSurface = exhibitLighting && new URLSearchParams(window.location.search).get('surface') !== 'previous';
   const refinedModels = detailed && new URLSearchParams(window.location.search).get('model') !== 'previous';
   let proteinView = null, proteinVisual = null, perspectiveEnabled = true;
+  let proteinShells = [];
+  let fallbackProteinShells = [];
+  const labelOcclusionRaycaster = new THREE.Raycaster();
+  const labelOcclusionDirection = new THREE.Vector3();
+  const labelOccluderCenter = new THREE.Vector3();
   container.dataset.visual = classic ? 'classic' : 'exhibit';
   container.dataset.modelEdition = refinedModels ? 'exhibit-v12' : bioSurface ? 'bio-materials-v10' : exhibitLighting ? 'exhibit-v5' : detailed ? 'full-v4' : classic ? 'classic' : 'previous';
   let renderer;
@@ -352,8 +357,11 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
       element.style.border = '0';
       element.style.background = 'transparent';
       element.style.padding = '1px 3px';
-      element.style.textShadow = '0 1px 2px rgba(9,25,27,.95), 0 0 2px rgba(9,25,27,.8)';
-      element.style.fontWeight = '650';
+      // Dark ink reads on all five softly lit base colors. A fine light rim
+      // preserves the glyph when a base happens to face away from the key light.
+      element.style.color = '#172b2d';
+      element.style.textShadow = '-1px 0 rgba(245,248,238,.85), 1px 0 rgba(245,248,238,.85), 0 -1px rgba(245,248,238,.85), 0 1px rgba(245,248,238,.85), 0 1px 2px rgba(9,25,27,.22)';
+      element.style.fontWeight = '800';
     }
     const label = { element, anchor, kind, selection, offset, visible: true };
     labels.push(label);
@@ -415,6 +423,9 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
   const entrance = createDnaEntrance({scene,group:dnaGroup,plates:dnaPlates,sugars:dnaSugars,codingPoints,templatePoints,codingRail,templateRail,attachments:dnaAttachments,pairingDashes:hydrogenDashes,pairBetween:pairingBetween});
 
   const rnaGroup = new THREE.Group(); scene.add(rnaGroup);
+  // The incoming glyph and its committed RNA glyph exchange visibility at
+  // phase .70; sharing an anchor keeps the letter fixed at that handoff.
+  const rnaGlyphLocalAnchor = vec(0, 0.015, 0.05);
   const rnaPoints = Array.from({ length: 30 }, () => vec(0, 0, 0));
   const rnaRail = tube(rnaGroup, palette.rna, 0.045, 116, { type: 'rna' }, true);
   const rnaBases = [], rnaSugars = [], rnaGlyphs = [];
@@ -422,7 +433,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     const base = mesh(baseGeometries[rna[i]], baseMaterials[rna[i]] || palette.rna, rnaGroup, { type: 'rna', index: i });
     rnaBases.push(base);
     rnaSugars.push(mesh(sugarGeo, palette.rna, rnaGroup, { type: 'rna', index: i }));
-    rnaGlyphs.push(domLabel(rna[i] || '', objectAnchor(base, vec(0, 0.015, 0.05)), { kind: 'rna-base', selection: { type: 'rna', index: i }, index: i }));
+    rnaGlyphs.push(domLabel(rna[i] || '', objectAnchor(base, rnaGlyphLocalAnchor), { kind: 'rna-base', selection: { type: 'rna', index: i }, index: i }));
   }
   let shownRna = 0;
   const rnaStart = domLabel('5′', () => {
@@ -458,8 +469,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
   const activeNucleotide = new THREE.Group(); scene.add(activeNucleotide);
   const activeBase = mesh(baseGeometries.A, enteringBases.A, activeNucleotide, { type: 'rna', index: 0 });
   const activeSugar = mesh(sugarGeo, enteringSugar, activeNucleotide, { type: 'rna', index: 0 });
-  const incomingBaseLabel = fixedLabel('', activeBase, vec(0, 0.08, 0.09), { kind: 'incoming-base', selection: { type: 'rna', index: 0 } });
-  incomingBaseLabel.offset = [0, -15];
+  const incomingBaseLabel = fixedLabel('', activeBase, rnaGlyphLocalAnchor, { kind: 'incoming-base', selection: { type: 'rna', index: 0 } });
   const transcriptionPair = connector(scene, palette.joint, 0.014);
   const freeNucleotides = new THREE.Group(); scene.add(freeNucleotides);
   for (let i = 0; i < 8; i++) {
@@ -971,7 +981,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
       activeBase.userData.selection = { type: 'rna', index };
       activeSugar.userData.selection = { type: 'rna', index };
       activeSugar.rotation.copy(rnaSugars[index].rotation);
-      incomingBaseLabel.element.textContent = cycle < 0.54 ? `${rna[index]} · 游离核苷酸` : rna[index];
+      incomingBaseLabel.element.textContent = rna[index];
       incomingBaseLabel.element.style.opacity = String(entrance);
       incomingBaseLabel.element.dataset.index = String(index);
       incomingBaseLabel.selection = { type: 'rna', index };
@@ -1407,6 +1417,11 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     renderer.render(scene, camera);
     if (idleAdvancing) invalidate();
     renderCount++;
+    const readingIndex = currentKey === 'transcription' ? transcriptionAdvance(snapshot)
+      : currentKey === 'translation' ? 7 + (snapshot.translation?.ribosomeCodon || 0) * 3 : 14.5;
+    const occlusionShells = proteinShells.length ? proteinShells : fallbackProteinShells;
+    const checkProteinOcclusion = currentKey === 'transcription' && occlusionShells.length;
+    if (checkProteinOcclusion) (proteinVisual || polymerase).getWorldPosition(labelOccluderCenter);
     for (const label of labels) {
       const always = label.kind.includes('base') || ['endpoint', 'residue', 'anticodon', 'site', 'codon', 'direction','compartment'].includes(label.kind);
       let enabled = label.visible && (always || options.labels || (label === polyLabel && viewMode === 'reaction'));
@@ -1415,9 +1430,8 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
       if (enabled && detailed && !options.labels && label.kind.includes('base')) {
         const index = Number(label.element.dataset.index);
         const selected = options.selected?.indices?.includes(index) || (options.selected?.index === index && ['base', 'rna'].includes(options.selected.type));
-        const reading = currentKey === 'transcription' ? transcriptionAdvance(snapshot) : currentKey === 'translation' ? 7 + (snapshot.translation?.ribosomeCodon || 0) * 3 : 14.5;
         const radius = currentKey === 'transcription' ? 2.2 : currentKey === 'translation' ? 4 : currentKey === 'dna' && width < 600 ? 1.35 : 2.8;
-        enabled = label.kind === 'incoming-base' || selected || Math.abs(index - reading) < radius;
+        enabled = label.kind === 'incoming-base' || selected || Math.abs(index - readingIndex) < radius;
       }
       // With the explanation open on a short phone, this becomes a small
       // contextual preview. Reserve glyphs for the selected object; the full
@@ -1425,11 +1439,22 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
       if (width < 600 && height < 260) enabled = label.visible && !!selectedLabel;
       if (!enabled) { label.element.hidden = true; continue; }
       const position = label.anchor();
-      if (label.selection) label.element.setAttribute('aria-label', `${label.element.textContent}，查看说明`);
+      if (label.selection) label.element.setAttribute('aria-label', label.kind === 'incoming-base'
+        ? `游离 RNA 核苷酸 ${label.element.textContent}，查看说明`
+        : `${label.element.textContent}，查看说明`);
       projected.copy(position).project(camera);
       const inView = projected.z > -1 && projected.z < 1 && Math.abs(projected.x) < 1.13 && Math.abs(projected.y) < 1.12;
       label.element.hidden = !inView;
       if (!inView) continue;
+      if (checkProteinOcclusion && label.kind.includes('base') && position.distanceToSquared(labelOccluderCenter) < 16) {
+        const distance = camera.position.distanceTo(position);
+        labelOcclusionRaycaster.set(camera.position, labelOcclusionDirection.subVectors(position, camera.position).normalize());
+        // Match the visible cutaway rather than hiding every letter behind the
+        // whole enzyme: transparent front-wall regions still expose the bases.
+        const blocked = labelOcclusionRaycaster.intersectObjects(occlusionShells, false)
+          .some(hit => hit.distance < distance - .035 && (!proteinView || proteinView.opacityAt(hit.point) > .35));
+        if (blocked) { label.element.hidden = true; continue; }
+      }
       let x = (projected.x * 0.5 + 0.5) * width + label.offset[0];
       const y = (-projected.y * 0.5 + 0.5) * height + label.offset[1];
       if (['endpoint', 'direction','compartment'].includes(label.kind)) {
@@ -1448,7 +1473,15 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
         guide.svg.style.display='block';guide.path.setAttribute('d',`M ${x} ${y+11} L ${px} ${py-5}`);
         label.element.style.borderColor=label.element.dataset.active==='true' ? '#cbb981' : 'rgba(211,230,223,.30)';
       }
-      if (label.kind.includes('base')) label.element.style.fontSize = viewMode === 'reaction' ? (width < 600 ? '12px' : '13px') : width < 500 ? '10px' : '11px';
+      if (label.kind.includes('base') || label.kind === 'anticodon') {
+        const index = Number(label.element.dataset.index);
+        const focused = !!selectedLabel || label.kind === 'incoming-base'
+          || (Number.isFinite(index) && currentKey === 'transcription' && Math.abs(index - readingIndex) < 1);
+        const size = width < 600 ? (viewMode === 'reaction' ? (focused ? 15 : 12) : (focused ? 14 : 11))
+          : width < 1200 ? (viewMode === 'reaction' ? (focused ? 18 : 15) : (focused ? 16 : 13))
+            : viewMode === 'reaction' ? (focused ? 20 : 17) : (focused ? 18 : 15);
+        label.element.style.fontSize = `${size}px`;
+      }
       if (['endpoint', 'direction'].includes(label.kind)) label.element.style.fontSize = viewMode === 'reaction' && width >= 600 ? '12px' : '10px';
     }
   }
@@ -1605,6 +1638,16 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     if(refinedModels)presentationZoom=next/baseDistance;
     invalidate();
   }
+  function onSceneWheel(event) {
+    if (disposed || whiteboardActive || whiteboardPreparing || entranceActive || !controls.enabled) return;
+    event.preventDefault();
+    // Keep wheel and trackpad zoom on the same presentation distance used by
+    // the zoom buttons, so the animated follow camera retains the new scale.
+    const pixels = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? height : 1);
+    const amount = clamp(-pixels / 120, -1.25, 1.25);
+    if (Math.abs(amount) > .001) zoom(amount);
+  }
+  container.addEventListener('wheel', onSceneWheel, { passive: false });
   function focus(type, index = null) {
     if (disposed) return;
     const objects = { coding: dnaGroup, template: dnaGroup, base: dnaGroup, polymerase, rna: rnaGroup, trna: aTrna.group.visible ? aTrna.group : pTrna.group, ribosome, peptide: peptideGroup, pore: nuclearPore };
@@ -1866,6 +1909,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     shaderWarmMs=performance.now()-began;
   }
   const fallbackMeshes = polymerase.children.slice();
+  fallbackProteinShells = fallbackMeshes.filter(object => object.isMesh);
   let exhibitVisual = null, exhibitMaterials = [];
   if (!classic) {
     // DNA geometry is the only remote model needed for the opening. Apply it
@@ -1903,6 +1947,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
         }
         if (disposed) return;
         polymerase.add(exhibitVisual);
+        fallbackProteinShells = exhibitVisual.children.filter(object => object.isMesh);
         fallbackMeshes.forEach(object => {
           object.visible = false;
           const index = pickables.indexOf(object);
@@ -1941,6 +1986,8 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
       if (full) {
         const visual = full.group;
         proteinView = full.view; proteinVisual = visual;
+        proteinShells = visual.children.filter(object => object.userData.proteinWindow);
+        fallbackProteinShells = [];
         proteinView.setEnabled(perspectiveEnabled);
         full.geometries.forEach(g => resources.add(g)); full.materials.forEach(m => materials.add(m));
         livingControllers.push(createPolymeraseLivingMotion({ group: visual, materials: full.materials }));
@@ -2425,6 +2472,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     dispose() {
       if (disposed) return;
       disposed = true;
+      container.removeEventListener('wheel', onSceneWheel);
       resizeObserver.disconnect();
       resetPointerState(); unbindControls(); controls.dispose();
       renderer.domElement.removeEventListener('pointerdown', pointerDown);

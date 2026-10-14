@@ -8,7 +8,7 @@ import { createWhiteboard } from './whiteboard.js';
 const $ = (id) => document.getElementById(id);
 const NAMES = ['认识 DNA', '转录', '出核', '翻译', '序列对照'];
 const TITLES = ['DNA 双链', '转录合成 RNA', 'mRNA 出核', '密码子与多肽', '序列追踪'];
-const HINTS = ['观察：两条链的 5′端与 3′端，分别朝向哪里？', '观察：新加入的 RNA 核苷酸连接在哪一端？', '观察：mRNA 经过什么结构离开细胞核？', '观察：肽链怎样从一条 tRNA 转移到另一条 tRNA？', '试一试：点击 Pro，追踪它对应的三个核酸位置。'];
+const HINTS = ['观察：两条链的 5′端与 3′端，分别朝向哪里？', '观察：新加入的 RNA 核苷酸连接在哪一端？', '观察：mRNA 经过什么结构离开细胞核？', '观察：肽链怎样从一条 tRNA 转移到另一条 tRNA？', '试一试：点击下方的 Pro（脯氨酸）。页面会高亮 mRNA 中编码它的 CCG 密码子，以及 DNA 两条链上对应的碱基。'];
 const PREFERS_REDUCED = matchMedia('(prefers-reduced-motion: reduce)');
 const sampleEntry = new URLSearchParams(location.search).get('sample') === 'transcription';
 const introOff = new URLSearchParams(location.search).get('intro') === 'off';
@@ -824,7 +824,7 @@ window.addEventListener('pagehide', () => { sceneDisposed=true;pause();cancelAni
 render();
 try {
   if (new URLSearchParams(location.search).get('view') === '2d') throw new Error('二维观察模式');
-  const { createScene } = await import('./scene.js?v=20261014-startup');
+  const { createScene } = await import('./scene.js?v=20261014-base-labels');
   if (sceneDisposed) throw new Error('页面已离开');
   pendingScene = createScene({ container: $('scene'), onSelect: selectScene, onHover: knowledgeHints.onHover, onInvalidate: requestSceneFrame });
   const loading=$('scene-loading');
