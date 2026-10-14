@@ -858,7 +858,7 @@ render();
 updatePlayControl();
 try {
   if (new URLSearchParams(location.search).get('view') === '2d') throw new Error('二维观察模式');
-  const { createScene } = await import('./scene.js?v=20261014-transcription-smooth');
+  const { createScene } = await import('./scene.js?v=20261014-mobile');
   if (sceneDisposed) throw new Error('页面已离开');
   pendingScene = createScene({ container: $('scene'), onSelect: selectScene, onHover: knowledgeHints.onHover, onInvalidate: requestSceneFrame });
   const loading=$('scene-loading');
