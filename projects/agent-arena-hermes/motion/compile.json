@@ -1,0 +1,23 @@
+{
+  "runtime": {
+    "type": "chroma-video",
+    "frameCount": 60,
+    "fps": 60,
+    "keying": {
+      "algorithm": "dominance-v2",
+      "mode": "green",
+      "keyColor": [
+        0,
+        254,
+        0
+      ],
+      "similarity": 0.12,
+      "smoothness": 0.06,
+      "dominanceStart": 0,
+      "dominanceEnd": 0.12,
+      "spillStart": -0.005,
+      "spillEnd": 0.06,
+      "spill": 1
+    }
+  }
+}

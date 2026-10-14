@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f7f6f0">
+  <meta name="description" content="从十二个亚基到内部配对区，近距离观察 RNA 聚合酶Ⅱ的结构与工作关系。">
+  <title>RNA 聚合酶Ⅱ · 分子观察室</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='11' fill='%2313272A'/%3E%3Cpath d='m12 14 16 2-9 12z' fill='none' stroke='%23d9c78d' stroke-width='1.5'/%3E%3Ccircle cx='12' cy='14' r='6' fill='%239387EA'/%3E%3Ccircle cx='28' cy='16' r='6' fill='%2342BFAA'/%3E%3Ccircle cx='19' cy='28' r='5' fill='%23F0AC65'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./style.css">
+  <script type="importmap">{"imports":{"three":"../vendor/three.module.js"}}</script>
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <svg class="icon-definitions" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="icon-back" viewBox="0 0 24 24"><path d="m14 6-6 6 6 6M8 12h12"/></symbol>
+    <symbol id="icon-window" viewBox="0 0 24 24"><path d="M8.2 4.5h7.6l4.2 7.5-4.2 7.5H8.2L4 12zM8.2 4.5 12 12l3.8 7.5M4 12h16M15.8 4.5 12 12l-3.8 7.5"/></symbol>
+    <symbol id="icon-expand" viewBox="0 0 24 24"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4M4 4l5 5m11-5-5 5M4 20l5-5m11 5-5-5"/></symbol>
+    <symbol id="icon-reset" viewBox="0 0 24 24"><path d="M4.5 10a7.7 7.7 0 1 1 .4 5M4 4v6h6"/></symbol>
+    <symbol id="icon-rotate" viewBox="0 0 24 24"><path d="M4.3 8A9 9 0 0 1 20 6m0-3v4h-4M19.7 16A9 9 0 0 1 4 18m0 3v-4h4M9 7v10m6-10v10"/></symbol>
+    <symbol id="icon-pause" viewBox="0 0 24 24"><path d="M9 5v14M15 5v14"/></symbol>
+    <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+  </svg>
+
+  <main class="demo-shell">
+    <header class="demo-header">
+      <div class="header-identity">
+        <a class="back-link" href="../"><svg class="icon"><use href="#icon-back"/></svg><span>返回基因表达</span></a>
+        <div class="title-row"><h1>RNA 聚合酶<span class="title-roman">Ⅱ</span></h1><span class="preview-label">概念预览</span></div>
+      </div>
+      <div class="header-caption"><span>MOLECULAR OBSERVATORY</span><p>走近一个分子，看清它如何工作。</p></div>
+    </header>
+
+    <div class="workspace">
+      <section class="molecule-viewer" aria-labelledby="viewer-title">
+        <div class="stage-header">
+          <div><span class="stage-eyebrow">RNA POLYMERASE II</span><h2 id="viewer-title">完整结构</h2></div>
+          <span id="stage-part-count" class="stage-part-count">结构载入中</span>
+        </div>
+        <div id="molecule-stage" class="molecule-stage" aria-label="RNA 聚合酶Ⅱ三维模型，拖动旋转、滚轮或双指缩放" aria-busy="true"></div>
+
+        <div id="model-loading" class="model-status" role="status" aria-live="polite">
+          <span class="loading-ring" aria-hidden="true"></span>
+          <strong id="loading-title">正在准备聚合酶结构</strong>
+          <p id="loading-description">载入结构与观察场景…</p>
+          <button id="model-retry" type="button" hidden>重新载入</button>
+        </div>
+
+        <div class="stage-corner-caption"><span class="caption-rule"></span><span id="stage-observation">十二个亚基 · 一个工作通道</span></div>
+        <div class="stage-interaction-hint"><span class="desktop-hint">拖动旋转 · 滚轮缩放</span><span class="touch-hint">单指旋转 · 双指缩放</span></div>
+        <div class="stage-tools" role="group" aria-label="模型观察工具">
+          <button id="cutaway-toggle" class="tool-button" type="button" aria-pressed="false" title="显示内部工作区域" data-scene-control disabled><svg class="icon"><use href="#icon-window"/></svg><span>透视</span></button>
+          <span class="tool-divider" aria-hidden="true"></span>
+          <button id="explode-toggle" class="tool-button" type="button" aria-pressed="false" title="分开观察各个亚基" data-scene-control disabled><svg class="icon"><use href="#icon-expand"/></svg><span>亚基展开</span></button>
+          <button id="reset-view" class="tool-button" type="button" title="恢复观察视角（Esc）" data-scene-control disabled><svg class="icon"><use href="#icon-reset"/></svg><span>复位</span></button>
+          <button id="rotate-toggle" class="tool-button" type="button" aria-pressed="false" title="缓慢自动旋转模型" data-scene-control disabled><svg class="icon"><use id="rotate-icon" href="#icon-rotate"/></svg><span id="rotate-text">自转</span></button>
+        </div>
+      </section>
+
+      <aside class="lesson-panel" aria-labelledby="lesson-heading">
+        <div class="lesson-heading"><span class="eyebrow">A CLOSER LOOK</span><h2 id="lesson-heading">从结构，看到过程。</h2><p>选择一个观察步骤，或直接点选模型。</p></div>
+        <nav class="lesson-steps" aria-label="分子观察步骤">
+          <button class="step-button is-active" type="button" data-step="0" aria-current="step" data-scene-control disabled><span class="step-number">01</span><span class="step-copy"><strong>整体结构</strong><small>认识十二个亚基</small></span><svg class="icon step-arrow"><use href="#icon-arrow"/></svg></button>
+          <button class="step-button" type="button" data-step="1" data-scene-control disabled><span class="step-number">02</span><span class="step-copy"><strong>模板配对</strong><small>进入内部工作区域</small></span><svg class="icon step-arrow"><use href="#icon-arrow"/></svg></button>
+          <button class="step-button" type="button" data-step="2" data-scene-control disabled><span class="step-number">03</span><span class="step-copy"><strong>RNA 延长</strong><small>区分模板与新生产物</small></span><svg class="icon step-arrow"><use href="#icon-arrow"/></svg></button>
+        </nav>
+
+        <section class="observation-note" aria-live="polite" aria-atomic="true">
+          <div class="section-label"><span id="step-kicker">观察 01</span><i></i></div>
+          <h3 id="step-title">十二个亚基，围出工作通道。</h3>
+          <p id="step-what">彩色分区对应不同的蛋白质亚基，它们共同构成 RNA 聚合酶Ⅱ。</p>
+          <div class="observation-action"><span>试着观察</span><p id="step-how">旋转模型，寻找中央沟槽；点选色块，辨认其中一个亚基。</p></div>
+        </section>
+
+        <section class="subunit-section" aria-labelledby="subunit-heading">
+          <div class="subunit-heading"><h3 id="subunit-heading">按颜色辨认亚基</h3><button id="clear-part" class="clear-part" type="button" hidden data-scene-control disabled>取消选择</button></div>
+          <div id="major-subunits" class="major-subunits" role="group" aria-label="主要亚基"></div>
+          <details id="other-subunits" class="other-subunits"><summary><span>其余亚基</span><span class="details-mark" aria-hidden="true">＋</span></summary><div id="compact-subunits" class="compact-subunits" role="group" aria-label="其他亚基"></div></details>
+          <div id="part-note" class="part-note"><span id="part-note-mark" aria-hidden="true"></span><div><strong id="part-note-title">颜色帮助你追踪同一结构</strong><p id="part-note-description">在整体与透视之间切换，看看各个亚基如何相互包围。</p></div></div>
+        </section>
+
+        <div class="source-note"><span>结构坐标参考</span><a href="https://www.rcsb.org/structure/1Y1W" target="_blank" rel="noopener noreferrer">PDB 1Y1W <span aria-hidden="true">↗</span></a><p>酵母 RNA 聚合酶Ⅱ延伸复合物</p></div>
+      </aside>
+    </div>
+
+    <footer class="demo-footer"><p>分区色、相对比例与局部配对位置为教学示意；包络曲面不代表原子级结构。</p><span class="keyboard-hint"><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> 切换步骤 <i></i><kbd>Esc</kbd> 恢复视角</span></footer>
+    <p id="feedback-message" class="sr-only" role="status" aria-live="polite"></p>
+    <noscript><p class="noscript-note">请启用 JavaScript 以载入三维观察场景。RNA 聚合酶Ⅱ由多个亚基组成，读取 DNA 模板并以 5′→3′方向合成 RNA。</p></noscript>
+  </main>
+</body>
+</html>
