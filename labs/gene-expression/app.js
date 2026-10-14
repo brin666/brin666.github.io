@@ -24,7 +24,7 @@ if (entrance.eligible) {
 }
 const objectLesson = createObjectLesson({
   getReducedMotion: () => store.reducedMotion,
-  onEnter() { interruptEntrance('object-lesson'); pause(); cancelAnimationFrame(clockFrame); clockFrame=0; if($('sources').open)$('sources').close(); knowledgeHints.hide(); closeObjectMenu(); },
+  onEnter() { pendingSeek++; clearChapterLoading(); interruptEntrance('object-lesson'); scene?.cancelDeferredWarmup?.(); pause(); cancelAnimationFrame(clockFrame); clockFrame=0; if($('sources').open)$('sources').close(); knowledgeHints.hide(); closeObjectMenu(); },
   onReturn() { render(); requestSceneFrame(); },
 });
 const knowledgeHints = createKnowledgeHints({ getChapter: () => snapshot.chapter.id, isHidden: () => objectLesson.isActive() });
@@ -55,7 +55,11 @@ function updateViewControls() {
   $('whiteboard-open').disabled = !scene?.enterWhiteboard || entrance.active;
   if (fallback) $('whiteboard-open').title = '二维备用视图无法提供交互式 3D 白板';
   const hasViewApi = typeof scene?.setView === 'function';
-  $('protein-perspective').hidden = !hasViewApi || ![1,2,3].includes(snapshot.chapter.id) || scene?.getMetrics?.()?.polymeraseModel !== 'blender-full-perspective';
+  const chapter = snapshot.chapter.id;
+  const sceneMetrics = scene?.getMetrics?.();
+  const hasChapterWindow = chapter === 1 ? sceneMetrics?.polymeraseModel === 'blender-full-perspective'
+    : [2, 3].includes(chapter) && sceneMetrics?.modelEdition === 'exhibit-v12';
+  $('protein-perspective').hidden = !hasViewApi || !hasChapterWindow;
   if (viewApiAvailable !== hasViewApi) {
     $('view-mode-group').hidden = !hasViewApi;
     viewApiAvailable = hasViewApi;
@@ -111,7 +115,7 @@ addEventListener('resize', () => positionChapterIndicator(snapshot.chapter.id));
 chapterNav.addEventListener('click', (event) => {
   const target = event.target.closest('[data-chapter]');
   if (!target) return;
-  pause(); store.selected = null; scene?.resetView(); setTime(CHAPTERS[Number(target.dataset.chapter)].start);
+  pause(); store.selected = null; void seekWhenReady(CHAPTERS[Number(target.dataset.chapter)].start, { resetView: true });
 });
 
 function buildSequence() {
@@ -523,10 +527,66 @@ function replayEntrance() {
   return startEntrance({ replay: true });
 }
 
-function setTime(time) { if(whiteboard?.isActive())return; interruptEntrance('seek'); scene?.resetAmbient?.(); store.time = clampTime(time); render(); }
+function setTime(time) { if(whiteboard?.isActive())return; pendingSeek++; clearChapterLoading(); interruptEntrance('seek'); scene?.resetAmbient?.(); store.time = clampTime(time); render(); }
+let pendingSeek = 0, waitingForChapter = false;
+function clearChapterLoading() {
+  $('chapter-loading')?.remove();
+  $('scene').removeAttribute('aria-busy');
+  waitingForChapter = false;
+  $('play').disabled = false;
+}
+function scheduleChapterLoading(request) {
+  return setTimeout(() => {
+    if (request !== pendingSeek || sceneDisposed || objectLesson.isActive() || whiteboard?.isActive()) return;
+    const notice = document.createElement('div');
+    notice.id = 'chapter-loading';
+    notice.className = 'scene-loading';
+    notice.setAttribute('role', 'status');
+    notice.textContent = '正在准备转录模型…';
+    notice.style.cssText = 'z-index:20;background:#132427;color:#c3d2c8;pointer-events:none;';
+    $('scene').append(notice);
+    $('scene').setAttribute('aria-busy', 'true');
+  }, 150);
+}
+async function seekWhenReady(time, { resetView = false } = {}) {
+  if (whiteboard?.isActive()) return;
+  const request = ++pendingSeek;
+  clearChapterLoading();
+  interruptEntrance('seek');
+  const targetTime = clampTime(time);
+  if (scene && derive(targetTime).chapter.id === 1 && !scene.isDeferredAssetsReady?.()) {
+    waitingForChapter = true;
+    $('play').disabled = true;
+    const loadingTimer = scheduleChapterLoading(request);
+    try { await scene.startDeferredAssets?.(); }
+    catch (error) { console.info('基因表达：后续章节模型未能完整载入。', error); }
+    finally { clearTimeout(loadingTimer); if (request === pendingSeek) clearChapterLoading(); }
+    if (request !== pendingSeek || sceneDisposed || objectLesson.isActive()) return;
+  }
+  if (request !== pendingSeek || whiteboard?.isActive()) return;
+  if (resetView) scene?.resetView();
+  setTime(targetTime);
+}
 function pause() {
+  if (waitingForChapter) { pendingSeek++; clearChapterLoading(); }
   store.playing = false; store.ambientMotion = false; previousStamp = 0;
   $('play-text').textContent = '播放'; $('play-icon').textContent = '▶'; $('play').setAttribute('aria-label', '播放');
+}
+function waitForTranscriptionDuringPlayback() {
+  const request = ++pendingSeek;
+  waitingForChapter = true;
+  const loadingTimer = scheduleChapterLoading(request);
+  void scene.startDeferredAssets?.().catch(error => {
+    console.info('基因表达：转录模型载入失败，沿用备用展品。', error);
+  }).finally(() => {
+    clearTimeout(loadingTimer);
+    if (request !== pendingSeek || sceneDisposed || objectLesson.isActive() || whiteboard?.isActive()) return;
+    clearChapterLoading();
+    store.time = CHAPTERS[1].start;
+    previousStamp = 0;
+    render();
+    if (store.playing) requestSceneFrame();
+  });
 }
 function tick(stamp) {
   clockFrame = 0;
@@ -548,7 +608,15 @@ function tick(stamp) {
   }
   if (store.playing && previousStamp) {
     const dt = Math.min((stamp - previousStamp) / 1000, .12);
-    store.time = clampTime(store.time + dt * store.speed / 1.65);
+    const nextTime = clampTime(store.time + dt * store.speed / 1.65);
+    if (scene && store.time < CHAPTERS[1].start && nextTime >= CHAPTERS[1].start && !scene.isDeferredAssetsReady?.()) {
+      store.time = CHAPTERS[1].start - 0.00001;
+      previousStamp = 0;
+      render();
+      waitForTranscriptionDuringPlayback();
+      return;
+    }
+    store.time = nextTime;
   }
   previousStamp = store.playing ? stamp : 0;
   render();
@@ -561,21 +629,27 @@ function requestSceneFrame() {
 }
 function play() {
   if(whiteboard?.isActive())return;
+  if (waitingForChapter) {
+    if (store.playing) { pause(); render(); }
+    return;
+  }
+  pendingSeek++; clearChapterLoading();
   interruptEntrance('play');
-  if (store.reducedMotion) { setTime(nextStep(store.time)); return; }
+  if (store.reducedMotion) { void seekWhenReady(nextStep(store.time)); return; }
   if (store.playing) { pause(); render(); return; }
   if (store.time === TOTAL) { store.selected = null; setTime(0); }
   scene?.beginPlayback?.(store.speed/1.65);
+  if (scene && derive(store.time).chapter.id === 0 && !scene.isDeferredAssetsReady?.()) void scene.startDeferredAssets?.();
   store.playing = true; store.ambientMotion = false; previousStamp = 0;
   $('play-text').textContent = '暂停'; $('play-icon').textContent = 'Ⅱ'; $('play').setAttribute('aria-label', '暂停');
   requestSceneFrame();
 }
 $('play').addEventListener('click', play);
-$('previous').addEventListener('click', () => { pause(); setTime(previousStep(store.time)); });
-$('next').addEventListener('click', () => { pause(); setTime(nextStep(store.time)); });
-$('progress').addEventListener('input', (event) => { pause(); setTime(Number(event.target.value)); });
-$('reset').addEventListener('click', () => { pause(); store.selected = null; store.expanded = false; store.ambientMotion = true; $('expand').setAttribute('aria-pressed', 'false'); scene?.resetView(); setTime(0); });
-$('dna-idle').addEventListener('click', () => { store.playing = false; previousStamp = 0; store.ambientMotion = !store.ambientMotion; $('play-text').textContent='播放'; $('play-icon').textContent='▶'; $('play').setAttribute('aria-label','播放'); render(); requestSceneFrame(); });
+$('previous').addEventListener('click', () => { pause(); void seekWhenReady(previousStep(store.time)); });
+$('next').addEventListener('click', () => { pause(); void seekWhenReady(nextStep(store.time)); });
+$('progress').addEventListener('input', (event) => { pause(); void seekWhenReady(Number(event.target.value)); });
+$('reset').addEventListener('click', () => { pause(); store.selected = null; store.expanded = false; store.ambientMotion = true; $('expand').setAttribute('aria-pressed', 'false'); void seekWhenReady(0, { resetView: true }); });
+$('dna-idle').addEventListener('click', () => { const wasAmbient=store.ambientMotion; pause(); store.ambientMotion=!wasAmbient; render(); requestSceneFrame(); });
 document.querySelectorAll('[data-speed]').forEach((button) => button.addEventListener('click', () => {
   store.speed = Number(button.dataset.speed);
   document.querySelectorAll('[data-speed]').forEach((other) => other.setAttribute('aria-pressed', String(other === button)));
@@ -632,8 +706,8 @@ document.addEventListener('keydown', (event) => {
   }
   if (event.target.closest('input,textarea,select,button,a,[contenteditable="true"],summary')) return;
   if (event.code === 'Space') { event.preventDefault(); play(); }
-  if (event.code === 'ArrowRight') { event.preventDefault(); pause(); setTime(nextStep(store.time)); }
-  if (event.code === 'ArrowLeft') { event.preventDefault(); pause(); setTime(previousStep(store.time)); }
+  if (event.code === 'ArrowRight') { event.preventDefault(); pause(); void seekWhenReady(nextStep(store.time)); }
+  if (event.code === 'ArrowLeft') { event.preventDefault(); pause(); void seekWhenReady(previousStep(store.time)); }
 });
 $('sources-open').addEventListener('click', () => { pause(); render(); $('sources').showModal(); });
 $('sources-close').addEventListener('click', () => $('sources').close());
@@ -730,7 +804,7 @@ function restoreWhiteboardTeachingState(frozen) {
 }
 whiteboard=createWhiteboard({getScene:()=>scene,trigger:$('whiteboard-open'),
   onFreeze(){
-    pause();cancelAnimationFrame(clockFrame);clockFrame=0;knowledgeHints.hide();closeObjectMenu();
+    pendingSeek++;clearChapterLoading();scene?.cancelDeferredWarmup?.();pause();cancelAnimationFrame(clockFrame);clockFrame=0;knowledgeHints.hide();closeObjectMenu();
     const frozen=scene.captureFrozenState({freezePresentation:true});
     frozen.app={selected:store.selected,expanded:store.expanded,labels:store.labels,viewMode:store.viewMode,reducedMotion:store.reducedMotion,panelOpen:store.panelOpen};
     const chapter=derive(frozen.time).chapter;
@@ -750,7 +824,7 @@ window.addEventListener('pagehide', () => { sceneDisposed=true;pause();cancelAni
 render();
 try {
   if (new URLSearchParams(location.search).get('view') === '2d') throw new Error('二维观察模式');
-  const { createScene } = await import('./scene.js');
+  const { createScene } = await import('./scene.js?v=20261014-startup');
   if (sceneDisposed) throw new Error('页面已离开');
   pendingScene = createScene({ container: $('scene'), onSelect: selectScene, onHover: knowledgeHints.onHover, onInvalidate: requestSceneFrame });
   const loading=$('scene-loading');
@@ -759,10 +833,16 @@ try {
   await pendingScene.ready;
   if(!sceneDisposed) {
     scene=pendingScene;pendingScene=null;
+    // Direct chapter links keep the loading cover until their protein model is
+    // ready, rather than briefly showing the DNA-only exhibit in that chapter.
+    if (derive(store.time).chapter.id === 1) await scene.startDeferredAssets?.();
+    if (sceneDisposed) throw new Error('页面已离开');
     if (store.viewMode !== 'overview') scene.setView?.(store.viewMode);
     $('scene-loading')?.remove(); document.body.dataset.renderer = 'webgl'; render();
     if (entrance.eligible && !entrance.pendingSkip) void startEntrance();
-    else requestSceneFrame();
+    else {
+      requestSceneFrame();
+    }
   }
 } catch (error) {
   pendingScene?.dispose();pendingScene=null;

@@ -1,5 +1,5 @@
 import * as THREE from './vendor/three.module.js';
-import { createRibosomeShell } from './ribosome-shell.js';
+import { createRibosomeShell } from './ribosome-shell.js?v=20261014-startup';
 
 const selection = { type: 'ribosome' };
 const trnaSelection = { type: 'trna' };

@@ -7,6 +7,19 @@
   <meta name="description" content="追踪同一段人工教学序列：从 DNA 模板到 RNA，再到五个氨基酸组成的多肽。可暂停、逐步观察与双向追踪。">
   <title>基因表达 · 从 DNA 到多肽</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23f1dfac'/%3E%3Cpath d='M12 6C32 14 8 26 28 34M28 6C8 14 32 26 12 34M13 10h14M15 20h10M13 30h14' fill='none' stroke='%2354554c' stroke-width='2'/%3E%3C/svg%3E">
+  <script>
+    // Start the DNA exhibit transfer while the module graph loads. The 2D
+    // fallback does not fetch a 3D model.
+    const presentation = new URLSearchParams(location.search);
+    if (presentation.get('view') !== '2d' && presentation.get('visual') !== 'classic') {
+      const dnaModel = document.createElement('link');
+      dnaModel.rel = 'preload';
+      dnaModel.as = 'fetch';
+      dnaModel.href = './pilot/assets/exhibit/gene-expression-exhibit.glb';
+      dnaModel.crossOrigin = 'anonymous';
+      document.head.append(dnaModel);
+    }
+  </script>
   <link rel="stylesheet" href="./style.css">
   <link rel="stylesheet" href="./exhibit-ui.css">
   <link rel="stylesheet" href="./entrance.css">
@@ -29,7 +42,7 @@
       addEventListener('gene-expression-entrance-ready', () => clearTimeout(watchdog), { once: true });
     })();
   </script>
-  <script type="module" src="./app.js"></script>
+  <script type="module" src="./app.js?v=20261014-startup"></script>
 </head>
 <body>
   <section id="entrance-ui" data-phase="idle" aria-label="基因表达开场" aria-live="polite">

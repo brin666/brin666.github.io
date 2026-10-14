@@ -66,19 +66,41 @@ export function createRibosomeShell(small, baseColor) {
     const channel=small ? Math.exp(-(((p.y+.48)/.13)**2)) : Math.max(...TRANSLATION_SITES.map(site=>Math.exp(-(((p.x-site.x)/.31)**2+((p.y-.68)/.65)**2))));
     return baseColor.clone().lerp(light,.15*domain).lerp(dark,Math.min(.44,.27*seam+.24*channel*clamp((p.z+.30)/.4)));
   };
-  const append=p=>{const n=normal(p),c=colorAt(p);positions.push(p.x,p.y,p.z);normals.push(n.x,n.y,n.z);colors.push(c.r,c.g,c.b);};
+  // A lattice edge is shared by neighbouring tetrahedra and cells. Reuse its
+  // interpolated point and surface samples instead of evaluating the implicit
+  // field six more times for every triangle corner that touches it.
+  const append=p=>{
+    if (!p.shellNormal) {
+      p.shellNormal=normal(p);
+      p.shellColor=colorAt(p);
+    }
+    const n=p.shellNormal,c=p.shellColor;
+    positions.push(p.x,p.y,p.z);normals.push(n.x,n.y,n.z);colors.push(c.r,c.g,c.b);
+  };
   // Cache scalar values: cell corners are shared, all six tetrahedra use the
   // same diagonal, so adjacent cells meet without cracks.
   const nx=counts[0]+1,ny=counts[1]+1,nz=counts[2]+1,values=new Float32Array(nx*ny*nz);
   const index=(x,y,z)=>(x*ny+y)*nz+z;
+  const edgePoints=new Map();
   for(let x=0;x<nx;x++)for(let y=0;y<ny;y++)for(let z=0;z<nz;z++)values[index(x,y,z)]=field(min[0]+x*step,min[1]+y*step,min[2]+z*step);
   for(let x=0;x<counts[0];x++)for(let y=0;y<counts[1];y++)for(let z=0;z<counts[2];z++){
     const points=corners.map(([a,b,c])=>new THREE.Vector3(min[0]+(x+a)*step,min[1]+(y+b)*step,min[2]+(z+c)*step));
-    const scalar=corners.map(([a,b,c])=>values[index(x+a,y+b,z+c)]);
+    const cornerIds=corners.map(([a,b,c])=>index(x+a,y+b,z+c));
+    const scalar=cornerIds.map(id=>values[id]);
     if(scalar.every(v=>v>=0)||scalar.every(v=>v<0))continue;
+    const intersect=(a,b)=>{
+      const lo=Math.min(cornerIds[a],cornerIds[b]),hi=Math.max(cornerIds[a],cornerIds[b]);
+      const key=lo*values.length+hi;
+      let point=edgePoints.get(key);
+      if(!point) {
+        point=points[a].clone().lerp(points[b],scalar[a]/(scalar[a]-scalar[b]));
+        edgePoints.set(key,point);
+      }
+      return point;
+    };
     for(const tet of tetrahedra){
       const polygon=[];
-      for(const [i,j] of edges){const a=tet[i],b=tet[j];if((scalar[a]<0)===(scalar[b]<0))continue;polygon.push(points[a].clone().lerp(points[b],scalar[a]/(scalar[a]-scalar[b])));}
+      for(const [i,j] of edges){const a=tet[i],b=tet[j];if((scalar[a]<0)===(scalar[b]<0))continue;polygon.push(intersect(a,b));}
       if(polygon.length<3)continue;
       const center=polygon.reduce((sum,p)=>sum.add(p),new THREE.Vector3()).multiplyScalar(1/polygon.length),n=normal(center);
       const tangent=polygon[0].clone().sub(center).normalize(),bitangent=new THREE.Vector3().crossVectors(n,tangent).normalize();

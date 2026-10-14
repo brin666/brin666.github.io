@@ -5,10 +5,9 @@ import { createOrganicGeometry, createBaseGeometry, createSugarGeometry, createS
 import { createExhibitBase, adaptExhibitBase, createPairingDashes } from './nucleic-exhibit.js';
 import { createRefinedBaseGeometry } from './pilot/nucleic-base-geometry.js';
 import { createContinuousBackbone } from './continuous-backbone.js';
-import { buildRibosomeExhibit, buildTrnaExhibit } from './translation-exhibit.js';
+import { buildRibosomeExhibit, buildTrnaExhibit } from './translation-exhibit.js?v=20261014-startup';
 import { createExhibitMaterial, createExhibitEnvironment } from './exhibit-surface.js';
 import { createBioProteinMaterial, setProteinActivity } from './bio-protein-surface.js';
-import { loadPolymeraseExhibit } from './polymerase-exhibit.js';
 import { createPeptideResidue } from './peptide-exhibit.js';
 import { TRANSLATION_SITES, SITE_SPACING } from './translation-layout.js';
 import { buildNuclearExportExhibit } from './nuclear-export-exhibit.js';
@@ -696,7 +695,9 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
   let idleTime = 0, idleStamp = null, idleAdvancing = false, dragging = false;
   const dnaRotation = createDnaIdleRotation();
   let rotationPlayStart = null, dnaSpin = 0;
-  let entranceActive = false, entranceTime = 0, entranceMobile = false, entrancePreparation = 0, assetReady = Promise.resolve(), assetReadySettled = true;
+  let entranceActive = false, entranceTime = 0, entranceMobile = false, entrancePreparation = 0;
+  let dnaAssetReady = Promise.resolve(), assetReady = Promise.resolve(), assetReadySettled = true;
+  let deferredAssetTimer = 0, deferredAssetsStarted = false;
   const entranceLight = {key:keyLight.intensity,fill:fillLight.intensity,rim:rimLight.intensity};
   const selectedEmissive = new THREE.Color('#a68043');
   const normalEmissive = new THREE.Color('#000000');
@@ -1285,6 +1286,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     const key = snapshot.chapter.key;
     const wasEntranceActive=entranceActive;
     entranceActive=Boolean(refinedModels && options.entrance?.active && !options.reducedMotion && key==='dna' && snapshot.time===0);
+    if (key === 'transcription' && !entranceActive && !deferredAssetsStarted) void startDeferredAssets();
     if(entranceActive){
       entranceTime=clamp(options.entrance.time,0,ENTRANCE_DURATION);
       entranceMobile=(document.querySelector('.stage')?.clientWidth || container.clientWidth)<600;
@@ -1863,39 +1865,25 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     if(disposed)return;
     shaderWarmMs=performance.now()-began;
   }
+  const fallbackMeshes = polymerase.children.slice();
+  let exhibitVisual = null, exhibitMaterials = [];
   if (!classic) {
-    assetReadySettled = false;
-    const fallbackMeshes = polymerase.children.slice();
-    assetReady = import('./pilot/blender-assets.js')
+    // DNA geometry is the only remote model needed for the opening. Apply it
+    // before the entrance starts so bases never change shape mid-animation.
+    dnaAssetReady = import('./pilot/blender-assets.js')
       .then(({ loadBlenderModels }) => disposed ? null : loadBlenderModels('exhibit'))
-      .then(async (assets) => {
+      .then((assets) => {
         if (!assets) return;
-        if (disposed) { Object.values(assets.geometries).forEach((g) => g.dispose()); return; }
-        let full = null;
-        if (refinedModels) {
-          try { full = await loadPolymeraseExhibit(); }
-          catch (error) { polymeraseAssetError = `完整模型载入失败，保留旧展品：${error.message}`; }
-        }
-        if (disposed) { full?.dispose(); Object.values(assets.geometries).forEach(g => g.dispose()); return; }
-        const visual = full?.group || new THREE.Group();
-        if (!full) {
-        visual.position.set(0, -0.14, -0.02);
-        visual.scale.setScalar(0.58);
-        }
-        if (full) {
-          proteinView = full.view; proteinVisual = visual;
-          proteinView.setEnabled(perspectiveEnabled);
-          full.geometries.forEach(g => resources.add(g)); full.materials.forEach(m => materials.add(m));
-          const motion = createPolymeraseLivingMotion({ group: visual, materials: full.materials });
-          livingControllers.push(motion);
-          visual.traverse(object => { if (object.isMesh && object.userData.selection) pickables.push(object); });
-        }
+        if (disposed) { Object.values(assets.geometries).forEach(g => g.dispose()); return; }
+        exhibitVisual = new THREE.Group();
+        exhibitVisual.position.set(0, -0.14, -0.02);
+        exhibitVisual.scale.setScalar(0.58);
         const bodySurface = material(bioSurface ? '#c7bc99' : exhibitLighting ? '#7baea1' : '#86b5ac', { biological: true, variant: 'rnap-body', fieldVariant: 'rnap', vertexColors: true, bumpMap: null, bumpScale: 0 });
         const innerSurface = material(bioSurface ? '#706754' : exhibitLighting ? '#405f59' : '#52716d', { biological: true, kind: 'inner', variant: 'rnap-inner', fieldVariant: 'rnap', vertexColors: true, roughness: bioSurface ? .72 : exhibitLighting ? .81 : .69, bumpMap: null, bumpScale: 0 });
+        exhibitMaterials = [bodySurface, innerSurface];
         for (const [name, g] of Object.entries(assets.geometries)) {
           if (['RNAP_BODY', 'RNAP_INNER', 'RNAP_RIDGE'].includes(name)) {
-            if (full) { g.dispose(); continue; }
-            const part = mesh(geometry(g), name === 'RNAP_INNER' ? innerSurface : bodySurface, visual, { type: 'polymerase' });
+            const part = mesh(geometry(g), name === 'RNAP_INNER' ? innerSurface : bodySurface, exhibitVisual, { type: 'polymerase' });
             part.name = name;
           } else if (detailed && name.startsWith('BASE_')) {
             const base = name.slice(5), previous = baseGeometries[base];
@@ -1913,12 +1901,15 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
             scene.traverse(object => { if (object.isMesh && object.geometry === sugarGeo) object.geometry = g; });
           } else g.dispose();
         }
-        polymerase.add(visual);
-        fallbackMeshes.forEach((object) => { object.visible = false; });
-        if(refinedModels)await warmTeachingPrograms();
-        if(disposed)return;
-        polymeraseVisualSource = full ? 'blender-full-perspective' : 'blender-exhibit';
-        polymeraseLoadMs = assets.loadMs + (full?.loadMs || 0);
+        if (disposed) return;
+        polymerase.add(exhibitVisual);
+        fallbackMeshes.forEach(object => {
+          object.visible = false;
+          const index = pickables.indexOf(object);
+          if (index !== -1) pickables.splice(index, 1);
+        });
+        polymeraseVisualSource = 'blender-exhibit';
+        polymeraseLoadMs = assets.loadMs;
         if (snapshot) update(snapshot);
         container.dataset.polymeraseModel = polymeraseVisualSource;
         invalidate();
@@ -1929,8 +1920,58 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
         polymeraseAssetError = error.message;
         container.dataset.polymeraseModel = polymeraseVisualSource;
         invalidate();
-      })
-      .finally(() => { assetReadySettled = true; });
+      });
+  }
+  function startDeferredAssets() {
+    if (classic || disposed || deferredAssetsStarted) return assetReady;
+    deferredAssetsStarted = true;
+    if (deferredAssetTimer) { clearTimeout(deferredAssetTimer); deferredAssetTimer = 0; }
+    assetReadySettled = false;
+    assetReady = dnaAssetReady.then(async () => {
+      if (disposed) return;
+      let full = null;
+      if (refinedModels) {
+        try {
+          const { loadPolymeraseExhibit } = await import('./polymerase-exhibit.js');
+          if (!disposed) full = await loadPolymeraseExhibit();
+        }
+        catch (error) { polymeraseAssetError = `完整模型载入失败，保留旧展品：${error.message}`; }
+      }
+      if (disposed) { full?.dispose(); return; }
+      if (full) {
+        const visual = full.group;
+        proteinView = full.view; proteinVisual = visual;
+        proteinView.setEnabled(perspectiveEnabled);
+        full.geometries.forEach(g => resources.add(g)); full.materials.forEach(m => materials.add(m));
+        livingControllers.push(createPolymeraseLivingMotion({ group: visual, materials: full.materials }));
+        visual.traverse(object => { if (object.isMesh && object.userData.selection) pickables.push(object); });
+        if (exhibitVisual) {
+          exhibitVisual.traverse(object => {
+            if (!object.isMesh) return;
+            const index = pickables.indexOf(object);
+            if (index !== -1) pickables.splice(index, 1);
+            resources.delete(object.geometry);
+            object.geometry.dispose();
+          });
+          polymerase.remove(exhibitVisual);
+          exhibitVisual = null;
+          exhibitMaterials.forEach(mat => { materials.delete(mat); mat.dispose(); });
+          exhibitMaterials = [];
+        } else fallbackMeshes.forEach(object => { object.visible = false; });
+        polymerase.add(visual);
+        polymeraseVisualSource = 'blender-full-perspective';
+        polymeraseLoadMs = (polymeraseLoadMs || 0) + full.loadMs;
+        container.dataset.polymeraseModel = polymeraseVisualSource;
+        if (snapshot) update(snapshot);
+        invalidate();
+      }
+      if (refinedModels) await warmTeachingPrograms();
+    }).catch((error) => {
+      if (disposed) return;
+      polymeraseAssetError = error.message;
+      invalidate();
+    }).finally(() => { assetReadySettled = true; });
+    return assetReady;
   }
   function jsonCopy(value, fallback = null) {
     if (value === undefined) return fallback;
@@ -2171,7 +2212,12 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     return true;
   }
   return {
-    update, render, resetView, zoom, focus, setView, ready:assetReady,
+    update, render, resetView, zoom, focus, setView, ready:dnaAssetReady,
+    startDeferredAssets,
+    cancelDeferredWarmup() {
+      if (deferredAssetTimer) { clearTimeout(deferredAssetTimer); deferredAssetTimer = 0; }
+    },
+    isDeferredAssetsReady() { return classic || deferredAssetsStarted && assetReadySettled; },
     captureFrozenState,
     restoreFrozenState,
     async enterWhiteboard({ camera: requestedCamera = null, quality = 'balanced', onCameraChange = null } = {}) {
@@ -2203,9 +2249,11 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
       resize();
       // Asset loading can finish after the lesson first appears. Freeze external
       // updates immediately, then reconstruct once the current edition is ready.
-      const reconstructAfterAssets = !assetReadySettled;
+      const needsFullAssets = currentKey === 'transcription';
+      const fullAssets = needsFullAssets ? startDeferredAssets() : null;
+      const reconstructAfterAssets = needsFullAssets && !assetReadySettled;
       if (reconstructAfterAssets) {
-        try { await assetReady; } catch {}
+        try { await fullAssets; } catch {}
       }
       if (disposed) return null;
       whiteboardDarkState.materials = captureMaterials();
@@ -2274,14 +2322,14 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     async prepareEntrance() {
       const request=++entrancePreparation;
       if(!refinedModels)return false;
-      await assetReady;
+      await dnaAssetReady;
       if(disposed || request!==entrancePreparation)return false;
       idleTime=0;idleStamp=null;rotationPlayStart=null;dnaRotation.reset();dnaSpin=0;
       followReading=true;presentationZoom=1;manualCameraBlend=null;
       const warmOptions={playing:false,ambientMotion:false,selected:null,expanded:false,entrance:{active:true,time:6.7,viewportScale:[1,1]}};
       update(derive(0),warmOptions);
-      // Compile and upload every mesh at the assembled pose behind the loading
-      // cover. Warming only time zero leaves sugars and pairing strokes cold.
+      // Only the visible DNA opening is compiled behind the loading cover.
+      // Later protein variants warm after the entrance has handed off.
       if(renderer.compileAsync)await renderer.compileAsync(scene,camera);else renderer.compile(scene,camera);
       if(disposed || request!==entrancePreparation)return false;
       renderer.render(scene,camera);
@@ -2297,6 +2345,14 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
       options.entrance=null;
       if(snapshot)update(snapshot,{entrance:null});
       invalidate();
+      if (!classic && !disposed && !deferredAssetsStarted && !deferredAssetTimer) {
+        // Give the first settled DNA frame a chance to paint before parsing
+        // the polymerase GLB and compiling later teaching materials.
+        deferredAssetTimer = setTimeout(() => {
+          deferredAssetTimer = 0;
+          if (!disposed && !whiteboardActive && ['dna', 'transcription'].includes(currentKey)) void startDeferredAssets();
+        }, 140);
+      }
     },
     resetAmbient() { idleTime = 0; idleStamp = null; dnaSpin=dnaRotation.reset(); rotationPlayStart=null; manualCameraBlend=null; },
     beginPlayback(rate=1/1.65) {
@@ -2365,7 +2421,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
         camera: { position: camera.position.toArray(), target: controls.target.toArray(), quaternion:camera.quaternion.toArray(), fov: camera.fov, aspect: camera.aspect, viewMode, following:followReading, resuming:!!manualCameraBlend },
       };
     },
-    getMetrics() { return { renderCount, updateCount, drawCalls: renderer.info.render.calls, triangles: renderer.info.render.triangles, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures, width, height, pixelRatio: renderer.getPixelRatio(), ownAnimationLoop: false, shaderWarmMs, warmMaterialVariants:warmMaterials.size, entrance:entrance.inspect(), polymeraseModel: polymeraseVisualSource, polymeraseLoadMs, polymeraseAssetError, modelEdition: container.dataset.modelEdition, viewMode, ambient: { time: idleTime, advancing: idleAdvancing, dragging, duration: 18,rotation:dnaRotation.inspect() }, whiteboard: { active: whiteboardActive, preparing: whiteboardPreparing, mode: whiteboardMode, quality: whiteboardQuality, renderCount: whiteboardRenderCount, cameraChanges: whiteboardCameraChangeCount }, transitions:{windows:cameraWindows,canvasFade:false}, livingMotion: livingControllers.map(motion => motion.inspect()) }; },
+    getMetrics() { return { renderCount, updateCount, drawCalls: renderer.info.render.calls, triangles: renderer.info.render.triangles, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures, width, height, pixelRatio: renderer.getPixelRatio(), ownAnimationLoop: false, shaderWarmMs, warmMaterialVariants:warmMaterials.size, entrance:entrance.inspect(), polymeraseModel: polymeraseVisualSource, polymeraseLoadMs, polymeraseAssetError, deferredAssetsStarted, deferredAssetsReady:classic || deferredAssetsStarted && assetReadySettled, modelEdition: container.dataset.modelEdition, viewMode, ambient: { time: idleTime, advancing: idleAdvancing, dragging, duration: 18,rotation:dnaRotation.inspect() }, whiteboard: { active: whiteboardActive, preparing: whiteboardPreparing, mode: whiteboardMode, quality: whiteboardQuality, renderCount: whiteboardRenderCount, cameraChanges: whiteboardCameraChangeCount }, transitions:{windows:cameraWindows,canvasFade:false}, livingMotion: livingControllers.map(motion => motion.inspect()) }; },
     dispose() {
       if (disposed) return;
       disposed = true;
@@ -2383,6 +2439,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
       pointerLeave();
       renderer.domElement.removeEventListener('webglcontextlost', contextLost);
       if (whiteboardCameraChangeTimer) clearTimeout(whiteboardCameraChangeTimer);
+      if (deferredAssetTimer) clearTimeout(deferredAssetTimer);
       hydrogenDashes?.object.dispose(); dnaAttachments?.dispose();
       entrance.dispose();
       livingControllers.forEach(motion => motion.dispose());
