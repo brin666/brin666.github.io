@@ -1,0 +1,109 @@
+{
+  "article": "Agent 完成任务时，如何理解“不能做”？",
+  "theme": "Agent 的任务完成倾向、系统边界与停止机制；不是意识或机器人叛乱的证明。",
+  "stickers": [
+    {
+      "id": "sticker-01",
+      "file": "sticker-01.png",
+      "keyword": "OpenAI",
+      "type": "brand",
+      "source": "official",
+      "importance": "primary",
+      "suggested_side": "left",
+      "suggested_scale": "medium",
+      "suggested_zone": "title",
+      "rotation": 0,
+      "reason": "点明事件主体，保留官方标志。",
+      "source_detail": {
+        "url": "https://developers.openai.com/",
+        "rights_note": "OpenAI trademark; editorial reference only, no endorsement.",
+        "guidelines": "https://openai.com/brand/",
+        "method": "Exact SVG from official developer-site logo anchor; paths and black color unchanged; rasterized from vector"
+      }
+    },
+    {
+      "id": "sticker-02",
+      "file": "sticker-02.png",
+      "keyword": "执行任务的小 Bot",
+      "type": "object",
+      "source": "generated",
+      "importance": "primary",
+      "suggested_side": "right",
+      "suggested_scale": "large",
+      "suggested_zone": "title",
+      "rotation": 0,
+      "reason": "代表努力完成任务的 Agent，而非表现机器人叛乱。",
+      "source_detail": {
+        "generation_prompt": "Use case: stylized-concept. Asset type: one original transparent PNG die-cut editorial sticker decorating the margin of a Chinese personal essay. Restrained hand-drawn charcoal pencil outlines, warm ivory paper-like fill with light pencil grain, tiny desaturated teal, muted ochre and salmon accents. Elegant adult creator notebook aesthetic, not childish, not glossy 3D, not vector UI clipart. One clear connected silhouette, complete subject, centered, close composition with a small safe transparent margin; genuinely transparent background outside the subject. No words, letters, numbers, logos, watermark, square card, background scene or drop shadow. Thin pale ivory cut edge following silhouette. Subject: a small thoughtful task-executing robot with round ivory head, two simple dark oval eyes, teal ear pieces, compact complete body and rounded limbs, standing and holding a single task checklist sheet with three abstract short lines (not text). Neutral attentive pose, not angry or menacing. The full robot and sheet must be visible and coherent.",
+        "cleanup_prompt": "Edit target: the attached robot sticker. Remove ONLY all of the diffuse gray/ivory glow, vignette, gradient haze and semi-transparent halo outside the robot and its task sheet. The outside must be perfectly clean genuinely transparent alpha, right up to a narrow crisp ivory die-cut border. Preserve the exact complete robot, clipboard, pencil texture, pose, charcoal outlines, colors and proportions. Do not redraw the robot, add text, add shadow, change its identity, or crop body parts. Isolated clean sticker cutout on transparent background."
+      }
+    },
+    {
+      "id": "sticker-03",
+      "file": "sticker-03.png",
+      "keyword": "共享留言板",
+      "type": "object",
+      "source": "generated",
+      "importance": "secondary",
+      "suggested_side": "left",
+      "suggested_scale": "medium",
+      "suggested_zone": "upper_body",
+      "rotation": -2,
+      "reason": "对应软件包仓库被用来交换文件请求和线索。",
+      "source_detail": {
+        "generation_prompt": "Use case: stylized-concept. Asset type: one original transparent PNG die-cut editorial sticker decorating the margin of a Chinese personal essay. Restrained hand-drawn charcoal pencil outlines, warm ivory paper-like fill with light pencil grain, tiny desaturated teal, muted ochre and salmon accents. Elegant adult creator notebook aesthetic, not childish, not glossy 3D, not vector UI clipart. One clear connected silhouette, complete subject, centered, close composition with a small safe transparent margin; genuinely transparent background outside the subject. No words, letters, numbers, logos, watermark, square card, background scene or drop shadow. Thin pale ivory cut edge following silhouette. Subject: a small handmade cork-and-paper shared message board, informal irregular silhouette, four pinned ivory, pale ochre and pale teal paper notes joined by two light hand-drawn curved arrows. Notes have only abstract short strokes, no actual text. Three tiny paper file tabs attached along the lower edge suggest shared file requests. No browser window, no interface screenshot, no robot character. Clear recognizable physical bulletin board."
+      }
+    },
+    {
+      "id": "sticker-04",
+      "file": "sticker-04.png",
+      "keyword": "沙盒与绕行路径",
+      "type": "concept",
+      "source": "generated",
+      "importance": "secondary",
+      "suggested_side": "right",
+      "suggested_scale": "medium",
+      "suggested_zone": "mid_body",
+      "rotation": 2,
+      "reason": "表现沙盒边界与替代路径，不描述具体攻击操作。",
+      "source_detail": {
+        "generation_prompt": "Use case: stylized-concept. Asset type: one original transparent PNG die-cut editorial sticker decorating the margin of a Chinese personal essay. Restrained hand-drawn charcoal pencil outlines, warm ivory paper-like fill with light pencil grain, tiny desaturated teal, muted ochre and salmon accents. Elegant adult creator notebook aesthetic, not childish, not glossy 3D, not vector UI clipart. One clear connected silhouette, complete subject, centered, close composition with a small safe transparent margin; genuinely transparent background outside the subject. No words, letters, numbers, logos, watermark, square card, background scene or drop shadow. Thin pale ivory cut edge following silhouette. Subject: a simple hand-drawn transparent sandbox cube with a soft pale-blue glass outline and a tiny paper task folder inside; one short charcoal dotted path curves around the box edge toward a small teal network node just outside. Show an abstract system-boundary metaphor, not an actual cyber exploit or technical interface. One compact grouped object, three-quarter view, flat understated illustration, no solid background or diagram labels."
+      }
+    },
+    {
+      "id": "sticker-05",
+      "file": "sticker-05.png",
+      "keyword": "Hugging Face",
+      "type": "brand",
+      "source": "official",
+      "importance": "secondary",
+      "suggested_side": "left",
+      "suggested_scale": "medium",
+      "suggested_zone": "mid_body",
+      "rotation": 0,
+      "reason": "标识文章相关段落中涉及的平台。",
+      "source_detail": {
+        "url": "https://huggingface.co/datasets/huggingface/brand-assets/resolve/main/hf-logo.svg",
+        "rights_note": "Hugging Face trademark; editorial reference only, no endorsement.",
+        "guidelines": "https://huggingface.co/brand",
+        "method": "Official brand-assets SVG, colors and paths unchanged; rasterized from vector"
+      }
+    },
+    {
+      "id": "sticker-06",
+      "file": "sticker-06.png",
+      "keyword": "停止按钮",
+      "type": "object",
+      "source": "generated",
+      "importance": "secondary",
+      "suggested_side": "right",
+      "suggested_scale": "small",
+      "suggested_zone": "lower_body",
+      "rotation": -2,
+      "reason": "呼应结尾的停止机制问题。",
+      "source_detail": {
+        "generation_prompt": "Use case: stylized-concept. Asset type: one original transparent PNG die-cut editorial sticker decorating the margin of a Chinese personal essay. Restrained hand-drawn charcoal pencil outlines, warm ivory paper-like fill with light pencil grain, tiny desaturated teal, muted ochre and salmon accents. Elegant adult creator notebook aesthetic, not childish, not glossy 3D, not vector UI clipart. One clear connected silhouette, complete subject, centered, close composition with a small safe transparent margin; genuinely transparent background outside the subject. No words, letters, numbers, logos, watermark, square card, background scene or drop shadow. Thin pale ivory cut edge following silhouette. Subject: a small physical safety-stop mushroom pushbutton, muted coral-red cap on a warm ivory compact base, simple charcoal pencil contour, three tiny action strokes by the button to suggest a deliberate press. A simple dark square stop glyph in the center, no lettering. Slight hand-drawn three-quarter perspective but flat illustration, not photorealistic, no surrounding hand, no other objects. Readable silhouette at small size."
+      }
+    }
+  ]
+}

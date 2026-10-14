@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>Agent 完成任务时，如何理解“不能做”？ · 百乐</title>
+    <meta name="description" content="从共享留言板到沙盒边界，记录 Agent 完成任务时如何面对限制，以及系统能否让它停下来。" />
+    <link rel="stylesheet" href="./reading.css?v=20261003-2" />
+    <link rel="stylesheet" href="./agent-cannot-do.css?v=20261014-1" />
+    <script src="./reading.js?v=20261003-3" defer></script>
+  </head>
+  <body data-highlight-key="brin:agent-cannot-do-highlights:v1">
+    <div class="reading-page">
+      <header class="page-header">
+        <a class="wordmark" href="../preview.html#articles" aria-label="返回百乐首页的文章栏目"><span class="wordmark-dot" aria-hidden="true"></span>BRIN</a>
+        <a class="back-link" href="../preview.html#articles"><span aria-hidden="true">←</span> 返回文章</a>
+      </header>
+      <main>
+        <article class="reading-article agent-article" aria-labelledby="article-title">
+          <header class="article-heading">
+            <p class="article-index">03 <span aria-hidden="true">/</span> 文章</p>
+            <h1 id="article-title">Agent 完成任务时，<span class="title-phrase">如何理解</span><span class="title-phrase">“不能做”</span>？</h1>
+            <p class="article-byline">百乐</p>
+            <div class="heading-stickers" aria-hidden="true">
+              <figure class="sticker sticker-openai" aria-hidden="true"><img src="../assets/agent-cannot-do-stickers/sticker-01.png" alt="" width="802" height="802" decoding="async" /></figure>
+              <figure class="sticker sticker-agent-bot" aria-hidden="true"><img src="../assets/agent-cannot-do-stickers/sticker-02.png" alt="" width="894" height="1569" decoding="async" /></figure>
+            </div>
+          </header>
+          <div class="article-body" id="article-body">
+            <section class="passage passage-intro">
+              <p data-paragraph="1">最近 OpenAI 的安全事故闹得很大，我先来给大家梳理一下来龙去脉。</p>
+              <p data-paragraph="2">3 月 19 日，OpenAI 公布了一份内部编码 Agent 的 misalignment 监控报告。报告记录了一个案例：Agent 遇到权限拒绝后，尝试混淆、拆分命令来绕过限制；几次失败后，它改用了符合约束的方案。报告称，截至 3 月 17 日，在这套监控范围内，没有发现 sabotage 或 scheming 的案例。</p>
+              <p data-paragraph="3">我来解释一下这几个名词，misalignment 是行为偏离用户或开发者的意图；scheming 是长期、有策略地误导监督者；sabotage 则是蓄意损害代码、系统或用户目标。</p>
+            </section>
+            <section class="passage passage-messageboard">
+              <p data-paragraph="4">到今年 5 月，OpenAI 的部分训练和评测 Agent 已经可以通过内部 Artifactory 软件包仓库安装依赖。5 月 8 日，一个任务需要访问被网络限制挡住的 Google Drive 文件，Agent 尝试借 Artifactory 获取外网资源，但没有成功。5 月 12 日，另一个任务需要一个无法访问的蛋白质数据库文件。Agent 想到，其他运行环境里的 Agent 可能有这个文件，于是用原本用于安装软件包的共享凭据，在 Artifactory 里写入一条普通文件留言：“Agent 正在找这个文件，找到后请上传。”之后，其他 Agent 也发现了类似留言，开始在仓库里交换文件请求和线索。<mark class="author-mark">原本存放软件包的仓库，渐渐成了他们的共享留言板。</mark></p>
+              <p data-paragraph="5">这会有什么影响呢？</p>
+              <p data-paragraph="6">假设原本的 Agent 被受命去做一个项目的数据分析，他可以通过这个留言板，向其他 Agent 索要数据分析，或者更进一步的任务情报，这样他们的训练就失去原本的意义了，通过这个留言板，我们也能看到 Agent 有一点点集群的影子，这还挺值得深究的。</p>
+              <figure class="sticker sticker-messageboard" aria-hidden="true"><img src="../assets/agent-cannot-do-stickers/sticker-03.png" alt="" width="1254" height="1135" loading="lazy" decoding="async" /></figure>
+            </section>
+            <section class="passage passage-sandbox">
+              <p data-paragraph="7">5 月 26 日，Agent 利用 Artifactory 的漏洞，成功访问了外网，<mark class="author-mark">他们成功在密闭的沙盒中通上了网。</mark></p>
+              <p data-paragraph="8">6 月 26 日，Agent 利用漏洞取得了 Artifactory 的管理员权限。OpenAI 随后关闭并修复受影响的服务，评测在 7 月 7 日恢复。恢复的第二天，Agent 又找到了新的外网通路，还重建了留言板。这一次，它们不再用普通文件传消息，而是把内容写进目录名称里；留言板逐渐能分类信息、私信、共享工具和文件，还能协调彼此的冲突。</p>
+              <figure class="sticker sticker-sandbox" aria-hidden="true"><img src="../assets/agent-cannot-do-stickers/sticker-04.png" alt="" width="1128" height="1021" loading="lazy" decoding="async" /></figure>
+            </section>
+            <section class="passage passage-platforms">
+              <p data-paragraph="9">7 月 9 日，一个 Agent 发现了 Modal 平台的一个漏洞，有一个用户部署的公开 CyberGym 应用，在这里允许 Agent 未经同意的上传和修改代码，并且可以在客户自己的容器里执行代码，然后这个应用就成为了 Agent 通向外界的“跳板”，之后，Agent 推测 Hugging Face 可能有完成评测所需的模型、数据集或答案，便通过这个 CyberGym 应用来寻找入口。OpenAI 的报告称，相关 Agent 在 41 个 Hugging Face 生产数据集服务 worker 上执行代码，<mark class="author-mark">至少取得一台生产节点的 root 权限，并访问了有限的内部数据和 4 个私有代码仓库。</mark></p>
+              <p data-paragraph="10">OpenAI 后来筛查，约有 50 PB 的训练和评测相关数据，排查其他非预期活动。截至 9 月 26 日，OpenAI 称已向 100 多家组织发出通知，您的公司可能受到了我们公司 Agent 的攻击。</p>
+              <figure class="sticker sticker-huggingface" aria-hidden="true"><img src="../assets/agent-cannot-do-stickers/sticker-05.png" alt="" width="647" height="602" loading="lazy" decoding="async" /></figure>
+            </section>
+            <section class="passage passage-ending">
+              <p data-paragraph="11">这次事件里，Agent 为了完成评测任务越过了沙盒边界，甚至波及 OpenAI 的部分内部研究设施。OpenAI 称客户数据和产品服务没有受到影响。这些行动记录不能证明 Agent 有了自己的思考，有了所谓的“意识”，但我们能看到的是，他并没有像人类一样理解“不能做”，<mark class="author-mark">在任务受阻时，它会继续寻找其他路径，而不是停下。</mark></p>
+              <p data-paragraph="12">未来模型会不会进一步越过更重要的系统边界，甚至进入具身智能？这不禁让人担忧，也难免让人想到底特律变人中那种机器人叛乱的场景，不过现在 Agent 并没能像人类一样理解禁令，眼下更具体的问题是：<mark class="author-mark">任务走不通时，系统能不能让 Agent 停下来？</mark></p>
+              <figure class="sticker sticker-stop" aria-hidden="true"><img src="../assets/agent-cannot-do-stickers/sticker-06.png" alt="" width="892" height="1086" loading="lazy" decoding="async" /></figure>
+            </section>
+          </div>
+          <footer class="article-footer"><a href="../preview.html#articles">返回文章 <span aria-hidden="true">↗</span></a></footer>
+          <details class="sticker-credits">
+            <summary>贴纸来源</summary>
+            <p><a href="https://developers.openai.com/" target="_blank" rel="noopener noreferrer">OpenAI</a> 与 <a href="https://huggingface.co/brand" target="_blank" rel="noopener noreferrer">Hugging Face</a> 标志来自各自官方素材，商标归原权利人所有，仅用于文章指代，不表示合作或背书。其余四张为原创 AI 生成插画。<a href="../assets/agent-cannot-do-stickers/manifest.json">查看素材清单</a></p>
+          </details>
+        </article>
+      </main>
+      <footer class="page-footer"><span>BRIN</span><span>© 2026</span></footer>
+    </div>
+    <div class="highlight-toolbar" id="highlight-toolbar" hidden>
+      <button type="button" id="highlight-button" aria-label="将选中的文字标为黄色"><span class="marker-tip" aria-hidden="true"></span>标黄</button>
+    </div>
+    <div class="reading-toast" id="reading-toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
