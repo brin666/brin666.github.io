@@ -92,15 +92,25 @@ button:focus-visible,a:focus-visible,input:focus-visible,[tabindex]:focus-visibl
 body[data-renderer=webgl] .stage-control-dock #protein-perspective[aria-pressed=true]{background:#cddbc5;border-color:#dfe7d6;color:#223d31}
 body[data-renderer=webgl] .stage-control-dock #protein-perspective[aria-pressed=false]{background:#203734;border-color:#34504b;color:#9fb4ab}
 @media(max-width:760px){
-  .stage-control-dock{left:12px;right:12px;bottom:12px;max-width:none;flex-direction:column;align-items:flex-end;gap:8px}
-  .stage-control-dock>.view-controls{order:2;width:100%;justify-content:center;flex-wrap:wrap;gap:3px;padding:4px}
-  .stage-control-dock>#whiteboard-open{order:1}
-  .stage-control-dock .view-mode-group{margin-right:0}
-  .lab-main[data-panel-open=true] .stage-control-dock{display:none}
+  .stage-control-dock{position:relative;grid-column:2;grid-row:2;left:auto;right:auto;bottom:auto;max-width:none;min-width:0;width:100%;margin:0 8px 0 0;flex-direction:row;justify-content:flex-end;align-items:center;gap:5px}
+  .stage-control-dock>.view-controls,.lab-main[data-panel-open=true] .stage-control-dock>.view-controls{display:flex;order:1;min-width:0;width:auto;flex:1;justify-content:flex-start;flex-wrap:nowrap;gap:2px;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;touch-action:pan-x;scrollbar-width:thin;scrollbar-color:#91a69b transparent;padding:2px 3px;border-radius:8px;box-shadow:none}
+  .stage-control-dock>.view-controls::-webkit-scrollbar{height:3px}
+  .stage-control-dock>.view-controls::-webkit-scrollbar-thumb{background:#91a69b;border-radius:3px}
+  .stage-control-dock .view-button,.stage-control-dock .icon-button{flex:none}
+  .stage-control-dock #zoom-in{order:1}
+  .stage-control-dock #zoom-out{order:2}
+  .stage-control-dock #view-reset{order:3;min-width:44px;padding-inline:3px;font-size:0}
+  .stage-control-dock #view-reset::after{content:'复位';font-size:10px}
+  .stage-control-dock .view-mode-group{order:4;flex:none;margin-right:0}
+  .stage-control-dock #protein-perspective{order:5}
+  .stage-control-dock #expand{order:6}
+  .stage-control-dock #labels{order:7}
+  .stage-control-dock #dna-idle{order:8}
+  .stage .stage-control-dock>#whiteboard-open{order:2;width:44px;height:44px;min-width:44px;box-shadow:0 3px 9px #07191d33}
 }
 @media(max-width:400px){
-  .stage-control-dock{left:9px;right:9px;bottom:9px}
-  .stage-control-dock>.view-controls{column-gap:2px;row-gap:3px}
+  .stage-control-dock{margin-right:6px;gap:3px}
+  .stage-control-dock>.view-controls{column-gap:2px}
   .stage-control-dock .view-button{padding-inline:6px}
   .stage-control-dock #protein-perspective{min-width:52px;padding-inline:6px}
 }
@@ -114,9 +124,8 @@ body[data-renderer=webgl] .stage-control-dock #protein-perspective[aria-pressed=
 .lab-main[data-panel-open=true] .stage>.stage-play{top:76px;bottom:auto}
 @media(min-width:761px) and (max-width:900px){.stage>.stage-play{top:76px;bottom:auto}}
 @media(max-width:760px){
-  .stage>.stage-play{top:62px;bottom:auto;left:14px;min-width:148px;min-height:50px;padding:7px 14px 7px 9px;font-size:13px}
-  .stage>.stage-play #play-icon{width:29px;height:29px}
-  .lab-main[data-panel-open=true] .stage>.stage-play{top:48px;bottom:auto;min-height:44px}
+  .stage>.stage-play,.lab-main[data-panel-open=true] .stage>.stage-play{position:relative;grid-column:1;grid-row:2;align-self:center;justify-self:start;top:auto;bottom:auto;left:auto;min-width:120px;width:120px;min-height:44px;height:44px;margin-left:8px;padding:5px 8px 5px 6px;gap:7px;border-radius:8px;font-size:11px;white-space:nowrap;box-shadow:0 3px 9px #07191d33}
+  .stage>.stage-play #play-icon{width:26px;height:26px;font-size:12px}
 }
-@media(max-width:400px){.stage>.stage-play{left:12px}}
+@media(max-width:400px){.stage>.stage-play,.lab-main[data-panel-open=true] .stage>.stage-play{width:116px;min-width:116px;margin-left:6px}}
 @media(prefers-reduced-motion:reduce){.stage>.stage-play{transition:none}.stage>.stage-play:not(:disabled):hover{transform:none}}

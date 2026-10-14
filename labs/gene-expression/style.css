@@ -203,16 +203,32 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,[
   .lab-shell{height:100svh;min-height:0;max-height:100svh;grid-template-rows:auto auto minmax(0,1fr) auto;overflow:clip}
   .identity{display:flex;flex-direction:row;align-items:center;gap:12px}
   .lab-main,.lab-main[data-panel-open=true]{min-height:0;grid-template-rows:minmax(0,1fr) 0px;overflow:hidden}
-  .lab-main[data-panel-open=true]{grid-template-rows:minmax(0,.45fr) minmax(0,.55fr)}
-  .stage{height:calc(100% - 9px);min-height:0;align-self:end}
+  .lab-main[data-panel-open=true]{grid-template-rows:minmax(0,.58fr) minmax(0,.42fr)}
+  .stage{height:calc(100% - 9px);min-height:0;align-self:end;display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:minmax(0,1fr) 56px;overflow:hidden}
+  .scene{grid-column:1 / -1;grid-row:1;min-height:0;height:100%;border-radius:9px 9px 0 0}
   .learning-panel{min-height:0;overflow:hidden}
-  .transport{position:relative;bottom:auto;margin-top:6px;backdrop-filter:none}
+  .transport{position:relative;bottom:auto;margin-top:6px;padding:6px 0 calc(5px + env(safe-area-inset-bottom));backdrop-filter:none}
+  .transport-summary{gap:2px}
+  .process-caption{min-height:35px}
+  .transport-bottom{display:flex;justify-content:space-between;align-items:center;gap:4px;margin-top:2px}
+  .play-group{width:auto;justify-content:flex-start;flex:none;gap:0}
+  .play-options{min-width:0;flex:none}
+  .speed-group{gap:0;padding:2px}
+  .speed-group button{min-width:42px}
+  .reset-button{padding-inline:4px;white-space:nowrap}
   .lab-footer{display:none}
-  .lab-main[data-panel-open=true] .view-controls,.lab-main[data-panel-open=true] .stage-bottom{display:none}
+  .lab-main[data-panel-open=true] .stage-bottom{display:none}
   .lab-main[data-panel-open=true] .stage-heading{top:8px;left:12px;right:12px}
   .lab-main[data-panel-open=true] .stage-heading .eyebrow{display:none}
   .lab-main[data-panel-open=true] .stage-heading h2{font-size:13px;margin:0}
   .panel-heading{padding:5px 7px}
   .panel-heading .eyebrow{display:none}
   .panel-heading h2{margin:0}
+}
+/* On very short phones, opening the explanation gets its own scroll space
+   instead of squeezing the 3D canvas into an unreadable thumbnail. */
+@media(max-width:360px) and (max-height:620px){
+  .lab-shell:has(.lab-main[data-panel-open=true]){height:auto;min-height:100svh;max-height:none;grid-template-rows:auto auto auto auto;overflow:visible}
+  .lab-main[data-panel-open=true]{grid-template-rows:minmax(300px,58svh) minmax(200px,36svh);overflow:visible}
+  .lab-main[data-panel-open=true] .learning-panel{height:100%}
 }

@@ -800,11 +800,9 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     dnaGroup.visible = key !== 'translation';
     dnaGroup.position.set(key === 'export' ? -3.65 : 0, key === 'export' ? 0.95 : key === 'comparison' ? 1.18 : 0.35, 0);
     dnaGroup.scale.setScalar(key === 'export' ? 0.48 : key === 'comparison' ? 0.90 : 1);
-    // Portrait entry uses the stage's height while preserving all thirty pairs
-    // and both ends. The reaction and sequence views retain their reading axis.
-    const flatten = smooth((time - 2.7) / 1.5);
-    dnaGroup.rotation.z = refinedModels && key === 'dna' && (entranceActive ? entranceMobile : width < 600) && !options.expanded ? .90 * (1 - flatten) : 0;
-    if (dnaGroup.rotation.z) dnaGroup.position.y = mix(1.45, .35, flatten);
+    // Keep the reading axis horizontal on phones as well as desktop. A tilted
+    // portrait pose clipped the ends of the strand on shorter screens.
+    dnaGroup.rotation.z = 0;
     if (carry) {
       const transfer = smooth(time - 34);
       dnaGroup.position.lerp(vec(-3.65, .95, 0), transfer);
@@ -1547,7 +1545,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
   function viewDistance(key=currentKey, mode=viewMode) {
     const mobile = entranceActive ? entranceMobile : width < 600;
     const reaction = mode === 'reaction' && ['transcription', 'translation',...(refinedModels?['export']:[])].includes(key);
-    const halfViewWidth = reaction ? (mobile ? 2.35 : 3.45) : mobile ? key === 'dna' && refinedModels && !options.expanded ? 5.05 : 5.8 : 6.35;
+    const halfViewWidth = reaction ? (mobile ? 2.35 : 3.45) : mobile ? key === 'dna' && refinedModels && !options.expanded ? 5.7 : 5.8 : 6.35;
     let distance = halfViewWidth / (Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect);
     if (reaction) distance = Math.max(distance, (key === 'translation' ? 2.15 : 1.9) / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)));
     if (key === 'export') distance = reaction ? Math.max(distance,8.6/Math.min(1,camera.aspect)) : Math.max(distance,12.4);
@@ -1643,6 +1641,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
       pose={target,position:target.clone().addScaledVector(direction,distance),distance};
     }
     baseDistance=pose.distance;
+    syncTeachingControls();
     pose.position.sub(pose.target).multiplyScalar(presentationZoom).add(pose.target);
     if(manualCameraBlend) {
       const f=smooth((time-manualCameraBlend.start)/.7);
@@ -1696,6 +1695,18 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     if(refinedModels)presentationZoom=next/baseDistance;
     invalidate();
   }
+  function syncTeachingControls() {
+    if (whiteboardActive) return;
+    const mobile = width < 600;
+    controls.enableZoom = mobile;
+    controls.enablePan = mobile;
+    controls.touches.ONE = THREE.TOUCH.ROTATE;
+    controls.touches.TWO = mobile ? THREE.TOUCH.DOLLY_PAN : THREE.TOUCH.DOLLY_ROTATE;
+    controls.minDistance = mobile ? baseDistance * .57 : 0;
+    controls.maxDistance = mobile ? baseDistance * 1.4 : Infinity;
+    controls.zoomSpeed = mobile ? .75 : 1;
+    controls.panSpeed = mobile ? .65 : 1;
+  }
   function onSceneWheel(event) {
     if (disposed || whiteboardActive || whiteboardPreparing || entranceActive || !controls.enabled) return;
     event.preventDefault();
@@ -1705,6 +1716,14 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     const amount = clamp(-pixels / 120, -1.25, 1.25);
     if (Math.abs(amount) > .001) zoom(amount);
   }
+  function onCanvasWheelCapture(event) {
+    // Mobile OrbitControls handles pinch, while the lesson handles wheels.
+    // Capture wheel events before OrbitControls to avoid applying zoom twice.
+    if (width >= 600 || whiteboardActive || whiteboardPreparing) return;
+    event.stopImmediatePropagation();
+    onSceneWheel(event);
+  }
+  renderer.domElement.addEventListener('wheel', onCanvasWheelCapture, { capture: true, passive: false });
   container.addEventListener('wheel', onSceneWheel, { passive: false });
   function focus(type, index = null) {
     if (disposed) return;
@@ -1746,6 +1765,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
       return;
     }
     baseDistance = snapshot ? viewDistance() : Math.max(14.0, 5.95 / (Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect));
+    syncTeachingControls();
     if (snapshot) {
       // Opening the sidebar changes aspect, not the learner's chosen angle or
       // focus target. Preserve the relative zoom and orbit instead of resetting.
@@ -1822,7 +1842,26 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     pointerStart=null;pointerLeave();
   }
   function trackControlPointerDown(event) { activeControlPointers.add(event.pointerId); }
-  function trackControlPointerUp(event) { activeControlPointers.delete(event.pointerId); }
+  function resumeMobileFollowing() {
+    if (width >= 600 || whiteboardActive || whiteboardPreparing || entranceActive || !snapshot) return;
+    presentationZoom = clamp(camera.position.distanceTo(controls.target) / Math.max(baseDistance, .01), .57, 1.4);
+    if (!options.playing || followReading) return;
+    manualCameraBlend = options.reducedMotion ? null : {
+      from: { position: camera.position.clone(), target: controls.target.clone() },
+      start: snapshot.time,
+    };
+    followReading = true;
+    invalidate();
+  }
+  function trackControlPointerUp(event) {
+    activeControlPointers.delete(event.pointerId);
+    if (event.pointerType !== 'touch' || activeControlPointers.size || width >= 600 || whiteboardActive) return;
+    // OrbitControls emits 'end' for each finger and retains damping deltas.
+    // Recreate only after the last finger leaves so the next gesture starts
+    // from the released pose, then blend back to the moving teaching subject.
+    recreateControls(null, false);
+    resumeMobileFollowing();
+  }
   function whiteboardCameraValue() {
     return {
       position: camera.position.toArray(),
@@ -1844,6 +1883,10 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     whiteboardCameraChangeTimer = setTimeout(flushWhiteboardCameraChange, 100);
   }
   function controlsChanged() {
+    if (!whiteboardActive && width < 600 && activeControlPointers.size > 1 && !followReading) {
+      // Keep a two-finger zoom when the teaching camera resumes following.
+      presentationZoom = clamp(camera.position.distanceTo(controls.target) / Math.max(baseDistance, .01), .57, 1.4);
+    }
     invalidate();
     queueWhiteboardCameraChange();
   }
@@ -1872,6 +1915,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
       controls.minPolarAngle = 1.02; controls.maxPolarAngle = 1.83;
       controls.touches.ONE = THREE.TOUCH.ROTATE; controls.touches.TWO = THREE.TOUCH.DOLLY_ROTATE;
       controls.enabled = enabled;
+      syncTeachingControls();
     }
     bindControls();
     controls.update();
@@ -1895,6 +1939,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     // OrbitControls has no lostpointercapture handler. Recreating it drops its
     // private pointer state while preserving the live camera pose and target.
     recreateControls(whiteboardActive ? null : whiteboardDarkState?.controls, whiteboardActive);
+    if (event.pointerType === 'touch') resumeMobileFollowing();
     invalidate();
   }
   function cancelOrbitGesture(event) {
@@ -1905,6 +1950,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     // Remove OrbitControls' pointercancel listener before it runs: its bundled
     // handler releases an already-cancelled capture unconditionally.
     recreateControls(whiteboardActive ? null : whiteboardDarkState?.controls, whiteboardActive);
+    if (event.pointerType === 'touch') resumeMobileFollowing();
     invalidate();
   }
   function contextLost(event) {
@@ -2550,6 +2596,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
       if (disposed) return;
       disposed = true;
       container.removeEventListener('wheel', onSceneWheel);
+      renderer.domElement.removeEventListener('wheel', onCanvasWheelCapture, true);
       resizeObserver.disconnect();
       resetPointerState(); unbindControls(); controls.dispose();
       renderer.domElement.removeEventListener('pointerdown', pointerDown);
