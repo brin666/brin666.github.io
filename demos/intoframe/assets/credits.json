@@ -1,0 +1,149 @@
+{
+  "referenceCommit": "02ecc568a5ccd8cc49f6e1751f25da9e79808294",
+  "repository": "https://github.com/brin666/IntoFrame/tree/demo/hackathon-submission",
+  "film": {
+    "file": "IntoFrame-demo.mp4",
+    "sha256": "917275a5e60480971237289268fd02588337b9dc0bdb6cbef4ea98b174cd1143",
+    "durationSeconds": 150,
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "note": "Complete existing film; poster at 54s and layer still at 101s are resized extracted frames, not product screenshots."
+  },
+  "samples": [
+    {
+      "id": "tower",
+      "title": "Big Ben, London",
+      "url": "https://commons.wikimedia.org/wiki/File:BigBenLondon.jpg",
+      "author": "Massimo Catarinella",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "beforeFile": "tower-before.webp",
+      "modifications": "Original EXIF-oriented resized source copied unchanged from the credited sample package. After images are the real product PNG export with sky replacement, framing and foreground compositing; each derivative retains the original sample license."
+    },
+    {
+      "id": "taipei",
+      "title": "Taipei 101 in blue sky",
+      "url": "https://commons.wikimedia.org/wiki/File:Taipei_101_in_blue_sky.jpg",
+      "author": "Pauloleong2002",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "beforeFile": "taipei-before.webp",
+      "modifications": "Original EXIF-oriented resized source copied unchanged from the credited sample package. After images are the real product PNG export with sky replacement, framing and foreground compositing; each derivative retains the original sample license."
+    },
+    {
+      "id": "flatiron",
+      "title": "Flatiron Building, New York",
+      "url": "https://commons.wikimedia.org/wiki/File:The_Flatiron_Building_(7).jpg",
+      "author": "PortableNYCTours",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "beforeFile": "flatiron-before.webp",
+      "modifications": "Original EXIF-oriented resized source copied unchanged from the credited sample package. After images are the real product PNG export with sky replacement, framing and foreground compositing; each derivative retains the original sample license."
+    },
+    {
+      "id": "qutub",
+      "title": "Qutub Minar",
+      "url": "https://commons.wikimedia.org/wiki/File:Qutub_Minar_(54342718682).jpg",
+      "author": "Joe deSousa (Mustang Joe)",
+      "license": "CC0 1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "beforeFile": "qutub-before.webp",
+      "modifications": "Original EXIF-oriented resized source copied unchanged from the credited sample package. After images are the real product PNG export with sky replacement, framing and foreground compositing; each derivative retains the original sample license."
+    }
+  ],
+  "exports": [
+    {
+      "sample": "tower",
+      "style": "dreamy-pink",
+      "file": "tower-dreamy-pink.png",
+      "width": 683,
+      "height": 1024,
+      "sha256": "df714a7179d5a675ffe781a295ce7d4d76533ba00fbf72d971ea5829c4ebcc98",
+      "source": {
+        "url": "https://commons.wikimedia.org/wiki/File:BigBenLondon.jpg",
+        "author": "Massimo Catarinella",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+      },
+      "method": "Unmodified Download PNG from the reference frontend, centered still composition, cached sample only"
+    },
+    {
+      "sample": "tower",
+      "style": "golden-hour",
+      "file": "tower-golden-hour.png",
+      "width": 683,
+      "height": 1024,
+      "sha256": "ade7125506dc5b76adea269f959baf57137d4fbcf0ded967aec36d12a1c1d4f8",
+      "source": {
+        "url": "https://commons.wikimedia.org/wiki/File:BigBenLondon.jpg",
+        "author": "Massimo Catarinella",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+      },
+      "method": "Unmodified Download PNG from the reference frontend, centered still composition, cached sample only"
+    },
+    {
+      "sample": "tower",
+      "style": "cinematic-night",
+      "file": "tower-cinematic-night.png",
+      "width": 683,
+      "height": 1024,
+      "sha256": "9578dbe5dd19962b6ee275709883d0909f5773b274e04d941be5bce484ade28b",
+      "source": {
+        "url": "https://commons.wikimedia.org/wiki/File:BigBenLondon.jpg",
+        "author": "Massimo Catarinella",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+      },
+      "method": "Unmodified Download PNG from the reference frontend, centered still composition, cached sample only"
+    },
+    {
+      "sample": "taipei",
+      "style": "cinematic-night",
+      "file": "taipei-cinematic-night.png",
+      "width": 614,
+      "height": 1024,
+      "sha256": "6cd66b9ef09387419023496bca6512f43a400302c2b7c5212f239f8895f3d67a",
+      "source": {
+        "url": "https://commons.wikimedia.org/wiki/File:Taipei_101_in_blue_sky.jpg",
+        "author": "Pauloleong2002",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
+      "method": "Unmodified Download PNG from the reference frontend, centered still composition, cached sample only"
+    },
+    {
+      "sample": "flatiron",
+      "style": "golden-hour",
+      "file": "flatiron-golden-hour.png",
+      "width": 768,
+      "height": 1024,
+      "sha256": "1d8ea1ff3cb9f1e7e2aebec2a4f7117a76fa7088a18354292eef0e11c60648f9",
+      "source": {
+        "url": "https://commons.wikimedia.org/wiki/File:The_Flatiron_Building_(7).jpg",
+        "author": "PortableNYCTours",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
+      "method": "Unmodified Download PNG from the reference frontend, centered still composition, cached sample only"
+    },
+    {
+      "sample": "qutub",
+      "style": "dreamy-pink",
+      "file": "qutub-dreamy-pink.png",
+      "width": 684,
+      "height": 1024,
+      "sha256": "941c22699fd2942ec196095b671cd2fdabc2a19d276446f377ba2e4d56564293",
+      "source": {
+        "url": "https://commons.wikimedia.org/wiki/File:Qutub_Minar_(54342718682).jpg",
+        "author": "Joe deSousa (Mustang Joe)",
+        "license": "CC0 1.0",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      "method": "Unmodified Download PNG from the reference frontend, centered still composition, cached sample only"
+    }
+  ]
+}

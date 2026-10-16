@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light" />
+  <meta name="theme-color" content="#fbfaf7" />
+  <meta name="description" content="IntoFrame 个人项目案例：用真实建筑照片演示天空替换、主体破框和受限视角的 2.5D 视差，记录实现方式、工程取舍与当前边界。" />
+  <title>IntoFrame：让普通照片突破画框 · 百乐</title>
+  <link rel="stylesheet" href="../pm-copilot/style.css?v=case-v3-20261012" />
+  <link rel="stylesheet" href="./style.css?v=20261016" />
+  <script src="./case.js?v=20261016" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <div class="page-shell">
+    <header class="page-header">
+      <a class="wordmark" href="../../preview.html#demos"><span class="wordmark-dot" aria-hidden="true"></span>百乐 / Demo</a>
+      <a class="back-link" href="../../preview.html#demos">返回 Demo <span aria-hidden="true">↗</span></a>
+    </header>
+    <main id="main">
+      <section class="hero" aria-labelledby="page-title">
+        <p class="project-state">个人项目 · 互动照片原型</p>
+        <h1 id="page-title">IntoFrame：让普通照片突破画框</h1>
+        <p class="tagline" lang="en">Make your photos come alive.</p>
+        <p class="hero-summary">我想让照片多一点可以探索的空间，而不只是换个滤镜。IntoFrame 为照片换上新的天空，加入电影画幅，让原来的主体越过黑边，再通过轻微视差，给静止的画面一点纵深。</p>
+        <p class="scope-note">这页展示真实样例和完整影片，不提供新照片上传或在线 GPU 推理。</p>
+      </section>
+
+      <section class="visual-demo" aria-labelledby="film-heading">
+        <h2 id="film-heading" class="sr-only">实际效果与完整演示</h2>
+        <figure class="film" id="film">
+          <div class="film-frame">
+            <video id="demo-film" controls muted playsinline preload="metadata" poster="./assets/film-poster.jpg" aria-label="IntoFrame 完整演示：真实操作、四组建筑效果、图层说明和拖动交互，共 2 分 30 秒" aria-describedby="film-caption">
+              <source src="./assets/IntoFrame-demo.mp4" type="video/mp4" />
+              <track kind="captions" src="./assets/chapters-zh.vtt" srclang="zh" label="中文章节说明（非逐字字幕）" />
+              当前浏览器不支持此视频。可以<a href="./assets/IntoFrame-demo.mp4">打开完整 MP4</a>，或查看下方的真实原图与结果。
+            </video>
+          </div>
+          <figcaption id="film-caption"><span>完整演示 · 2:30 / 1080p / 30 FPS</span><a class="text-button" href="./assets/IntoFrame-demo.mp4">打开 MP4 <span aria-hidden="true">↗</span></a></figcaption>
+        </figure>
+        <nav class="film-chapters" aria-label="跳转到影片章节" hidden>
+          <button type="button" data-seek="8"><span>使用流程</span><small>00:08</small></button>
+          <button type="button" data-seek="38"><span>照片转变</span><small>00:38</small></button>
+          <button type="button" data-seek="56"><span>三种氛围</span><small>00:56</small></button>
+          <button type="button" data-seek="72"><span>建筑样例</span><small>01:12</small></button>
+          <button type="button" data-seek="96"><span>图层关系</span><small>01:36</small></button>
+          <button type="button" data-seek="114"><span>拖动探索</span><small>01:54</small></button>
+        </nav>
+        <p id="video-message" class="film-message" role="status" hidden></p>
+        <p class="media-note">影片包含真实浏览器操作，处理中间的等待经过剪辑。30 FPS 是影片的编码规格，不是浏览器实时性能测试结果。照片作者见<a href="#credits">素材署名</a>，影片与提取帧沿用 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>。</p>
+      </section>
+
+      <section class="reading-section" aria-labelledby="results-title">
+        <div class="section-heading"><h2 id="results-title">先看照片发生了什么。</h2><p>左侧原图，右侧实际 PNG 导出。</p></div>
+        <p>这次演示选了四张建筑照片。天空比较开放，建筑轮廓也比较明确，能更直接地看出换天与破框的关系。下方展示的是保存的真实生成结果，不代表所有照片、所有风格都能稳定成功。</p>
+        <div class="sample-grid">
+          <figure class="sample-case">
+            <div class="comparison-pair">
+              <a href="./assets/tower-before.webp" target="_blank" rel="noopener noreferrer"><span>原图</span><img src="./assets/tower-before.webp" alt="大本钟原图，原始天空与塔楼" width="683" height="1024" loading="lazy" decoding="async" /></a>
+              <a href="./assets/tower-dreamy-pink.png" target="_blank" rel="noopener noreferrer"><span>Dreamy Pink</span><img src="./assets/tower-dreamy-pink.png" alt="大本钟的真实粉色天空结果，塔楼越过电影黑边" width="683" height="1024" loading="lazy" decoding="async" /></a>
+            </div>
+            <figcaption><strong>大本钟</strong><p>保留塔楼，换上粉色天空。原图下方已有裁切，不能通过视差补出缺失的建筑。</p><small>照片：<a href="https://commons.wikimedia.org/wiki/File:BigBenLondon.jpg" target="_blank" rel="noopener noreferrer">Massimo Catarinella</a> · <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 3.0</a>；结果为改编。</small></figcaption>
+          </figure>
+          <figure class="sample-case">
+            <div class="comparison-pair">
+              <a href="./assets/taipei-before.webp" target="_blank" rel="noopener noreferrer"><span>原图</span><img src="./assets/taipei-before.webp" alt="台北 101 的原始蓝天照片" width="614" height="1024" loading="lazy" decoding="async" /></a>
+              <a href="./assets/taipei-cinematic-night.png" target="_blank" rel="noopener noreferrer"><span>Cinematic Night</span><img src="./assets/taipei-cinematic-night.png" alt="台北 101 的真实蓝调傍晚天空和破框构图" width="614" height="1024" loading="lazy" decoding="async" /></a>
+            </div>
+            <figcaption><strong>台北 101</strong><p>这里展示蓝调傍晚版本。Golden Hour 的上方天空有重复横带，因此没有把那一版作为成功效果展示。</p><small>照片：<a href="https://commons.wikimedia.org/wiki/File:Taipei_101_in_blue_sky.jpg" target="_blank" rel="noopener noreferrer">Pauloleong2002</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>；结果为改编。</small></figcaption>
+          </figure>
+          <figure class="sample-case">
+            <div class="comparison-pair">
+              <a href="./assets/flatiron-before.webp" target="_blank" rel="noopener noreferrer"><span>原图</span><img src="./assets/flatiron-before.webp" alt="纽约熨斗大厦及原有街道、树木和行人" width="768" height="1024" loading="lazy" decoding="async" /></a>
+              <a href="./assets/flatiron-golden-hour.png" target="_blank" rel="noopener noreferrer"><span>Golden Hour</span><img src="./assets/flatiron-golden-hour.png" alt="熨斗大厦的真实暖色天空破框结果，街道和人物仍被保留" width="768" height="1024" loading="lazy" decoding="async" /></a>
+            </div>
+            <figcaption><strong>纽约熨斗大厦</strong><p>没有重画街道和行人。远处屋顶与树木边缘仍可能留有细小色缝。</p><small>照片：<a href="https://commons.wikimedia.org/wiki/File:The_Flatiron_Building_(7).jpg" target="_blank" rel="noopener noreferrer">PortableNYCTours</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>；结果为改编。</small></figcaption>
+          </figure>
+          <figure class="sample-case">
+            <div class="comparison-pair">
+              <a href="./assets/qutub-before.webp" target="_blank" rel="noopener noreferrer"><span>原图</span><img src="./assets/qutub-before.webp" alt="顾特卜塔与前景遗迹的原始照片" width="684" height="1024" loading="lazy" decoding="async" /></a>
+              <a href="./assets/qutub-dreamy-pink.png" target="_blank" rel="noopener noreferrer"><span>Dreamy Pink</span><img src="./assets/qutub-dreamy-pink.png" alt="顾特卜塔的真实粉色天空结果，保留前景遗迹" width="684" height="1024" loading="lazy" decoding="async" /></a>
+            </div>
+            <figcaption><strong>顾特卜塔</strong><p>塔身之外的遗迹仍来自原图。天空中原有小飞机的边缘处理还不够干净。</p><small>照片：<a href="https://commons.wikimedia.org/wiki/File:Qutub_Minar_(54342718682).jpg" target="_blank" rel="noopener noreferrer">Joe deSousa (Mustang Joe)</a> · <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener noreferrer">CC0 1.0</a>；结果为改编。</small></figcaption>
+          </figure>
+        </div>
+        <details class="style-examples"><summary>同一张大本钟照片的三种氛围</summary><div class="style-grid">
+          <figure><img src="./assets/tower-dreamy-pink.png" alt="大本钟 Dreamy Pink 结果" width="683" height="1024" loading="lazy" /><figcaption>Dreamy Pink</figcaption></figure>
+          <figure><img src="./assets/tower-golden-hour.png" alt="大本钟 Golden Hour 结果" width="683" height="1024" loading="lazy" /><figcaption>Golden Hour</figcaption></figure>
+          <figure><img src="./assets/tower-cinematic-night.png" alt="大本钟 Cinematic Night 结果" width="683" height="1024" loading="lazy" /><figcaption>Cinematic Night</figcaption></figure>
+        </div><p class="media-note">同一原图与作者：Massimo Catarinella · CC BY-SA 3.0。三张结果均为天空替换与合成改编，沿用该署名及许可。</p></details>
+      </section>
+
+      <section class="reading-section prose" aria-labelledby="workflow-title">
+        <h2 id="workflow-title">从上传，到一张可以探索的照片。</h2>
+        <ol class="workflow-list">
+          <li><strong>上传照片。</strong>选择 JPG、PNG 或 WebP，完成主体和天空分析；不适合换天的照片会得到原因提示，而不是一张伪造的结果。</li>
+          <li><strong>选择氛围。</strong>Dreamy Pink、Golden Hour 与 Cinematic Night 改变天空风格，不是让模型任意重画整张照片。</li>
+          <li><strong>点击 Generate。</strong>生成天空并合成结果，再播放原图、背景、黑边与主体依次进入的六秒转变动画。</li>
+          <li><strong>探索与对比。</strong>画面准备好后会轻微自动移动；按住并左右拖动可以接管视角，松手后平滑恢复。Before/After 用来查看变化，也可以重播转变动画。</li>
+          <li><strong>下载 PNG。</strong>保存当前构图的中心静止画面，包含电影黑边和破框主体，<mark>不包含交互视差或动画</mark>。</li>
+        </ol>
+        <p class="scope-note">仓库中附带四组预计算建筑样例。按 README 在本地启动前端即可查看样例，无需配置 GPU；上传并处理自己的新照片仍需要本地 Python/CUDA 后端。本案例页本身不是该前端的在线部署。</p>
+      </section>
+
+      <section class="reading-section prose" aria-labelledby="implementation-title">
+        <h2 id="implementation-title">把生成与交互分开。</h2>
+        <p>前端由 React、TypeScript 和 Vite 构建；FastAPI 与 PyTorch 承担本地图像处理。BiRefNet 提取主体 Alpha，独立的 SegFormer 天空识别确定哪些地方可以改，Stable Diffusion v1.5 Inpainting 生成新的天空背景。合成时再恢复原始主体，并尽量保留非天空环境。</p>
+        <p>电影黑边不是盖在最终图片最上面的一层：背景留在画幅内，主体放到黑边上方，才能产生越框的效果。Remotion 负责网页中的照片转变动画，以及上方完整演示影片；它不负责替代图像推理。</p>
+        <figure class="layer-evidence"><img src="./assets/layers-film.jpg" alt="实际演示影片中的原始 RGB、主体 Alpha 和相对深度说明帧" width="1280" height="720" loading="lazy" decoding="async" /><figcaption>截取自真实影片 01:41：输入图像、主体 Alpha 与相对深度。此处是解释用的图层示意，不是完整三维场景。</figcaption></figure>
+        <p>Depth Anything V2 Small 对照片做一次相对深度预测，保留高精度 float32 数据。Three.js 随后利用已有纹理和深度，在浏览器里绘制有限幅度的空间变化。<mark>图像推理发生在上传和生成阶段，交互时不逐帧请求 AI。</mark></p>
+      </section>
+
+      <section class="reading-section prose" aria-labelledby="decisions-title">
+        <h2 id="decisions-title">我更在意：动起来之后，哪里会穿帮？</h2>
+        <p>我没有把这个项目做成可以自由环绕建筑的工具。单张照片没有提供背面和被遮挡区域的信息，增加相机幅度很容易把这些缺口暴露出来。现阶段，我选择先把小范围内的观看体验做好。</p>
+        <dl class="tradeoffs">
+          <div><dt>让图层各司其职</dt><dd>主体、静止黑边、保留场景和新天空分开处理。天空不是前景的一部分，主体也不能被画幅一并裁掉。</dd></div>
+          <div><dt>新天空放在远处</dt><dd>生成天空不继承原背景的深度形状，避免云层跟着原先的建筑轮廓弯折；主体与保留场景共享原始深度关系，尽量减少接触位置错开。</dd></div>
+          <div><dt>保留精度，约束运动</dt><dd>主体继续使用原生浮点深度，而非仅依赖显示用的 8 位灰度图。相机移动同时受源图裁切与构图限制；深度缺失或不可靠时，保留静态预览。</dd></div>
+          <div><dt>不同出口，用对资源</dt><dd>Before 使用原始内容，After 使用对应风格的图层；转变动画与静态导出沿用正确的构图。下载时不截取正在移动的浏览器画面。</dd></div>
+          <div><dt>先让人看见真实样例</dt><dd>预计算样例保留主体、深度与对应天空结果。访问者在本地启动仓库前端后，可以先了解效果，再决定是否配置新照片处理环境。</dd></div>
+        </dl>
+      </section>
+
+      <section class="reading-section prose boundary" aria-labelledby="limits-title">
+        <h2 id="limits-title">它还不是一张真正的三维照片。</h2>
+        <p>这是<mark>受限视角的 2.5D 空间效果，不是完整三维重建</mark>。相对深度不等于米制距离，也不能恢复建筑背面或准确的墙面朝向。</p>
+        <p>Cinematic Night 的蓝调傍晚依赖天空替换与主体、保留环境的温和颜色统一，并没有重建物理光照，也没有消除原照片里的白天阴影。</p>
+        <p>目前更适合轮廓清楚、天空开放的照片。复杂镂空、远处树梢、屋顶和部分边缘仍可能失败；演示也保留了台北 101 某一风格的天空重复问题。功能检查通过，不等于每张结果都通过视觉验收。</p>
+        <p>下一步，我想先改善复杂轮廓与旧天空残留的处理，并让不适合生成的原因更容易理解。主体选择和局部编辑等能力仍是后续方向，不是这一版已经完成的功能。</p>
+      </section>
+
+      <section class="reading-section prose" id="credits" aria-labelledby="credits-title">
+        <h2 id="credits-title">源码、素材与署名。</h2>
+        <p>本页依据 <a href="https://github.com/brin666/IntoFrame/tree/02ecc568a5ccd8cc49f6e1751f25da9e79808294" target="_blank" rel="noopener noreferrer">02ecc568… 参考提交</a>整理，四组原图、结果和逐项许可证已随图标明。原图是项目公开样例中的方向校正与缩放版本；结果为真实 PNG 导出，增加了天空替换、画幅与主体合成。</p>
+        <p>完整影片及其提取帧沿用 CC BY-SA 4.0。大本钟照片与其单独结果沿用 CC BY-SA 3.0，台北 101 和熨斗大厦沿用 CC BY-SA 4.0，顾特卜塔原图为 CC0 1.0。对应作者、原始来源及许可链接可在<a href="./assets/credits.json">素材清单</a>逐项核对。</p>
+        <p>BiRefNet、Depth Anything V2 Small、Stable Diffusion 和 SegFormer 各自适用不同条款；其中当前 SegFormer 权重限非商业研究或评估。Remotion 也不是 MIT 许可。使用或继续发布前，需要分别核对<a href="https://github.com/brin666/IntoFrame/blob/02ecc568a5ccd8cc49f6e1751f25da9e79808294/docs/THIRD_PARTY.md" target="_blank" rel="noopener noreferrer">第三方条款</a>。</p>
+        <p>项目代码尚未选定仓库统一许可证。GitHub 公开不代表所有代码和素材都能按同一许可使用，也不代表已完成比赛平台提交或获得奖项。开发过程中使用了 OpenAI Codex 辅助实现、调试与文档整理。</p>
+        <div class="reference-links">
+          <a class="source-link" href="https://github.com/brin666/IntoFrame/tree/demo/hackathon-submission" target="_blank" rel="noopener noreferrer">查看 GitHub 源码 <span aria-hidden="true">↗</span></a>
+          <a class="text-button" href="https://github.com/brin666/IntoFrame/blob/02ecc568a5ccd8cc49f6e1751f25da9e79808294/docs/DEMO_ASSETS.md" target="_blank" rel="noopener noreferrer">照片来源与已知问题 <span aria-hidden="true">↗</span></a>
+        </div>
+      </section>
+      <footer class="page-footer"><p>IntoFrame · 本地 AI 处理，浏览器内交互。这里记录的是当前原型，不是完整三维重建服务。</p><a class="footer-link" href="../../preview.html#demos">返回 Demo <span aria-hidden="true">↗</span></a></footer>
+    </main>
+  </div>
+</body>
+</html>
