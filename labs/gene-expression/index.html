@@ -6,6 +6,18 @@
   <meta name="theme-color" content="#fbfaf7">
   <meta name="description" content="追踪同一段人工教学序列：从 DNA 模板到 RNA，再到五个氨基酸组成的多肽。可暂停、逐步观察与双向追踪。">
   <title>基因表达 · 从 DNA 到多肽</title>
+  <script>
+    // Establish the saved language before the page paints or application modules load.
+    (() => {
+      const requested = new URLSearchParams(location.search).get('lang');
+      let saved = null;
+      try { saved = localStorage.getItem('gene-expression-language'); } catch {}
+      document.documentElement.lang = requested === 'en' || requested === 'zh-CN' || requested === 'zh'
+        ? (requested === 'en' ? 'en' : 'zh-CN')
+        : (saved === 'en' ? 'en' : 'zh-CN');
+      if (document.documentElement.lang === 'en') document.title = 'Gene Expression · From DNA to Polypeptide';
+    })();
+  </script>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23f1dfac'/%3E%3Cpath d='M12 6C32 14 8 26 28 34M28 6C8 14 32 26 12 34M13 10h14M15 20h10M13 30h14' fill='none' stroke='%2354554c' stroke-width='2'/%3E%3C/svg%3E">
   <script>
     // Start the DNA exhibit transfer while the module graph loads. The 2D
@@ -21,7 +33,7 @@
     }
   </script>
   <link rel="stylesheet" href="./style.css?v=20261014-mobile">
-  <link rel="stylesheet" href="./exhibit-ui.css?v=20261014-mobile">
+  <link rel="stylesheet" href="./exhibit-ui.css?v=20261016-hide-english-textbook">
   <link rel="stylesheet" href="./entrance.css">
   <link rel="stylesheet" href="./whiteboard.css">
   <link rel="stylesheet" href="./textbook-dialog.css">
@@ -43,7 +55,7 @@
       addEventListener('gene-expression-entrance-ready', () => clearTimeout(watchdog), { once: true });
     })();
   </script>
-  <script type="module" src="./app.js?v=20261016-textbook"></script>
+  <script type="module" src="./app.js?v=20261016-language"></script>
 </head>
 <body>
   <section id="entrance-ui" data-phase="idle" aria-label="基因表达开场" aria-live="polite">
@@ -54,7 +66,7 @@
   <main class="lab-shell">
     <header class="lab-header">
       <div class="identity"><div class="title-line"><h1>基因表达</h1><span>从 DNA 到多肽</span></div></div>
-      <div class="header-actions"><button id="objects-toggle" class="quiet-button objects-toggle" type="button" aria-controls="object-menu" aria-expanded="false">认识分子</button><button id="details-toggle" class="quiet-button details-toggle" type="button" aria-controls="learning-panel" aria-expanded="false">说明与序列</button></div>
+      <div class="header-actions"><div class="language-switch" role="group" aria-label="界面语言"><button class="language-option" type="button" data-language="zh-CN" lang="zh-CN" aria-label="切换为中文" aria-pressed="true">中文</button><button class="language-option" type="button" data-language="en" lang="en" aria-label="切换为英文" aria-pressed="false">EN</button></div><button id="objects-toggle" class="quiet-button objects-toggle" type="button" aria-controls="object-menu" aria-expanded="false">认识分子</button><button id="details-toggle" class="quiet-button details-toggle" type="button" aria-controls="learning-panel" aria-expanded="false">说明与序列</button></div>
       <nav id="object-menu" class="object-menu" aria-label="独立对象教学" hidden></nav>
     </header>
     <nav id="chapters" class="chapters" aria-label="教学章节"></nav>
@@ -75,7 +87,7 @@
           <button id="protein-perspective" class="view-button" type="button" aria-label="透视效果" aria-pressed="true" hidden>透视</button>
           <button id="zoom-in" class="icon-button" type="button" aria-label="放大视角">＋</button>
           <button id="zoom-out" class="icon-button" type="button" aria-label="缩小视角">−</button>
-          <button id="view-reset" class="view-button" type="button">恢复视角</button>
+          <button id="view-reset" class="view-button" type="button" data-short-label="复位">恢复视角</button>
           <button id="labels" class="view-button" type="button" aria-pressed="false">详细标签</button>
         </div>
         <button id="whiteboard-open" type="button" disabled aria-label="进入白板，冻结当前教学步骤" title="白板 · 冻结当前构象"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4H4v16h16V10M10 15l1-4 8-8 3 3-8 8zM17 5l3 3"/></svg></button>
@@ -104,7 +116,7 @@
   </main>
 
   <section id="object-lesson" class="object-lesson" aria-labelledby="object-title" hidden>
-    <header class="object-header"><button id="object-back" class="object-back" type="button"><span aria-hidden="true">←</span> 返回整体过程</button><span class="object-breadcrumb">基因表达 <span aria-hidden="true">/</span> 分子特写</span><a id="object-book" class="book-link" target="_blank" rel="noopener noreferrer"></a></header>
+    <header class="object-header"><button id="object-back" class="object-back" type="button"><span aria-hidden="true">←</span> 返回整体过程</button><span class="object-breadcrumb">基因表达 <span aria-hidden="true">/</span> 分子特写</span><div class="language-switch" role="group" aria-label="界面语言"><button class="language-option" type="button" data-language="zh-CN" lang="zh-CN" aria-label="切换为中文" aria-pressed="true">中文</button><button class="language-option" type="button" data-language="en" lang="en" aria-label="切换为英文" aria-pressed="false">EN</button></div><a id="object-book" class="book-link" target="_blank" rel="noopener noreferrer"></a></header>
     <div class="object-layout">
       <div class="object-stage"><div class="object-stage-heading"><span id="object-stage-name"></span><span>拖动旋转 · 滚轮缩放</span></div><div id="object-scene" class="object-scene" aria-label="独立对象三维教学模型"></div><div id="object-loading" class="object-loading" role="status">正在准备分子展台…</div><div class="object-tools"><button id="object-perspective" type="button" aria-pressed="false" hidden>透视：关</button><button id="object-reset" type="button">恢复视角</button></div><p id="object-model-note" class="object-model-note"></p></div>
       <aside class="object-teaching">

@@ -18,6 +18,50 @@ const PERSPECTIVE_TYPES = new Set(['polymerase', 'ribosome', 'pore']);
 const vector = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
 const PEPTIDE_COLORS = ['#c8a586', '#c9ba91', '#b5a8c7', '#b4c2a3', '#c79281'];
 const RESIDUES = ['Met', 'Ala', 'Phe', 'Glu', 'Pro'];
+const ENGLISH_SCENE_TEXT = {
+  '教学示意模型': 'Schematic teaching model',
+  '三维对象，可拖动旋转、滚轮或双指缩放': '3D model: drag to rotate; use the wheel or two fingers to zoom',
+  '模板链 · 3′ → 5′': 'Template strand · 3′ → 5′',
+  '游离 RNA 核苷酸': 'Free RNA nucleotide',
+  '已连接 RNA · 5′ → 3′': 'Growing RNA · 5′ → 3′',
+  '经过区域 · DNA 恢复配对': 'Behind the enzyme · DNA re-pairs',
+  '局部工作区域': 'Local working region',
+  'DNA 恢复双链': 'DNA re-forms its double helix',
+  '直接配对的是模板链': 'The template strand pairs directly',
+  '按碱基互补形成 RNA': 'Complementary pairing forms RNA',
+  '与编码链对应 · T 换成 U': 'Corresponds to coding strand · U replaces T',
+  'RNA 离开 · 原 DNA 保留': 'RNA leaves · original DNA remains',
+  '编码链用于序列对照': 'Coding strand aids sequence comparison',
+  '模板链 · 转录时局部配对': 'Template strand · local pairing during transcription',
+  '折叠的 RNA': 'Folded RNA',
+  '反密码子 · 3′-UAC-5′': 'Anticodon · 3′-UAC-5′',
+  '氨基酸连接端': 'Amino acid attachment end',
+  '送来 Met': 'Delivers Met',
+  'mRNA 密码子 · AUG': 'mRNA codon · AUG',
+  '大亚基': 'Large subunit',
+  '小亚基': 'Small subunit',
+  '读取 mRNA': 'Reads mRNA',
+  '肽键连接 · 示意': 'Peptide bond · schematic',
+  '空 tRNA · 已转移': 'Empty tRNA · cargo transferred',
+  '空 tRNA 离开': 'Empty tRNA leaves',
+  '载链 tRNA 移到前一站': 'Peptide-bearing tRNA shifts site',
+  '新 tRNA · Phe': 'New tRNA · Phe',
+  'N 端': 'N terminus',
+  'C 端': 'C terminus',
+  '新氨基酸连接在 C 端': 'New amino acid joins the C terminus',
+  '双层核膜 · 局部剖示': 'Double nuclear membrane · local cutaway',
+  '核孔通道': 'Nuclear pore channel',
+  '核内 → 细胞质': 'Nucleus → cytoplasm',
+  '受约束协同微动教学示意；配对端、载荷端固定，不代表实测分子动力学': 'Constrained coordinated motion for teaching; the pairing and cargo ends remain fixed. This does not represent measured molecular dynamics.',
+  'PDB 1Y1W 十二亚基粗粒化完整包络': 'PDB 1Y1W twelve-subunit coarse-grained full envelope',
+  '六核苷酸教学片段与碱基环状几何': 'Six-nucleotide teaching segment with ring-shaped base geometry',
+  '九核苷酸教学片段': 'Nine-nucleotide teaching segment',
+  '原有 L 形折叠 RNA 教学示意': 'Original L-shaped folded RNA teaching model',
+  '原有两亚基隐式曲面教学模型': 'Original two-subunit implicit-surface teaching model',
+  '五残基短肽链教学示意': 'Five-residue short peptide teaching model',
+  '原有连续核孔领圈与双层核膜局部剖示': 'Original continuous pore collar and local cutaway of the double nuclear membrane',
+};
+const sceneText = (value, locale) => /^en(?:-|$)/i.test(locale || '') ? ENGLISH_SCENE_TEXT[value] || value : value;
 
 /**
  * A separately owned, demand-rendered observation stage. Step changes are
@@ -31,6 +75,7 @@ export function createObjectLessonScene({ container, type, onInvalidate = () => 
 
   const began = performance.now();
   let disposed = false, loaded = false, errorMessage = null, step = 0;
+  let locale = document.documentElement.lang;
   let perspective = false, needsFrame = false, dragging = false;
   let width = 1, height = 1, frames = 0, resizeObserver = null, loadMs = null;
   let environment = null, polymerase = null, exportExhibit = null;
@@ -56,7 +101,7 @@ export function createObjectLessonScene({ container, type, onInvalidate = () => 
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1;
   renderer.domElement.dataset.objectLessonCanvas = type;
-  renderer.domElement.setAttribute('aria-label', '三维对象，可拖动旋转、滚轮或双指缩放');
+  renderer.domElement.setAttribute('aria-label', sceneText('三维对象，可拖动旋转、滚轮或双指缩放', locale));
   renderer.domElement.setAttribute('role', 'img');
   renderer.domElement.style.cssText = 'display:block;width:100%;height:100%;touch-action:none;';
   container.style.position = 'relative';
@@ -149,11 +194,11 @@ export function createObjectLessonScene({ container, type, onInvalidate = () => 
     return true;
   }
   function label(text, object, local = vector(), { minStep = 0, maxStep = 2, letter = false, offset = [0, 0], anchor = null } = {}) {
-    const element = document.createElement('span'); element.textContent = text; element.hidden = true;
+    const element = document.createElement('span'); element.textContent = sceneText(text, locale); element.hidden = true;
     element.dataset.objectLessonLabel = letter ? 'letter' : 'annotation';
     element.style.cssText = `position:absolute;left:0;top:0;transform:translate(-50%,-50%);white-space:nowrap;font-family:ui-sans-serif,system-ui,sans-serif;font-size:${letter ? 13 : 11}px;font-weight:${letter ? 800 : 600};line-height:1.3;color:${letter ? '#172b2d' : '#f2f2e5'};${letter ? 'padding:1px 2px;text-shadow:-1px 0 rgba(245,248,238,.85), 1px 0 rgba(245,248,238,.85), 0 -1px rgba(245,248,238,.85), 0 1px rgba(245,248,238,.85), 0 1px 2px rgba(9,25,27,.22);' : 'padding:3px 7px;border:1px solid #6a807666;border-radius:5px;background:#132427d9;'}`;
     overlay.append(element);
-    labels.push({ element, object, local, minStep, maxStep, offset, anchor });
+    labels.push({ element, sourceText: text, object, local, minStep, maxStep, offset, anchor });
     return element;
   }
   function connector(parent, a, b, radius = .018, mat = palette.joint) {
@@ -292,7 +337,7 @@ export function createObjectLessonScene({ container, type, onInvalidate = () => 
         maxDisplacement: Math.max(.039, ...profiles.map(profile => profile.maxDisplacement || 0)),
         strands: strandRecords.length, curvedStrands: strandRecords.filter(record => record.curved).length,
         pairedTipMaxError: maxTipError, buffers: 'persistent; geometry allocated only at first set',
-        scientificScope: '受约束协同微动教学示意；配对端、载荷端固定，不代表实测分子动力学' };
+        scientificScope: sceneText('受约束协同微动教学示意；配对端、载荷端固定，不代表实测分子动力学', locale) };
     }
     function sampleLabelPoint(kind, point) {
       return byKind.get(kind)?.sampleLocalPoint(point, lastTime || 0, { working: lastWorking || 0 }) || point;
@@ -553,7 +598,14 @@ export function createObjectLessonScene({ container, type, onInvalidate = () => 
     }
     renderer.render(scene, camera); frames++;
     const projected = vector();
+    // On a phone the polymerase work inset is smaller than its annotations.
+    // Keep the current step's focal callout and leave the full explanation in
+    // the adjacent lesson copy; the model and wider layouts are unchanged.
+    const narrowPolymeraseFocus = type === 'polymerase' && width <= 380
+      ? (step === 1 ? '游离 RNA 核苷酸' : step === 2 ? '已连接 RNA · 5′ → 3′' : null)
+      : null;
     for (const entry of labels) {
+      if (narrowPolymeraseFocus && entry.sourceText !== narrowPolymeraseFocus) { entry.element.hidden = true; continue; }
       if (step < entry.minStep || step > entry.maxStep || !visibleInHierarchy(entry.object)) { entry.element.hidden = true; continue; }
       if (entry.anchor) entry.anchor(projected); else projected.copy(entry.local);
       if (entry.object.userData.motionKind) projected.copy(livingMotion.sampleLabelPoint(entry.object.userData.motionKind, projected));
@@ -571,6 +623,13 @@ export function createObjectLessonScene({ container, type, onInvalidate = () => 
     if (disposed) return;
     if (!Number.isInteger(index) || index < 0 || index > 2) throw new RangeError('对象教学步骤应为 0、1 或 2');
     step = index; if (loaded) applyStep(); invalidate();
+  }
+  function setLocale(value = document.documentElement.lang) {
+    if (disposed) return;
+    locale = value;
+    renderer.domElement.setAttribute('aria-label', sceneText('三维对象，可拖动旋转、滚轮或双指缩放', locale));
+    for (const entry of labels) entry.element.textContent = sceneText(entry.sourceText, locale);
+    invalidate();
   }
   function setPerspective(value) {
     if (disposed) return;
@@ -613,7 +672,7 @@ export function createObjectLessonScene({ container, type, onInvalidate = () => 
       auxiliaries: auxiliaries.filter(visibleInHierarchy).map(object => object.name),
       visibleLabels: labels.filter(entry => !entry.element.hidden).map(entry => entry.element.textContent),
       camera: { position: camera.position.toArray(), target: controls.target.toArray(), distance: camera.position.distanceTo(controls.target) },
-      model: { ...modelInfo }, window: windowView?.inspect() || null,
+      model: { ...modelInfo, authoring: sceneText(modelInfo.authoring, locale) }, window: windowView?.inspect() || null,
       motion:{
         available:Boolean(livingMotion && loaded),enabled:motionEnabled,
         playing:Boolean(livingMotion && motionEnabled && motionPlaying && !reducedMotion && !motionSuspended),
@@ -644,5 +703,5 @@ export function createObjectLessonScene({ container, type, onInvalidate = () => 
   const ready = Promise.resolve().then(build).then(() => getMetrics()).catch(error => {
     errorMessage = error.message; dispose(); throw error;
   });
-  return { ready, render, setStep, resetView, setPerspective, setReducedMotion, setMotionPlaying, setMotionEnabled, seekMotion, setMotionSuspended, getMetrics, dispose };
+  return { ready, render, setStep, setLocale, resetView, setPerspective, setReducedMotion, setMotionPlaying, setMotionEnabled, seekMotion, setMotionSuspended, getMetrics, dispose };
 }

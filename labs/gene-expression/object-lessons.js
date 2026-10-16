@@ -104,3 +104,112 @@ export const OBJECT_LESSONS = {
     extension: '本站示意：核孔外形和 mRNA 穿行路线采用简化模型；教材本节在此处给出正文说明，没有对应的核孔插图。',
   },
 };
+
+// The scans and page numbers refer to the 2019 Chinese edition. Keep the
+// original lesson object available to callers that still import OBJECT_LESSONS.
+const ENGLISH_OBJECT_LESSONS = {
+  polymerase: {
+    id: 'polymerase',
+    title: 'RNA polymerase',
+    subtitle: 'The enzyme that joins RNA nucleotides',
+    summary: 'RNA polymerase binds to DNA, helps open a short region of the double helix, and joins RNA nucleotides along the template.',
+    book: { page: 65, figure: 'Fig. 4-4', label: '2019 Chinese-edition textbook scan · p. 65 · Fig. 4-4', url: `${SCAN_ROOT}76.jpg` },
+    steps: [
+      { title: 'Meet the polymerase', text: 'RNA polymerase is the enzyme active during transcription. Rotate the complete model first; the next step shows how it works with DNA.', focus: 'overview' },
+      { title: 'Pair with the template', text: 'Free RNA nucleotides pair with bases on the DNA template strand.', focus: 'work' },
+      { title: 'Join them into RNA', text: 'The paired nucleotides join in sequence to form new RNA; the DNA behind the enzyme re-forms its double helix.', focus: 'process' },
+    ],
+  },
+  template: {
+    id: 'template',
+    title: 'DNA template strand',
+    subtitle: 'The strand used for pairing during transcription',
+    summary: 'Transcription uses one DNA strand as a template and synthesizes RNA through complementary base pairing.',
+    book: { page: 65, figure: 'Fig. 4-4', label: '2019 Chinese-edition textbook scan · p. 65 · Fig. 4-4', url: `${SCAN_ROOT}76.jpg` },
+    steps: [
+      { title: 'One of two strands', text: 'After a short stretch of DNA opens, only one strand serves as the template for this transcription event.', focus: 'overview' },
+      { title: 'See the base pairs', text: 'Template A pairs with RNA U, T with A, and G with C.', focus: 'work' },
+      { title: 'The DNA remains', text: 'RNA is the newly synthesized molecule. The template strand is neither cut away nor consumed; it remains part of the DNA afterward.', focus: 'process' },
+    ],
+  },
+  coding: {
+    id: 'coding',
+    title: 'DNA coding strand',
+    subtitle: 'The other strand, used to compare RNA sequences',
+    summary: 'In this example, reading the coding strand and RNA in the same direction reveals the main letter difference: DNA T corresponds to RNA U.',
+    book: { page: 65, figure: 'Fig. 4-4', label: '2019 Chinese-edition textbook scan · p. 65 · Fig. 4-4 (transcription reference)', url: `${SCAN_ROOT}76.jpg` },
+    steps: [
+      { title: 'Find the template first', text: 'RNA is synthesized from the template strand. Here, the opposite strand is called the coding strand.', focus: 'overview' },
+      { title: 'Compare in one direction', text: 'Read both this coding strand and the RNA 5′→3′, then compare T and U at corresponding positions.', focus: 'work' },
+      { title: 'Comparison versus synthesis', text: 'The coding strand helps check the sequence, but the template strand pairs directly with nucleotides during this RNA synthesis.', focus: 'process' },
+    ],
+    extension: 'This site’s explanation: textbook Fig. 4-4 shows transcription but does not use the term “coding strand.” Comparing the coding strand and RNA in the same direction is an addition in this demo.',
+  },
+  rna: {
+    id: 'rna',
+    title: 'mRNA · messenger RNA',
+    subtitle: 'Carries information from transcription to translation',
+    summary: 'This newly synthesized RNA carries the gene’s sequence information to a ribosome in the cytoplasm.',
+    book: { page: 65, figure: 'Figs. 4-3 and 4-4', label: '2019 Chinese-edition textbook scan · p. 65 · Figs. 4-3 and 4-4', url: `${SCAN_ROOT}76.jpg` },
+    steps: [
+      { title: 'Meet messenger RNA', text: 'mRNA is a type of RNA. It is usually single-stranded and contains four bases: A, U, G, and C.', focus: 'overview' },
+      { title: 'Made by transcription', text: 'RNA nucleotides join in sequence according to the bases on the template strand, forming mRNA.', focus: 'work' },
+      { title: 'A template for translation', text: 'In the cytoplasm, mRNA binds to a ribosome. Its codons determine the amino acid sequence.', focus: 'process' },
+    ],
+  },
+  trna: {
+    id: 'trna',
+    title: 'tRNA · transfer RNA',
+    subtitle: 'Carries an amino acid and recognizes a codon',
+    summary: 'One end of a tRNA carries an amino acid. Its anticodon pairs with a codon on mRNA.',
+    book: { page: 67, figure: 'Fig. 4-6', label: '2019 Chinese-edition textbook scan · p. 67 · Fig. 4-6', url: `${SCAN_ROOT}78.jpg` },
+    steps: [
+      { title: 'Two functional regions', text: 'The amino acid attachment end and the anticodon lie in different regions, serving transport and recognition respectively.', focus: 'overview' },
+      { title: 'Pair with a codon', text: 'The anticodon’s three bases pair with the three bases of the matching mRNA codon.', focus: 'work' },
+      { title: 'Deliver the next amino acid', text: 'tRNA brings an amino acid into the ribosome so it can join the peptide chain in the order specified by mRNA.', focus: 'process' },
+    ],
+  },
+  ribosome: {
+    id: 'ribosome',
+    title: 'Ribosome',
+    subtitle: 'The site where translation takes place',
+    summary: 'A ribosome binds mRNA and coordinates tRNA pairing and the joining of amino acids.',
+    book: { page: 68, figure: 'Fig. 4-7', label: '2019 Chinese-edition textbook scan · p. 68 · Fig. 4-7', url: `${SCAN_ROOT}79.jpg` },
+    steps: [
+      { title: 'Two subunits', text: 'This demo shows a large and a small ribosomal subunit. Together they coordinate mRNA reading and amino acid joining.', focus: 'overview' },
+      { title: 'Join amino acids', text: 'Amino acids delivered by different tRNAs are joined by peptide bonds, lengthening the peptide chain.', focus: 'work' },
+      { title: 'Move along mRNA', text: 'The ribosome advances along mRNA. A new tRNA enters while a tRNA that has delivered its cargo leaves.', focus: 'process' },
+    ],
+    extension: 'Textbook Fig. 4-7 explains translation using two tRNA binding sites. The A/P/E site names shown in this demo are an extension; they are not the site names used in this textbook section.',
+  },
+  peptide: {
+    id: 'peptide',
+    title: 'Peptide chain',
+    subtitle: 'Amino acids linked in sequence',
+    summary: 'During translation, amino acids are joined by peptide bonds in the order specified by mRNA, forming a peptide chain.',
+    book: { page: 68, figure: 'Fig. 4-7 and text', label: '2019 Chinese-edition textbook scan · p. 68 · Fig. 4-7 and text', url: `${SCAN_ROOT}79.jpg` },
+    steps: [
+      { title: 'Meet this short peptide', text: 'The five residues in this example are Met, Ala, Phe, Glu, and Pro, in that order. mRNA codons determine the sequence.', focus: 'overview' },
+      { title: 'Peptide bonds', text: 'Adjacent amino acids form peptide bonds. The existing chain is transferred to the incoming amino acid and continues to grow.', focus: 'work' },
+      { title: 'Growth from N to C', text: 'Each incoming amino acid joins the C terminus of the chain. This example shows only a five-residue short peptide; it does not simulate later folding.', focus: 'process' },
+    ],
+    extension: 'This site’s example: the demo releases only a short chain of five amino acid residues. It does not simulate protein folding.',
+  },
+  pore: {
+    id: 'pore',
+    title: 'Nuclear pore',
+    subtitle: 'A passage for mRNA to the cytoplasm',
+    summary: 'After synthesis, mRNA passes through a nuclear pore from the nucleus to the cytoplasm, where it participates in translation.',
+    book: { page: 66, figure: null, label: '2019 Chinese-edition textbook scan · p. 66 · text', url: `${SCAN_ROOT}77.jpg` },
+    steps: [
+      { title: 'Start in the nucleus', text: 'mRNA is produced by transcription in the nucleus. The original DNA stays in the nucleus.', focus: 'overview' },
+      { title: 'Pass through a pore', text: 'mRNA enters the cytoplasm through a nuclear pore, carrying the gene’s information to a new working site.', focus: 'work' },
+      { title: 'Connect to translation', text: 'In the cytoplasm, mRNA binds to a ribosome and serves as the template for peptide synthesis.', focus: 'process' },
+    ],
+    extension: 'This site’s diagram: the pore shape and mRNA route are simplified. This textbook section describes the process in text and has no corresponding nuclear pore illustration.',
+  },
+};
+
+export function getObjectLessons(locale = globalThis.document?.documentElement?.lang) {
+  return /^en(?:-|$)/i.test(locale || '') ? ENGLISH_OBJECT_LESSONS : OBJECT_LESSONS;
+}

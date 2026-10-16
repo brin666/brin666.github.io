@@ -1,6 +1,11 @@
 const INTRO_DURATION = 9;
 const HANDOFF_START = 7.25;
 const UI_FADE_START = 7.8;
+const entranceLanguage = () => document.documentElement.lang === 'en' ? 'en' : 'zh';
+const entranceCopy = {
+  zh: { title: '基因表达', loading: '正在准备分子序列…', active: '从 DNA 到多肽', skip: '跳过开场' },
+  en: { title: 'Gene Expression', loading: 'Preparing molecular sequences…', active: 'From DNA to polypeptide', skip: 'Skip intro' },
+};
 
 function smoothstep(value) {
   const t = Math.min(1, Math.max(0, value));
@@ -36,6 +41,15 @@ export function createEntranceUI({ onSkip = () => {} } = {}) {
     scale: [1, 1],
   };
 
+  function localizeEntrance() {
+    const copy = entranceCopy[entranceLanguage()];
+    title.textContent = copy.title;
+    status.textContent = ['active', 'handoff', 'complete'].includes(state.phase) ? copy.active : copy.loading;
+    skipButton.textContent = copy.skip;
+  }
+  window.addEventListener('gene-expression-languagechange', localizeEntrance);
+  localizeEntrance();
+
   function setPhase(phase) {
     if (state.phase === phase) return;
     state.phase = phase;
@@ -66,8 +80,6 @@ export function createEntranceUI({ onSkip = () => {} } = {}) {
     overlay.style.opacity = '1';
     copy.style.opacity = '';
     skipButton.style.opacity = '';
-    title.textContent = '基因表达';
-    status.textContent = '正在准备分子序列…';
     if (!state.capturedShellState) {
       state.originalShellInert = shell.inert;
       state.originalSkipLinkInert = skipLink?.inert || false;
@@ -85,6 +97,7 @@ export function createEntranceUI({ onSkip = () => {} } = {}) {
     shell.style.opacity = '.001';
     shell.style.visibility = 'visible';
     setPhase('loading');
+    localizeEntrance();
     if (focus || (state.previousFocus !== document.body && shell.contains(state.previousFocus))) skipButton.focus({ preventScroll: true });
   }
 
@@ -105,9 +118,8 @@ export function createEntranceUI({ onSkip = () => {} } = {}) {
     });
     state.scene.setAttribute('aria-hidden', 'true');
     overlay.style.opacity = '1';
-    title.textContent = '基因表达';
-    status.textContent = '从 DNA 到多肽';
     setPhase('active');
+    localizeEntrance();
     return true;
   }
 

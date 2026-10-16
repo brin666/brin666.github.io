@@ -33,6 +33,32 @@ const rna = dnaSequence(RNA);
 const aminoNames = ['Met', 'Ala', 'Phe', 'Glu', 'Pro'];
 const peptideColors = ['#c8a586', '#c9ba91', '#b5a8c7', '#b4c2a3', '#c79281'];
 const aaName = (i) => AMINO_ACIDS?.[i]?.short || aminoNames[i] || '';
+const SCENE_TEXT_EN = {
+  '编码链 5′': 'Coding strand 5′', '模板链 3′': 'Template strand 3′',
+  'DNA · 两条链反向平行': 'DNA · antiparallel strands',
+  'RNA 聚合酶': 'RNA polymerase', '模板链 · 3′→5′': 'Template · 3′→5′',
+  '编码链 · 5′→3′': 'Coding · 5′→3′', '细胞核内': 'Nucleus',
+  '细胞质': 'Cytoplasm', '核孔 · 双层核膜': 'Nuclear pore',
+  '核糖体': 'Ribosome', 'E / P / A · 拓展位点': 'E / P / A · extension sites',
+  '起始密码子 AUG': 'Start codon AUG', '载链 tRNA': 'Chain-bearing tRNA',
+  '氨酰 tRNA': 'Aminoacyl-tRNA', '空 tRNA': 'Unloaded tRNA',
+  '肽链 · N 端 → C 端': 'Peptide · N terminus → C terminus',
+  '释放因子': 'Release factor', '3′ · 延长端': '3′ · growing end',
+  '起始 tRNA · 接近 AUG': 'Initiator tRNA · approaching AUG',
+  '起始 tRNA · P 位': 'Initiator tRNA · P site',
+  '载链 tRNA · P 位': 'Chain-bearing tRNA · P site',
+  '载链 tRNA · A 位': 'Chain-bearing tRNA · A site',
+  '氨酰 tRNA · A 位': 'Aminoacyl-tRNA · A site',
+  '空 tRNA · P → E': 'Unloaded tRNA · P → E',
+  '空 tRNA · 离开 E 位': 'Unloaded tRNA · leaving E site',
+  '载链 tRNA · A → P': 'Chain-bearing tRNA · A → P',
+  '末个 tRNA · P 位': 'Final tRNA · P site',
+  '起始 AUG': 'Start AUG', '终止 UAA · 不编码残基': 'Stop UAA · no residue',
+};
+const sceneText = (zh) => document.documentElement.lang === 'en' ? SCENE_TEXT_EN[zh] || zh : zh;
+const siteDescription = (site) => document.documentElement.lang === 'en'
+  ? ({ E: 'Exit region · extension', P: 'Chain-bearing region · extension', A: 'Entry region · extension' }[site.key])
+  : site.description;
 const colorOf = (b) => BASE_COLORS?.[b] || ({ A: '#8aa991', T: '#bda880', U: '#bda880', G: '#baa0a0', C: '#92aabb' }[b]) || '#a9b4b2';
 const vec = (x, y, z = 0) => new THREE.Vector3(x, y, z);
 const Z_AXIS = vec(0, 0, 1);
@@ -194,6 +220,10 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
   }
   const pickables = [];
   const labels = [];
+  const setLabelText = (label, zh) => {
+    label.element.dataset.labelZh = zh;
+    label.element.textContent = sceneText(zh);
+  };
   const geometry = (g) => { resources.add(g); return g; };
   const material = (color, extra = {}) => {
     const role = extra.kind === 'inner' ? 'inner' : ['base', 'sugar'].includes(extra.kind) ? 'nucleic' : extra.kind === 'backbone' ? 'backbone' : 'protein';
@@ -367,7 +397,8 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     && ['base', 'coding', 'template', 'rna', 'peptide'].includes(selection.type);
   const domLabel = (text, anchor, { kind = 'structure', selection = null, index = null, offset = [0, 0] } = {}) => {
     const element = document.createElement('span');
-    element.textContent = text;
+    element.dataset.labelZh = text;
+    element.textContent = sceneText(text);
     element.className = `scene-label scene-label--${kind}`;
     element.dataset.kind = kind;
     if (index !== null) element.dataset.index = String(index);
@@ -617,7 +648,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     svg.append(path); overlay.prepend(svg);
     const ring = mesh(geometry(new THREE.TorusGeometry(.050,.008,6,20)), material('#c4cdb6',{kind:'backbone',roughness:.85,specularIntensity:.08}), smallSubunit);
     ring.position.set(site.x,site.y,site.z);ring.name=`site-anchor-${site.key}`;
-    siteLabels[index].element.title=site.description;
+    siteLabels[index].element.title=siteDescription(site);
     return { path, svg, ring };
   });
   const siteNote = fixedLabel('E / P / A · 拓展位点', ribosome, vec(1.78, 0.03, 0.12), { kind: 'site-note' });
@@ -994,7 +1025,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     visible(rnaStart, shownRna > 0);
     visible(rnaEnd, shownRna > 0);
     const reactionEnd = detailed && key === 'transcription' && viewMode === 'reaction';
-    rnaEnd.element.textContent = reactionEnd ? '3′ · 延长端' : '3′';
+    setLabelText(rnaEnd, reactionEnd ? '3′ · 延长端' : '3′');
     rnaEnd.offset = reactionEnd ? [28, 19] : [0, 0];
     visible(rnaTitle, ['translation', 'comparison'].includes(key));
     nucleus.visible = refinedModels ? time>=34 && time<39.5 : key==='export';
@@ -1165,7 +1196,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
       pTrna.group.visible=true;pTrna.group.scale.setScalar(Math.max(.00001,arrival));
       pTrna.group.position.copy(rnaPoints[7]).add(vec(-2.6,2.2,.38).lerp(vec(-.8,1.0,.13),arrival));
       pTrna.group.quaternion.setFromEuler(new THREE.Euler(.09,-.13,.23));
-      setAnticodon(pTrna,0,arrival>.35);pTrna.label.element.textContent='起始 tRNA · 接近 AUG';
+      setAnticodon(pTrna,0,arrival>.35);setLabelText(pTrna.label,'起始 tRNA · 接近 AUG');
       initiatorAmino.visible=true;visible(initiatorAminoLabel,arrival>.45);
     } else if (mode === 'initiate') {
       pTrna.group.visible = true;
@@ -1175,20 +1206,20 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
         pTrna.group.position.add(bezierOffset(vec(-0.80, 0.50, 0.23), vec(-0.62, 0.73, 0.18), vec(-0.14, 0.12, 0.04), vec(0, 0, 0), progress));
         pTrna.group.quaternion.setFromEuler(new THREE.Euler(0.09, -0.13, 0.23)).slerp(new THREE.Quaternion(), progress);
       }
-      pTrna.label.element.textContent = '起始 tRNA · P 位';
+      setLabelText(pTrna.label, '起始 tRNA · P 位');
       setAnticodon(pTrna, 0, true);
       initiatorAmino.visible = data.peptideCount === 0;
       visible(initiatorAminoLabel, initiatorAmino.visible);
     } else if (mode === 'assemble') {
       pTrna.group.visible = true;
-      pTrna.label.element.textContent = '起始 tRNA · P 位';
+      setLabelText(pTrna.label, '起始 tRNA · P 位');
       setAnticodon(pTrna, 0, true);
     } else if (mode === 'elongate') {
       pTrna.group.visible = true;
-      pTrna.label.element.textContent = chainSite === 'A' ? '空 tRNA' : '载链 tRNA · P 位';
+      setLabelText(pTrna.label, chainSite === 'A' ? '空 tRNA' : '载链 tRNA · P 位');
       setAnticodon(pTrna, pIndex, true);
       aTrna.group.visible = true;
-      aTrna.label.element.textContent = chainSite === 'A' ? '载链 tRNA · A 位' : '氨酰 tRNA · A 位';
+      setLabelText(aTrna.label, chainSite === 'A' ? '载链 tRNA · A 位' : '氨酰 tRNA · A 位');
       setAnticodon(aTrna, aIndex, true);
       if (sub === 'enter') {
         const progress = smooth(phase);
@@ -1212,15 +1243,15 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
         const departure = smooth(Math.max(0, phase - 0.45) / 0.55);
         eTrna.group.position.set(pX - translocation * SITE_SPACING - departure * 0.85, 0.12 + smooth(Math.max(0, phase - 0.5) / 0.5) * 0.6, carrierZ);
         if (!classic) { eTrna.group.position.z += Math.sin(departure * Math.PI) * 0.12; eTrna.group.rotation.z = departure * 0.21; }
-        eTrna.label.element.textContent = phase < 0.7 ? '空 tRNA · P → E' : '空 tRNA · 离开 E 位';
+        setLabelText(eTrna.label, phase < 0.7 ? '空 tRNA · P → E' : '空 tRNA · 离开 E 位');
         setAnticodon(pTrna, pIndex, false);
         setAnticodon(eTrna, pIndex, phase < 0.94);
-        aTrna.label.element.textContent = '载链 tRNA · A → P';
+        setLabelText(aTrna.label, '载链 tRNA · A → P');
         chainSite = 'A';
       }
     } else if (['stop', 'release-factor', 'release'].includes(mode)) {
       pTrna.group.visible = true;
-      pTrna.label.element.textContent = '末个 tRNA · P 位';
+      setLabelText(pTrna.label, '末个 tRNA · P 位');
       setAnticodon(pTrna, 4, true);
       if (mode !== 'stop') {
         releaseFactor.visible = true;
@@ -1311,7 +1342,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
       readBracket.quaternion.setFromUnitVectors(vec(1,0,0),rnaPoints[8].clone().sub(rnaPoints[6]).normalize());
     }
     const codon = CODONS[codonIndex]?.rna || rna.slice(6 + codonIndex * 3, 9 + codonIndex * 3).join('');
-    codonLabel.element.textContent = codonIndex === 0 ? '起始 AUG' : codonIndex === 5 ? '终止 UAA · 不编码残基' : `${codon} · ${aaName(codonIndex)}`;
+    setLabelText(codonLabel, codonIndex === 0 ? '起始 AUG' : codonIndex === 5 ? '终止 UAA · 不编码残基' : `${codon} · ${aaName(codonIndex)}`);
     codonLabel.selection = { type: 'rna', indices: [6 + codonIndex * 3, 7 + codonIndex * 3, 8 + codonIndex * 3] };
   }
 
@@ -1493,7 +1524,9 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
       if (!enabled) { label.element.hidden = true; continue; }
       const position = label.anchor();
       if (canTraceSelection(label.selection)) {
-        label.element.setAttribute('aria-label', `第 ${label.selection.index + 1} 位 ${label.element.textContent}，反查序列位置`);
+        label.element.setAttribute('aria-label', document.documentElement.lang === 'en'
+          ? `Position ${label.selection.index + 1}, ${label.element.textContent}; trace sequence position`
+          : `第 ${label.selection.index + 1} 位 ${label.element.textContent}，反查序列位置`);
       }
       projected.copy(position).project(camera);
       const inView = projected.z > -1 && projected.z < 1 && Math.abs(projected.x) < 1.13 && Math.abs(projected.y) < 1.12;
@@ -2381,8 +2414,15 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     invalidate();
     return true;
   }
+  function setLocale() {
+    for (const label of labels) {
+      if (label.element.dataset.labelZh !== undefined) label.element.textContent = sceneText(label.element.dataset.labelZh);
+    }
+    siteLabels.forEach((label, index) => { label.element.title = siteDescription(TRANSLATION_SITES[index]); });
+    render();
+  }
   return {
-    update, render, resetView, zoom, focus, setView, ready:dnaAssetReady,
+    update, render, resetView, zoom, focus, setView, setLocale, ready:dnaAssetReady,
     startDeferredAssets,
     cancelDeferredWarmup() {
       if (deferredAssetTimer) { clearTimeout(deferredAssetTimer); deferredAssetTimer = 0; }

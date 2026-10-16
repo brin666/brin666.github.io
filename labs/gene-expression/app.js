@@ -1,6 +1,7 @@
+import './locale.js';
 import { CODING_DNA, TEMPLATE_DNA, RNA, CODONS, AMINO_ACIDS, BASE_COLORS, regionAt, tracePosition, indicesForCodon } from './biology.mjs';
 import { CHAPTERS, TOTAL, derive, clampTime, nextStep, previousStep } from './state.mjs';
-import { OBJECT_LESSONS } from './object-lessons.js';
+import { getObjectLessons } from './object-lessons.js';
 import { createObjectLesson, createKnowledgeHints, bookForObject } from './object-lesson.js';
 import { createEntranceUI } from './entrance-ui.js';
 import { createWhiteboard } from './whiteboard.js';
@@ -10,6 +11,21 @@ const $ = (id) => document.getElementById(id);
 const NAMES = ['认识 DNA', '转录', '出核', '翻译', '序列对照'];
 const TITLES = ['DNA 双链', '转录合成 RNA', 'mRNA 出核', '密码子与多肽', '序列追踪'];
 const HINTS = ['观察：两条链的 5′端与 3′端，分别朝向哪里？', '观察：新加入的 RNA 核苷酸连接在哪一端？', '观察：mRNA 经过什么结构离开细胞核？', '观察：肽链怎样从一条 tRNA 转移到另一条 tRNA？', '试一试：点击下方的 Pro（脯氨酸）。页面会高亮 mRNA 中编码它的 CCG 密码子，以及 DNA 两条链上对应的碱基。'];
+const EN_NAMES = ['Meet DNA', 'Transcription', 'Nuclear export', 'Translation', 'Sequence map'];
+const EN_TITLES = ['DNA double helix', 'RNA transcription', 'mRNA nuclear export', 'Codons and peptide', 'Trace the sequence'];
+const EN_HINTS = [
+  'Observe: which way do the 5′ and 3′ ends of the two strands point?',
+  'Observe: to which end is the new RNA nucleotide added?',
+  'Observe: through which structure does mRNA leave the nucleus?',
+  'Observe: how does the growing peptide move from one tRNA to another?',
+  'Try selecting Pro (proline) below. Its mRNA codon CCG and the matching positions on both DNA strands will be highlighted.',
+];
+const EN_AMINO_NAMES = { Met: 'Methionine', Ala: 'Alanine', Phe: 'Phenylalanine', Glu: 'Glutamate', Pro: 'Proline' };
+const isEn = () => document.documentElement.lang === 'en';
+const t = (zh, en) => isEn() ? en : zh;
+const L = t;
+const chapterName = (id) => (isEn() ? EN_NAMES : NAMES)[id];
+const aminoName = (amino) => isEn() ? EN_AMINO_NAMES[amino.short] || amino.name : amino.name;
 const PREFERS_REDUCED = matchMedia('(prefers-reduced-motion: reduce)');
 const sampleEntry = new URLSearchParams(location.search).get('sample') === 'transcription';
 const introOff = new URLSearchParams(location.search).get('intro') === 'off';
@@ -31,7 +47,10 @@ const objectLesson = createObjectLesson({
 });
 const knowledgeHints = createKnowledgeHints({ getChapter: () => snapshot.chapter.id, isHidden: () => objectLesson.isActive() });
 const objectMenu = $('object-menu');
-objectMenu.innerHTML = Object.values(OBJECT_LESSONS).map(lesson=>`<button type="button" data-lesson="${lesson.id}">${lesson.title}<small>${lesson.subtitle}</small></button>`).join('');
+function renderObjectMenu() {
+  objectMenu.innerHTML = Object.values(getObjectLessons()).map(lesson=>`<button type="button" data-lesson="${lesson.id}">${lesson.title}<small>${lesson.subtitle}</small></button>`).join('');
+}
+renderObjectMenu();
 function closeObjectMenu() { objectMenu.hidden=true; $('objects-toggle').setAttribute('aria-expanded','false'); }
 $('objects-toggle').addEventListener('click',()=>{objectMenu.hidden=!objectMenu.hidden;$('objects-toggle').setAttribute('aria-expanded',String(!objectMenu.hidden));});
 objectMenu.addEventListener('click',event=>{const button=event.target.closest('[data-lesson]');if(button)objectLesson.open(button.dataset.lesson,$('objects-toggle'));});
@@ -58,7 +77,7 @@ function setPanelOpen(open, { returnFocus = false } = {}) {
 
 function updateViewControls() {
   $('whiteboard-open').disabled = !scene?.enterWhiteboard || entrance.active;
-  if (fallback) $('whiteboard-open').title = '二维备用视图无法提供交互式 3D 白板';
+  if (fallback) $('whiteboard-open').title = t('二维备用视图无法提供交互式 3D 白板', 'The 2D fallback cannot provide an interactive 3D whiteboard');
   const hasViewApi = typeof scene?.setView === 'function';
   const chapter = snapshot.chapter.id;
   const sceneMetrics = scene?.getMetrics?.();
@@ -84,7 +103,7 @@ function updateViewControls() {
 for (const [base, color] of Object.entries(BASE_COLORS)) document.documentElement.style.setProperty(`--${base.toLowerCase()}`, color);
 
 const chapterNav = $('chapters');
-chapterNav.innerHTML = CHAPTERS.map((chapter) => `<button class="chapter-button" data-chapter="${chapter.id}">${NAMES[chapter.id]}</button>`).join('')
+chapterNav.innerHTML = CHAPTERS.map((chapter) => `<button class="chapter-button" data-chapter="${chapter.id}">${chapterName(chapter.id)}</button>`).join('')
   + '<span id="chapter-route" class="chapter-route" aria-hidden="true"></span><span id="chapter-indicator" class="chapter-indicator" aria-hidden="true"></span>';
 const chapterButtons = [...chapterNav.querySelectorAll('.chapter-button')];
 const chapterIndicator = $('chapter-indicator');
@@ -125,14 +144,22 @@ chapterNav.addEventListener('click', (event) => {
 
 function buildSequence() {
   const rows = [
-    ['coding', 'DNA 编码链', CODING_DNA, '5′', '3′'],
-    ['template', 'DNA 模板链', TEMPLATE_DNA, '3′', '5′'],
+    ['coding', t('DNA 编码链', 'DNA coding strand'), CODING_DNA, '5′', '3′'],
+    ['template', t('DNA 模板链', 'DNA template strand'), TEMPLATE_DNA, '3′', '5′'],
     ['rna', 'RNA', RNA, '5′', '3′'],
   ];
-  $('sequences').innerHTML = rows.map(([type, name, sequence, left, right]) => `<div class="sequence-row" data-row="${type}"><span class="row-name">${name}</span><span class="end-mark">${left}</span><div class="base-track">${[...sequence].map((base, index) => `<button class="base-cell" data-base="${base}" data-type="${type}" data-index="${index}" aria-label="${name} 第 ${index + 1} 位 ${base}">${base}</button>`).join('')}</div><span class="end-mark">${right}</span></div>`).join('') + '<div class="region-row" id="regions"><span></span><span></span><div class="regions"><span>5′侧非翻译区</span><span>五个氨基酸的编码区</span><span>终止</span><span>3′侧非翻译区</span></div><span></span></div>';
-  $('amino-row').innerHTML = '<span class="amino-label">氨基酸序列</span><span class="amino-end">N</span>' + AMINO_ACIDS.map((amino, index) => `${index ? '<span class="peptide-link" aria-hidden="true"></span>' : ''}<button class="amino" data-amino="${index}" aria-label="${amino.short} ${amino.name}" aria-pressed="false">${amino.short}<small>${amino.name}</small></button>`).join('') + '<span class="amino-end">C</span>';
+  $('sequences').innerHTML = rows.map(([type, name, sequence, left, right]) => `<div class="sequence-row" data-row="${type}"><span class="row-name">${name}</span><span class="end-mark">${left}</span><div class="base-track">${[...sequence].map((base, index) => `<button class="base-cell" data-base="${base}" data-type="${type}" data-index="${index}" aria-label="${isEn() ? `${name}, position ${index + 1}, ${base}` : `${name} 第 ${index + 1} 位 ${base}`}">${base}</button>`).join('')}</div><span class="end-mark">${right}</span></div>`).join('') + `<div class="region-row" id="regions"><span></span><span></span><div class="regions"><span>${t('5′侧非翻译区', '5′ UTR')}</span><span>${t('五个氨基酸的编码区', 'Five-residue coding region')}</span><span>${t('终止', 'Stop')}</span><span>${t('3′侧非翻译区', '3′ UTR')}</span></div><span></span></div>`;
+  $('amino-row').innerHTML = `<span class="amino-label">${t('氨基酸序列', 'Amino acid sequence')}</span><span class="amino-end">N</span>` + AMINO_ACIDS.map((amino, index) => `${index ? '<span class="peptide-link" aria-hidden="true"></span>' : ''}<button class="amino" data-amino="${index}" aria-label="${amino.short} ${aminoName(amino)}" aria-pressed="false">${amino.short}<small>${aminoName(amino)}</small></button>`).join('') + '<span class="amino-end">C</span>';
 }
 buildSequence();
+function localizeSequence() {
+  $('sequences').querySelector('[data-row="coding"] .row-name').textContent = t('DNA 编码链', 'DNA coding strand');
+  $('sequences').querySelector('[data-row="template"] .row-name').textContent = t('DNA 模板链', 'DNA template strand');
+  const regions = $('regions').querySelectorAll('.regions span');
+  [t('5′侧非翻译区', '5′ UTR'), t('五个氨基酸的编码区', 'Five-residue coding region'), t('终止', 'Stop'), t('3′侧非翻译区', '3′ UTR')]
+    .forEach((label, index) => { regions[index].textContent = label; });
+  $('amino-row').querySelector('.amino-label').textContent = t('氨基酸序列', 'Amino acid sequence');
+}
 $('sequences').addEventListener('click', (event) => {
   const button = event.target.closest('.base-cell');
   if (!button || button.disabled) return;
@@ -189,6 +216,17 @@ const STRUCTURES = {
   peptide: ['多肽链', '由指定顺序的氨基酸残基通过肽键连接而成。', '从 N 端向 C 端延长。本例最终释放五个残基，不模拟折叠或形成真实完整蛋白质。'],
   pore: ['核孔', '成熟 mRNA 出核的通道。', 'mRNA 从可见核孔通过，DNA 留在细胞核内。RNA 加工的细节已简化。'],
 };
+const EN_STRUCTURES = {
+  coding: ['DNA coding strand', 'When aligned in the same direction, this coding strand mainly differs from the RNA by T versus U.', 'The coding strand is neither cut away nor consumed; it runs antiparallel to the template strand.'],
+  template: ['DNA template strand', 'RNA polymerase reads this strand of the current gene and makes complementary RNA.', 'In this example it reads from the left 3′ end toward the right 5′ end; a different gene may use the other strand as its template.'],
+  polymerase: ['RNA polymerase', 'Locally opens the DNA, reads the template, and joins RNA nucleotides.', 'The DNA opens only near the polymerase and reforms a duplex behind it. Each new nucleotide joins the RNA 3′ end.'],
+  rna: ['mRNA / RNA', 'Carries the sequence information of this protein-coding gene to a ribosome in the cytoplasm.', 'This newly made RNA forms by joining nucleotides. The DNA remains in the nucleus.'],
+  trna: ['tRNA', 'Carries an amino acid and pairs its anticodon antiparallel to an mRNA codon.', 'The amino-acid attachment end is distinct from the anticodon. A departing tRNA may be reloaded; this page does not simulate reloading.'],
+  ribosome: ['Ribosome', 'Its large and small subunits organize codon reading, tRNA binding, and peptide-bond formation.', 'It advances along mRNA 5′→3′. The initiator tRNA occupies the P site; during ordinary elongation the next tRNA first enters the A site.'],
+  peptide: ['Peptide chain', 'A specified sequence of amino-acid residues joined by peptide bonds.', 'It grows from the N terminus toward the C terminus. This example releases five residues and does not simulate folding into a complete protein.'],
+  pore: ['Nuclear pore', 'A passage for mature mRNA to leave the nucleus.', 'mRNA passes through the visible pore while DNA stays in the nucleus. Details of RNA processing are simplified.'],
+};
+const structures = () => isEn() ? EN_STRUCTURES : STRUCTURES;
 
 function updateInspector() {
   const selection = store.selected;
@@ -196,14 +234,14 @@ function updateInspector() {
   $('trace-detail').replaceChildren();
   $('trace-message').textContent = '';
   if (!selection) return;
-  const [name, role, current] = STRUCTURES[selection.type] || STRUCTURES.template;
+  const [name, role, current] = structures()[selection.type] || structures().template;
   $('inspector-title').textContent = name;
   $('inspector-role').textContent = role;
   $('inspector-now').textContent = current;
-  if (selection.type === 'polymerase' && snapshot.transcription.index != null) $('inspector-now').textContent = `当前读取模板第 ${snapshot.transcription.index + 1} 位 ${TEMPLATE_DNA[snapshot.transcription.index]}，加入 RNA ${RNA[snapshot.transcription.index]}。新核苷酸连接在 RNA 的 3′端。`;
+  if (selection.type === 'polymerase' && snapshot.transcription.index != null) $('inspector-now').textContent = t(`当前读取模板第 ${snapshot.transcription.index + 1} 位 ${TEMPLATE_DNA[snapshot.transcription.index]}，加入 RNA ${RNA[snapshot.transcription.index]}。新核苷酸连接在 RNA 的 3′端。`, `Now reading template position ${snapshot.transcription.index + 1} (${TEMPLATE_DNA[snapshot.transcription.index]}) and adding RNA ${RNA[snapshot.transcription.index]}. The new nucleotide joins the RNA 3′ end.`);
   if (selection.type === 'trna' && selection.index != null && CODONS[selection.index] && !CODONS[selection.index].stop) {
     const codon = CODONS[selection.index];
-    $('inspector-now').textContent = `mRNA 5′-${codon.rna}-3′，对齐反密码子 3′-${codon.anticodonAligned}-5′。同一反密码子按 5′→3′书写是 ${codon.anticodon5to3}。`;
+    $('inspector-now').textContent = t(`mRNA 5′-${codon.rna}-3′，对齐反密码子 3′-${codon.anticodonAligned}-5′。同一反密码子按 5′→3′书写是 ${codon.anticodon5to3}。`, `mRNA 5′-${codon.rna}-3′ aligns antiparallel with anticodon 3′-${codon.anticodonAligned}-5′. Written 5′→3′, that anticodon is ${codon.anticodon5to3}.`);
   }
   if (!selection.indices?.length) return;
   const indices = selection.indices;
@@ -214,22 +252,22 @@ function updateInspector() {
   const dnaTemplate = indices.map((i) => TEMPLATE_DNA[i]).join('');
   const rna = indices.map((i) => i < snapshot.rnaCount ? RNA[i] : '·').join('');
   const trace = document.createElement('div'); trace.className = 'trace-detail';
-  const lines = [`位置 ${range}（从 1 开始编号）`, `编码链 5′-${dnaCoding}-3′`, `模板链 3′-${dnaTemplate}-5′`, `RNA　 5′-${rna}-3′`];
+  const lines = [t(`位置 ${range}（从 1 开始编号）`, `Positions ${range} (numbered from 1)`), t(`编码链 5′-${dnaCoding}-3′`, `Coding strand 5′-${dnaCoding}-3′`), t(`模板链 3′-${dnaTemplate}-5′`, `Template strand 3′-${dnaTemplate}-5′`), `RNA 5′-${rna}-3′`];
   for (const line of lines) { const code = document.createElement('code'); code.textContent = line; trace.append(code); }
   const note = document.createElement('small');
   let message;
   if (snapshot.chapter.id < 3) {
-    message = first < snapshot.rnaCount ? `位置 ${range}：模板 ${dnaTemplate} → RNA ${rna}，属于信息配对关系。` : `位置 ${range}：两条 DNA 链互补。这个 RNA 位置尚未生成。`;
+    message = first < snapshot.rnaCount ? t(`位置 ${range}：模板 ${dnaTemplate} → RNA ${rna}，属于信息配对关系。`, `Positions ${range}: template ${dnaTemplate} → RNA ${rna}. This shows complementary sequence information.`) : t(`位置 ${range}：两条 DNA 链互补。这个 RNA 位置尚未生成。`, `Positions ${range}: the two DNA strands are complementary. This RNA position has not been made yet.`);
   } else if (region === 'stop') {
-    message = 'UAA：终止信号，不对应氨基酸。由释放因子参与终止，不存在“终止氨基酸 tRNA”。';
+    message = t('UAA：终止信号，不对应氨基酸。由释放因子参与终止，不存在“终止氨基酸 tRNA”。', 'UAA is a stop signal, not an amino acid. A release factor participates in termination; there is no “stop amino acid tRNA.”');
   } else if (region === 'utr5' || region === 'utr3') {
-    message = '该区域在本例中不被翻译。它也在 RNA 中，但不产生本例的氨基酸残基。';
+    message = t('该区域在本例中不被翻译。它也在 RNA 中，但不产生本例的氨基酸残基。', 'This region is present in the RNA but is not translated into an amino-acid residue in this example.');
   } else {
     const codonIndex = Math.floor((first - 6) / 3), amino = AMINO_ACIDS[codonIndex];
-    message = codonIndex < snapshot.peptideCount ? `${amino.short}（${amino.name}） ↔ mRNA ${CODONS[codonIndex].rna} ↔ DNA 位置 ${range}。这是信息位置对应。` : `mRNA ${CODONS[codonIndex].rna} 位于当前读框；对应残基在当前进度尚未加入多肽。`;
+    message = codonIndex < snapshot.peptideCount ? t(`${amino.short}（${amino.name}） ↔ mRNA ${CODONS[codonIndex].rna} ↔ DNA 位置 ${range}。这是信息位置对应。`, `${amino.short} (${aminoName(amino)}) ↔ mRNA ${CODONS[codonIndex].rna} ↔ DNA positions ${range}. This traces corresponding information positions.`) : t(`mRNA ${CODONS[codonIndex].rna} 位于当前读框；对应残基在当前进度尚未加入多肽。`, `mRNA ${CODONS[codonIndex].rna} is in the reading frame; its residue has not yet joined the peptide at this point.`);
   }
   note.textContent = message; trace.append(note); $('trace-detail').append(trace); $('trace-message').textContent = message;
-  if (selection.type === 'peptide' && selection.index != null) $('inspector-title').textContent = `${AMINO_ACIDS[selection.index].short} · ${AMINO_ACIDS[selection.index].name}`;
+  if (selection.type === 'peptide' && selection.index != null) $('inspector-title').textContent = `${AMINO_ACIDS[selection.index].short} · ${aminoName(AMINO_ACIDS[selection.index])}`;
 }
 
 function closeInspector(returnFocus = true) {
@@ -240,7 +278,37 @@ $('inspector-close').addEventListener('click', () => closeInspector());
 $('inspector-return').addEventListener('click', () => closeInspector());
 $('inspector-lesson').addEventListener('click', () => { if(store.selected) objectLesson.open(store.selected.type,$('inspector-lesson')); });
 
-function teachingCaption(state) {
+function teachingCaption(state, locale = isEn() ? 'en' : 'zh') {
+  if (locale === 'en') {
+    switch (state.chapter.key) {
+      case 'dna': return ['One strand of this gene serves as the template', 'The DNA strands run antiparallel, with A–T and G–C base pairing.'];
+      case 'transcription': {
+        const index = state.transcription.index;
+        return [`Nucleotide ${index + 1} · ${TEMPLATE_DNA[index]} → ${RNA[index]}`, 'The template is read 3′→5′ while RNA grows 5′→3′.'];
+      }
+      case 'export': return ['Through a nuclear pore into the cytoplasm', 'mRNA crosses the nuclear pore; DNA remains in the nucleus.'];
+      case 'comparison': return ['Five residues, six codons read', 'Select a completed residue to trace its mRNA codon and corresponding DNA positions.'];
+      default: break;
+    }
+    const mode = state.translation, codon = CODONS[mode.codonIndex];
+    const descriptions = {
+      scan: ['Finding the specified start site', 'In this example reading begins at mRNA position 7, AUG.'],
+      initiate: ['Initiator tRNA enters the P site', 'AUG specifies methionine (Met); the initiator tRNA pairs antiparallel to it.'],
+      assemble: ['The subunits form an initiation complex', 'Met is still attached to the initiator tRNA; the next codon will enter the A site.'],
+      stop: ['UAA enters the A site', 'UAA signals termination and does not specify a sixth amino acid.'],
+      'release-factor': ['Release factor recognizes the stop codon', 'The release factor enters the A site and starts peptide release.'],
+      release: ['A five-residue peptide is released', 'The peptide leaves the P-site tRNA in the order Met–Ala–Phe–Glu–Pro.'],
+      disassemble: ['Ribosome-associated components separate', 'The mRNA remains, and use in translation does not destroy the tRNAs.'],
+      complete: ['The example peptide has formed and been released', 'This page stops at peptide release and does not simulate later folding.'],
+    };
+    if (mode.mode !== 'elongate') return descriptions[mode.mode];
+    return {
+      enter: [`tRNA carrying ${codon.aminoAcid.short} enters the A site`, 'The matching tRNA brings an amino acid beside the mRNA codon.'],
+      pair: [`Codon ${codon.rna} pairs with an anticodon`, `mRNA 5′-${codon.rna}-3′ aligns antiparallel with tRNA 3′-${codon.anticodonAligned}-5′.`],
+      bond: ['A peptide bond forms; the chain transfers to the A site', `The chain transfers to ${codon.aminoAcid.short} on the A-site tRNA, adding a new residue at the C terminus.`],
+      translocate: ['Advance one codon for the next cycle', 'The ribosome advances three bases; the chain-bearing tRNA moves from A to P.'],
+    }[mode.subphase];
+  }
   switch (state.chapter.key) {
     case 'dna': return ['当前基因的一条链作为模板', '两条 DNA 链反向平行，A—T、G—C 配对。'];
     case 'transcription': {
@@ -281,7 +349,7 @@ function updateStructureAccess() {
   const element = $('structure-access');
   if (element.dataset.types !== types.join(',')) {
     element.dataset.types = types.join(',');
-    element.innerHTML = types.map((type) => `<button data-structure="${type}">${STRUCTURES[type][0]}</button>`).join('');
+    element.innerHTML = types.map((type) => `<button data-structure="${type}">${structures()[type][0]}</button>`).join('');
   }
   element.querySelectorAll('button').forEach((button) => button.setAttribute('aria-pressed', String(store.selected?.type === button.dataset.structure)));
 }
@@ -306,11 +374,11 @@ function render() {
   $('dna-idle').hidden = snapshot.chapter.id !== 0 || !!fallback;
   $('dna-idle').disabled = store.reducedMotion || store.expanded;
   $('dna-idle').setAttribute('aria-pressed', String(store.ambientMotion && !store.reducedMotion));
-  $('dna-idle').textContent = store.ambientMotion && !store.reducedMotion ? '暂停旋转' : '播放旋转';
+  $('dna-idle').textContent = store.ambientMotion && !store.reducedMotion ? t('暂停旋转', 'Pause rotation') : t('播放旋转', 'Play rotation');
   fallback?.update(snapshot, store);
   $('progress').value = String(store.time);
   $('progress-value').textContent = `${Math.round(store.time / TOTAL * 100)}%`;
-  $('progress').setAttribute('aria-valuetext', `${NAMES[snapshot.chapter.id]}，全程 ${Math.round(store.time / TOTAL * 100)}%`);
+  $('progress').setAttribute('aria-valuetext', t(`${NAMES[snapshot.chapter.id]}，全程 ${Math.round(store.time / TOTAL * 100)}%`, `${chapterName(snapshot.chapter.id)}, ${Math.round(store.time / TOTAL * 100)}% of lesson`));
   const signature = [snapshot.chapter.id, snapshot.step, snapshot.rnaCount, snapshot.peptideCount, snapshot.phase, snapshot.translation.subphase, JSON.stringify(store.selected)].join('|');
   if (signature === uiSignature) return;
   uiSignature = signature;
@@ -318,15 +386,15 @@ function render() {
   document.body.dataset.chapter = snapshot.chapter.key;
   document.body.dataset.rnaCount = String(snapshot.rnaCount);
   document.body.dataset.peptideCount = String(snapshot.peptideCount);
-  $('stage-title').textContent = TITLES[chapterId];
-  $('observation').textContent = HINTS[chapterId];
+  $('stage-title').textContent = (isEn() ? EN_TITLES : TITLES)[chapterId];
+  $('observation').textContent = (isEn() ? EN_HINTS : HINTS)[chapterId];
   $('translation-site-note').hidden = chapterId !== 3;
   const book=bookForObject(['template','polymerase','pore','ribosome','peptide'][chapterId],{chapter:chapterId});
-  $('chapter-book').textContent=`教材 P${book.page} · ${chapterId===2?'正文':chapterId===3||chapterId===4?'图4-7':'图4-4'}`;
+  $('chapter-book').textContent=t(`教材 P${book.page} · ${chapterId===2?'正文':chapterId===3||chapterId===4?'图4-7':'图4-4'}`, `Textbook p. ${book.page} · ${chapterId===2?'text':chapterId===3||chapterId===4?'Fig. 4-7':'Fig. 4-4'}`);
   $('chapter-book').href=book.url;
   $('chapter-book').dataset.bookLabel=book.label;
-  $('chapter-book').setAttribute('aria-label',`2019版人教生物必修2，${book.label}，在窗口查看教材扫描页`);
-  $('progress-label').textContent = `全程进度 · ${NAMES[chapterId]}`;
+  $('chapter-book').setAttribute('aria-label',t(`2019版人教生物必修2，${book.label}，在窗口查看教材扫描页`, `People's Education Press Biology 2 (2019), ${book.label}; open scanned textbook page in a dialog`));
+  $('progress-label').textContent = t(`全程进度 · ${NAMES[chapterId]}`, `Lesson progress · ${chapterName(chapterId)}`);
   chapterButtons.forEach((button) => {
     if (Number(button.dataset.chapter) === chapterId) button.setAttribute('aria-current', 'step'); else button.removeAttribute('aria-current');
   });
@@ -336,7 +404,7 @@ function render() {
   $('peptide-count').textContent = String(snapshot.peptideCount);
   const [title, description] = teachingCaption(snapshot);
   $('step-title').textContent = title; $('step-description').textContent = description;
-  $('sequence-hint').textContent = chapterId < 3 ? '两条 DNA 链按同一位置对齐。RNA 随转录逐位生成，· 表示尚未生成。' : '编码区按三个碱基一组读取，前后非翻译区不分为密码子。点击字母或已生成残基可反查位置。';
+  $('sequence-hint').textContent = chapterId < 3 ? t('两条 DNA 链按同一位置对齐。RNA 随转录逐位生成，· 表示尚未生成。', 'The two DNA strands align by position. RNA is made one nucleotide at a time; · marks positions not yet made.') : t('编码区按三个碱基一组读取，前后非翻译区不分为密码子。点击字母或已生成残基可反查位置。', 'The coding region is read in triplets. Flanking untranslated regions are not grouped into codons. Select a base or completed residue to trace its position.');
   $('sequences').querySelector('[data-row="rna"]').hidden = chapterId === 0;
   $('regions').hidden = chapterId < 3;
   $('sequences').querySelectorAll('.base-track').forEach((track) => track.classList.toggle('codon-mode', chapterId >= 3));
@@ -351,14 +419,14 @@ function render() {
     cell.classList.toggle('codon-end', index >= 6 && index < 24 && (index - 6) % 3 === 2);
     cell.setAttribute('aria-pressed', String(!pending && !!store.selected?.indices?.includes(index)));
     const base = (type === 'coding' ? CODING_DNA : type === 'template' ? TEMPLATE_DNA : RNA)[index];
-    cell.setAttribute('aria-label', `${type === 'coding' ? 'DNA 编码链' : type === 'template' ? 'DNA 模板链' : 'RNA'} 第 ${index + 1} 位 ${pending ? '尚未生成' : base}`);
+    cell.setAttribute('aria-label', isEn() ? `${type === 'coding' ? 'DNA coding strand' : type === 'template' ? 'DNA template strand' : 'RNA'}, position ${index + 1}, ${pending ? 'not yet made' : base}` : `${type === 'coding' ? 'DNA 编码链' : type === 'template' ? 'DNA 模板链' : 'RNA'} 第 ${index + 1} 位 ${pending ? '尚未生成' : base}`);
   });
   $('amino-row').hidden = chapterId < 3;
   $('amino-row').querySelectorAll('[data-amino]').forEach((button) => {
     const index = Number(button.dataset.amino), pending = index >= snapshot.peptideCount, amino = AMINO_ACIDS[index];
     button.disabled = pending; button.classList.toggle('amino-pending', pending);
-    button.innerHTML = pending ? '·' : `${amino.short}<small>${amino.name}</small>`;
-    button.setAttribute('aria-label', pending ? `第 ${index + 1} 个残基尚未加入` : `${amino.short} ${amino.name}`);
+    button.innerHTML = pending ? '·' : `${amino.short}<small>${aminoName(amino)}</small>`;
+    button.setAttribute('aria-label', pending ? t(`第 ${index + 1} 个残基尚未加入`, `Residue ${index + 1} has not yet joined`) : `${amino.short} ${aminoName(amino)}`);
     button.setAttribute('aria-pressed', String(!!store.selected?.indices?.includes(amino.start)));
   });
   $('amino-row').querySelectorAll('.peptide-link').forEach((link, index) => { link.style.opacity = index + 1 < snapshot.peptideCount ? '1' : '.2'; });
@@ -547,7 +615,7 @@ function showChapterLoading(request) {
   notice.id = 'chapter-loading';
   notice.className = 'scene-loading';
   notice.setAttribute('role', 'status');
-  notice.textContent = '正在准备转录模型…';
+  notice.textContent = t('正在准备转录模型…', 'Preparing the transcription model…');
   notice.style.cssText = 'z-index:20;background:#132427;color:#c3d2c8;pointer-events:none;';
   $('scene').append(notice);
   $('scene').setAttribute('aria-busy', 'true');
@@ -584,7 +652,7 @@ async function seekWhenReady(time, { resetView = false } = {}) {
   setTime(targetTime);
 }
 function updatePlayControl() {
-  const label = store.playing ? '暂停' : store.time >= TOTAL ? '重播演示' : store.time <= 0.01 ? '开始演示' : '继续播放';
+  const label = store.playing ? t('暂停', 'Pause') : store.time >= TOTAL ? t('重播演示', 'Replay lesson') : store.time <= 0.01 ? t('开始演示', 'Start lesson') : t('继续播放', 'Resume');
   $('play-text').textContent = label;
   $('play-icon').textContent = store.playing ? 'Ⅱ' : '▶';
   $('play').setAttribute('aria-label', label);
@@ -698,7 +766,7 @@ $('view-reset').addEventListener('click', () => { scene?.resetView(); updateView
 function setPerspectiveButton(enabled) {
   const button = $('protein-perspective');
   button.setAttribute('aria-pressed', String(enabled));
-  button.title = enabled ? '关闭透视效果' : '开启透视效果';
+  button.title = enabled ? t('关闭透视效果', 'Turn perspective off') : t('开启透视效果', 'Turn perspective on');
 }
 setPerspectiveButton(true);
 $('protein-perspective').addEventListener('click', () => {
@@ -749,22 +817,43 @@ $('sources-open').addEventListener('click', () => { pause(); render(); $('source
 $('sources-close').addEventListener('click', () => $('sources').close());
 $('sources').addEventListener('click', (event) => { if (event.target === $('sources')) { const rect = $('sources').getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) $('sources').close(); } });
 
-function buildQuiz() {
-  const questions = [
+function quizQuestions() {
+  return isEn() ? [
+    ['Which RNA base pairs with A on the template strand?', ['U', 'T', 'A'], 0, 'Template A pairs with RNA U. RNA uses U rather than T.'],
+    ['Why do six read codons yield only five amino acids?', ['UAA is a stop signal', 'The last tRNA disappears', 'Pro is not added'], 0, 'A release factor recognizes UAA, which specifies no amino acid. All five residues remain.'],
+    ['Which mRNA codon specifies Pro here?', ['CCG', 'GCU', 'UAA'], 0, 'Pro corresponds to CCG at RNA positions 19–21 in this example. Select the residue below or in 3D to trace it.'],
+  ] : [
     ['模板链上的 A 对应哪一种 RNA 碱基？', ['U', 'T', 'A'], 0, '正确配对是模板 A → RNA U，RNA 使用 U 而不是 T。'],
     ['为什么六个读取单位只得到五个氨基酸？', ['UAA 是终止信号', '最后一个 tRNA 消失了', 'Pro 没有加入'], 0, 'UAA 由释放因子识别，不对应氨基酸；五个残基全部保留。'],
     ['Pro 对应哪个 mRNA 密码子？', ['CCG', 'GCU', 'UAA'], 0, 'Pro 对应 CCG，位于本例 RNA 第 19–21 位。下方和三维残基都可以点击追踪。'],
   ];
-  $('quiz-content').innerHTML = questions.map(([question, options], index) => `<div class="quiz-question" data-question="${index}"><p>${index + 1}. ${question}</p>${options.map((option, choice) => `<button data-choice="${choice}">${option}</button>`).join('')}<div class="quiz-answer" role="status"></div></div>`).join('');
-  $('quiz-content').addEventListener('click', (event) => { const button = event.target.closest('[data-choice]'); if (!button) return; const item = button.closest('[data-question]'), question = questions[Number(item.dataset.question)]; item.querySelector('.quiz-answer').textContent = `${Number(button.dataset.choice) === question[2] ? '答对了。' : '再想一想。'}${question[3]}`; });
 }
+function buildQuiz() {
+  const questions = quizQuestions();
+  const container = $('quiz-content');
+  if (!container.children.length) container.innerHTML = questions.map(([question, options], index) => `<div class="quiz-question" data-question="${index}"><p>${index + 1}. ${question}</p>${options.map((option, choice) => `<button data-choice="${choice}">${option}</button>`).join('')}<div class="quiz-answer" role="status"></div></div>`).join('');
+  else container.querySelectorAll('[data-question]').forEach((item, index) => {
+    const [question, options, correct, explanation] = questions[index];
+    item.querySelector('p').textContent = `${index + 1}. ${question}`;
+    item.querySelectorAll('[data-choice]').forEach((button, choice) => { button.textContent = options[choice]; });
+    if (item.dataset.selectedChoice !== undefined) {
+      item.querySelector('.quiz-answer').textContent = `${Number(item.dataset.selectedChoice) === correct ? t('答对了。', 'Correct. ') : t('再想一想。', 'Try again. ')}${explanation}`;
+    }
+  });
+}
+$('quiz-content').addEventListener('click', (event) => {
+  const button = event.target.closest('[data-choice]'); if (!button) return;
+  const item = button.closest('[data-question]'), question = quizQuestions()[Number(item.dataset.question)];
+  item.dataset.selectedChoice = button.dataset.choice;
+  item.querySelector('.quiz-answer').textContent = `${Number(button.dataset.choice) === question[2] ? t('答对了。', 'Correct. ') : t('再想一想。', 'Try again. ')}${question[3]}`;
+});
 buildQuiz();
 
 function createFallback(reason) {
   // Original SVG uses the same derived snapshot as the 3D renderer, including backward seeks.
   const container = $('scene'); container.replaceChildren();
   const banner = document.createElement('p'); banner.className = 'fallback-banner'; banner.textContent = reason; container.append(banner);
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.setAttribute('viewBox', '0 0 1000 460'); svg.setAttribute('class', 'fallback-svg'); svg.setAttribute('role', 'img'); svg.setAttribute('aria-label', '基因表达二维教学示意'); container.append(svg);
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.setAttribute('viewBox', '0 0 1000 460'); svg.setAttribute('class', 'fallback-svg'); svg.setAttribute('role', 'img'); svg.setAttribute('aria-label', t('基因表达二维教学示意', '2D gene-expression teaching diagram')); container.append(svg);
   $('zoom-in').disabled = true; $('zoom-out').disabled = true; $('view-reset').disabled = true; $('expand').hidden = true;
   function update(state, options) {
     const translation = state.chapter.id === 3, exportStage = state.chapter.id === 2, comparison = state.chapter.id === 4;
@@ -773,12 +862,12 @@ function createFallback(reason) {
       markup += `<line x1="90" x2="900" y1="${y}" y2="${y}" stroke="#c3b99d" stroke-width="2"/><text x="57" y="${y+6}" font-size="14" fill="#7b7160">${left}</text><text x="915" y="${y+6}" font-size="14" fill="#7b7160">${right}</text>`;
       for (let i = 0; i < count; i++) {
         const x = 90 + i * 27, selected = options.selected?.indices?.includes(i) || state.activeIndices.includes(i);
-        markup += `<g data-svg-type="${type}" data-svg-index="${i}" ${comparison ? `tabindex="0" role="button" aria-label="${type} 第${i+1}位 ${sequence[i]}"` : ''}><rect x="${x-9}" y="${y-11}" width="21" height="24" rx="5" fill="${selected ? '#e2cb8a' : BASE_COLORS[sequence[i]]}" stroke="${selected ? '#9b7730' : '#ffffff'}"/><text x="${x+1}" y="${y+6}" text-anchor="middle" font-size="14" fill="#423e33">${sequence[i]}</text></g>`;
+        markup += `<g data-svg-type="${type}" data-svg-index="${i}" ${comparison ? `tabindex="0" role="button" aria-label="${isEn() ? `${type}, position ${i+1}, ${sequence[i]}` : `${type} 第${i+1}位 ${sequence[i]}`}"` : ''}><rect x="${x-9}" y="${y-11}" width="21" height="24" rx="5" fill="${selected ? '#e2cb8a' : BASE_COLORS[sequence[i]]}" stroke="${selected ? '#9b7730' : '#ffffff'}"/><text x="${x+1}" y="${y+6}" text-anchor="middle" font-size="14" fill="#423e33">${sequence[i]}</text></g>`;
       }
     }
     if (exportStage) {
       const q = (state.time - 34) / 4;
-      markup += '<path d="M480 130L480 215M480 285L480 365" stroke="#b9bba5" stroke-width="12"/><rect x="470" y="215" width="20" height="70" rx="7" fill="none" stroke="#bda469" stroke-width="5"/><text x="275" y="170" font-size="18" fill="#8f927b">细胞核内</text><text x="660" y="170" font-size="18" fill="#8f927b">细胞质</text><text x="462" y="320" font-size="12" fill="#8a7745">核孔</text><text x="260" y="220" font-size="17" fill="#7b8070">DNA 留在核内</text>';
+      markup += `<path d="M480 130L480 215M480 285L480 365" stroke="#b9bba5" stroke-width="12"/><rect x="470" y="215" width="20" height="70" rx="7" fill="none" stroke="#bda469" stroke-width="5"/><text x="275" y="170" font-size="18" fill="#8f927b">${L('细胞核内', 'Inside nucleus')}</text><text x="660" y="170" font-size="18" fill="#8f927b">${L('细胞质', 'Cytoplasm')}</text><text x="462" y="320" font-size="12" fill="#8a7745">${L('核孔', 'Nuclear pore')}</text><text x="260" y="220" font-size="17" fill="#7b8070">${L('DNA 留在核内', 'DNA stays in nucleus')}</text>`;
       const x = 310 + q * 360;
       markup += `<path d="M${x-38} 247q19 -18 38 0t38 0" fill="none" stroke="#b39cb7" stroke-width="5"/><text x="${x-18}" y="280" font-size="12" fill="#74657b">mRNA</text>`;
     } else if (translation) {
@@ -794,24 +883,24 @@ function createFallback(reason) {
       if (!['complete'].includes(t.mode)) {
         const split = t.mode === 'disassemble' ? t.phase*55 : 0;
         markup += `<path d="M${x-46} ${288-split}C${x-64} ${181-split} ${x+121} ${181-split} ${x+132} ${288-split}Z" fill="#c1ccb7" stroke="#8f9d80"/><ellipse cx="${x+43}" cy="${344+split}" rx="94" ry="21" fill="#d3ceb6" stroke="#aaa385"/>`;
-        if (t.mode === 'initiate') { const ty=247-(1-t.phase)*45; drawTrna(pWorld,ty,0,'起始 tRNA / P'); chainAnchor=pWorld+20; }
+        if (t.mode === 'initiate') { const ty=247-(1-t.phase)*45; drawTrna(pWorld,ty,0,L('起始 tRNA / P', 'Initiator tRNA / P')); chainAnchor=pWorld+20; }
         else if (!['scan','disassemble','complete'].includes(t.mode)) {
           if (t.mode === 'elongate' && t.subphase === 'translocate') {
             // Codon-bound carriers stay in RNA coordinates as the ribosome advances around them.
-            drawTrna(pWorld-t.phase*35,247-t.phase*40,pIndex,'空载 / P→E',true);
-          } else drawTrna(pWorld,247,pIndex,t.chainSite==='A'?'空载 / P':'载链 / P',t.chainSite==='A');
+            drawTrna(pWorld-t.phase*35,247-t.phase*40,pIndex,L('空载 / P→E', 'Unloaded / P→E'),true);
+          } else drawTrna(pWorld,247,pIndex,t.chainSite==='A'?L('空载 / P', 'Unloaded / P'):L('载链 / P', 'Chain-bearing / P'),t.chainSite==='A');
         }
         if (t.mode === 'elongate') {
           const ay = t.subphase === 'enter' ? 217+t.phase*30 : 247;
-          drawTrna(aWorld,ay,t.codonIndex,t.subphase==='translocate'?'载链 / A→P':t.chainSite==='A'?'载链 / A':'氨酰 / A');
+          drawTrna(aWorld,ay,t.codonIndex,t.subphase==='translocate'?L('载链 / A→P', 'Chain-bearing / A→P'):t.chainSite==='A'?L('载链 / A', 'Chain-bearing / A'):L('氨酰 / A', 'Aminoacyl / A'));
           if (['pair','bond'].includes(t.subphase)) markup += `<text x="${aWorld-20}" y="329" font-size="10" fill="#8c728e">3′-${CODONS[t.codonIndex].anticodonAligned}-5′</text>`;
           if (t.chainSite === 'A' || t.subphase === 'translocate') chainAnchor = aWorld + 20;
           // Before peptide transfer the incoming residue remains attached to its own tRNA.
           if (t.subphase !== 'translocate' && !(t.subphase === 'bond' && t.phase >= .7)) markup += `<circle cx="${aWorld+20}" cy="${ay}" r="16" fill="#e7d8ad" stroke="#b7a578"/><text x="${aWorld+20}" y="${ay+4}" text-anchor="middle" font-size="10">${AMINO_ACIDS[t.codonIndex].short}</text>`;
         }
-        if (['release-factor','release'].includes(t.mode)) markup += `<path d="M${x+66} 252l16 -22 16 22-16 15Z" fill="#cbb678"/><text x="${x+62}" y="220" font-size="10" fill="#907445">释放因子</text>`;
+        if (['release-factor','release'].includes(t.mode)) markup += `<path d="M${x+66} 252l16 -22 16 22-16 15Z" fill="#cbb678"/><text x="${x+62}" y="220" font-size="10" fill="#907445">${L('释放因子', 'Release factor')}</text>`;
       }
-      markup += '<path d="M100 380H280" stroke="#8a7c52" marker-end="url(#arrow)"/><text x="310" y="386" font-size="11" fill="#7b7160">mRNA 5′→3′ 被读取，序列保持完整</text>';
+      markup += `<path d="M100 380H280" stroke="#8a7c52" marker-end="url(#arrow)"/><text x="310" y="386" font-size="11" fill="#7b7160">${L('mRNA 5′→3′ 被读取，序列保持完整', 'mRNA is read 5′→3′; its sequence remains intact')}</text>`;
       let anchorX = t.chainSite === 'released' ? 590 : chainAnchor, anchorY = t.chainSite === 'released' ? 178 : 247;
       for (let i = 0; i < state.peptideCount; i++) {
         const ax = anchorX-(state.peptideCount-1-i)*49, ay = anchorY-(state.peptideCount-1-i)*12;
@@ -822,14 +911,19 @@ function createFallback(reason) {
       strand(CODING_DNA, 30, 190, 'coding', '5′', '3′'); strand(TEMPLATE_DNA, 30, 238, 'template', '3′', '5′');
       for (let i = 0; i < 30; i++) { const x=91+i*27; markup += `<line x1="${x}" x2="${x}" y1="204" y2="225" stroke="#d3cdbb" stroke-dasharray="2 3"/>`; }
       if (state.chapter.id > 0) strand(RNA, state.rnaCount, 310, 'rna', '5′', '3′');
-      if (state.chapter.id === 1) { const x=91+state.transcription.index*27; markup += `<ellipse cx="${x}" cy="255" rx="33" ry="30" fill="#dcc99499" stroke="#b9a36a"/><text x="${Math.max(110,Math.min(840,x))}" y="370" text-anchor="middle" font-size="12" fill="#8e7640">RNA 聚合酶 · 新核苷酸加入 3′端</text>`; }
+      if (state.chapter.id === 1) { const x=91+state.transcription.index*27; markup += `<ellipse cx="${x}" cy="255" rx="33" ry="30" fill="#dcc99499" stroke="#b9a36a"/><text x="${Math.max(110,Math.min(840,x))}" y="370" text-anchor="middle" font-size="12" fill="#8e7640">${L('RNA 聚合酶 · 新核苷酸加入 3′端', 'RNA polymerase · nucleotide added at the 3′ end')}</text>`; }
       if (comparison) for (let i=0;i<5;i++) markup += `<g data-svg-type="peptide" data-svg-index="${i}" role="button" tabindex="0"><rect x="${275+i*87}" y="362" width="64" height="33" rx="10" fill="#e7d8ad" stroke="#b7a578"/><text x="${307+i*87}" y="384" text-anchor="middle" font-size="13">${AMINO_ACIDS[i].short}</text></g>`;
     }
     svg.innerHTML = markup;
   }
   const handler = (event) => { const target = event.target.closest('[data-svg-type]'); if (target) selectScene({type:target.dataset.svgType,index:Number(target.dataset.svgIndex)},target); };
   svg.addEventListener('click', handler); svg.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); handler(event); } });
-  return { update };
+  return { update, setLanguage() {
+    banner.textContent = new URLSearchParams(location.search).get('view') === '2d'
+      ? L('二维观察模式 · 序列与教学进度保持一致', '2D view · sequence and lesson progress stay in sync')
+      : L('此设备暂时无法建立三维场景，已切换为二维教学示意。', 'A 3D scene could not be created on this device. A 2D teaching diagram is shown.');
+    svg.setAttribute('aria-label', L('基因表达二维教学示意', '2D gene-expression teaching diagram'));
+  } };
 }
 
 function restoreWhiteboardTeachingState(frozen) {
@@ -846,7 +940,7 @@ whiteboard=createWhiteboard({getScene:()=>scene,trigger:$('whiteboard-open'),
     const chapter=derive(frozen.time).chapter;
     // Associate notes with conformation, not sidebar layout or the current orbit.
     const contextKey=JSON.stringify([chapter.key,Number(frozen.time.toFixed(6)),Number(frozen.dnaSpin.toFixed(6)),store.expanded,store.selected,store.reducedMotion,frozen.perspectiveEnabled]);
-    return {snapshot:frozen,contextKey,title:`${NAMES[chapter.id]} · ${$('step-title').textContent} · ${frozen.time.toFixed(2)} s`};
+    return {snapshot:frozen,contextKey,title:`${NAMES[chapter.id]} · ${teachingCaption(derive(frozen.time), 'zh')[0]} · ${frozen.time.toFixed(2)} s`};
   },
   onRestore:restoreWhiteboardTeachingState,
   onExit(frozen){
@@ -855,6 +949,24 @@ whiteboard=createWhiteboard({getScene:()=>scene,trigger:$('whiteboard-open'),
     setPerspectiveButton(frozen.perspectiveEnabled!==false);
     uiSignature='';render();requestSceneFrame();
   },
+});
+window.addEventListener('gene-expression-languagechange', () => {
+  renderObjectMenu();
+  chapterButtons.forEach((button) => { button.textContent = chapterName(Number(button.dataset.chapter)); });
+  localizeSequence();
+  buildQuiz();
+  $('structure-access').removeAttribute('data-types');
+  $('chapter-loading') && ($('chapter-loading').textContent = t('正在准备转录模型…', 'Preparing the transcription model…'));
+  fallback?.setLanguage();
+  scene?.setLocale?.();
+  pendingScene?.setLocale?.();
+  setPerspectiveButton($('protein-perspective').getAttribute('aria-pressed') === 'true');
+  uiSignature = '';
+  if (!whiteboard?.isActive() && !objectLesson.isActive()) {
+    render();
+    updatePlayControl();
+  }
+  updateViewControls();
 });
 window.addEventListener('pagehide', () => { sceneDisposed=true;pause();cancelAnimationFrame(clockFrame);whiteboard?.dispose();scene?.dispose();pendingScene?.dispose(); }, {once:true});
 render();
@@ -865,7 +977,7 @@ try {
   if (sceneDisposed) throw new Error('页面已离开');
   pendingScene = createScene({ container: $('scene'), onSelect: selectScene, onHover: knowledgeHints.onHover, onInvalidate: requestSceneFrame });
   const loading=$('scene-loading');
-  if(loading){loading.textContent='正在准备动态场景…';loading.style.cssText='z-index:20;background:#132427;color:#c3d2c8;pointer-events:none;';}
+  if(loading){loading.textContent=t('正在准备动态场景…', 'Preparing the interactive scene…');loading.style.cssText='z-index:20;background:#132427;color:#c3d2c8;pointer-events:none;';}
   pendingScene.update(derive(0),{...store,playing:false,ambientMotion:false});pendingScene.render();
   await pendingScene.ready;
   if(!sceneDisposed) {
@@ -886,7 +998,7 @@ try {
   if(!sceneDisposed) {
   console.info('基因表达：启用二维备用视图。', error.message);
   entrance.eligible = false; entrance.active = false; entrance.phase = 'disabled'; entrance.reason = 'renderer-fallback'; entranceUI.cancel();
-  fallback = createFallback(new URLSearchParams(location.search).get('view') === '2d' ? '二维观察模式 · 序列与教学进度保持一致' : '此设备暂时无法建立三维场景，已切换为二维教学示意。');
+  fallback = createFallback(new URLSearchParams(location.search).get('view') === '2d' ? t('二维观察模式 · 序列与教学进度保持一致', '2D view · sequence and lesson progress stay in sync') : t('此设备暂时无法建立三维场景，已切换为二维教学示意。', 'A 3D scene could not be created on this device. A 2D teaching diagram is shown.'));
   document.body.dataset.renderer = 'svg'; uiSignature = ''; render();
   }
 }

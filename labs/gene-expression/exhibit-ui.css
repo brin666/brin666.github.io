@@ -7,6 +7,12 @@ body{background:var(--page);color:var(--ink)}
 .identity{gap:28px}.title-line{gap:15px}.title-line h1{font-size:24px;font-weight:650;letter-spacing:-.6px}.title-line>span{font-size:12px;color:var(--muted)}
 .back-link{color:#6b756f}.back-link span{font-size:9px;letter-spacing:1.2px}
 .header-actions{display:flex;align-items:center;gap:12px}
+.language-switch{display:inline-flex;align-items:center;flex:none;padding:3px;border:1px solid #c9d3c5;border-radius:9px;background:#eef1e9;gap:2px}
+.language-option{min-width:44px;min-height:38px;padding:5px 9px;border-radius:6px;color:#66756b;font-size:11px;font-weight:600;line-height:1;white-space:nowrap}
+.language-option[aria-pressed=true]{background:#314b3b;color:#fff;box-shadow:0 1px 5px #18302722}
+.language-option:not([aria-pressed=true]):hover{background:#dfe7d9;color:#294032}
+html[lang=en] .lab-shell,html[lang=en] .object-lesson{font-family:Inter,ui-sans-serif,system-ui,sans-serif}
+html[lang=en] #chapter-book,html[lang=en] #object-book{display:none!important}
 .details-toggle,.objects-toggle{min-height:40px;padding:8px 13px;font-size:12px;border-radius:7px}
 .objects-toggle{display:flex;gap:13px;align-items:center}.objects-toggle[aria-expanded=true]{background:#e9e8e0}
 .chapters{min-height:48px;gap:32px}.chapter-button{min-height:48px;font-size:12px;gap:9px}.chapter-button span{font-size:10px;color:#77817a}.chapter-button[aria-current=step]{color:#25352f}
@@ -28,6 +34,7 @@ body[data-renderer=webgl] .view-controls .view-button[aria-pressed=false]{color:
 .object-lesson{position:fixed;inset:0;z-index:40;background:var(--exhibit-paper);padding:0 32px 24px;display:grid;grid-template-rows:74px minmax(0,1fr);overflow:hidden}
 body[data-object-lesson=true] .lab-shell{visibility:hidden;pointer-events:none}
 .object-header{display:flex;align-items:center;gap:26px;min-width:0;border-bottom:1px solid var(--rule);margin-bottom:16px}
+.object-header>.language-switch{margin-left:auto}
 .object-back{display:flex;align-items:center;gap:14px;min-height:44px;font-size:13px;white-space:nowrap}.object-back>span{font-size:22px;font-weight:300}.object-back:hover{color:#97792d}
 .object-breadcrumb{font-size:11px;color:#738077;display:flex;gap:15px;align-items:center}.object-breadcrumb>span{color:#abb2a8}
 .book-link{margin-left:auto;display:flex;align-items:center;min-height:40px;font-size:12px;color:#796431;text-decoration:none}.book-link:hover{text-decoration:underline;text-underline-offset:4px}
@@ -56,7 +63,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,[tabindex]:focus-visibl
 @media(max-width:760px){.lab-shell{width:calc(100% - 24px)}.lab-header{min-height:58px;gap:6px;padding:6px 0}.identity{gap:10px}.title-line h1{font-size:19px}.title-line>span{font-size:9px;margin-top:3px}.header-actions{gap:3px}.objects-toggle,.details-toggle{font-size:10px;min-height:44px;padding:6px 8px;gap:5px}.objects-toggle span{display:none}.chapters{min-height:45px;gap:0}.chapter-button{min-height:45px;font-size:10px;gap:5px}.chapter-button span{font-size:8px}.stage-heading{left:16px;right:16px;top:16px}.stage-heading h2{font-size:17px}.stage-meta{font-size:8px;gap:0}.chapter-book{font-size:9px;min-height:24px}.stage-meta .model-note{display:none}.view-controls .view-button,.view-controls .icon-button{min-height:44px;height:44px;font-size:10px}.stage-bottom{bottom:113px;left:16px;font-size:9px}.transport-summary{gap:4px}.process-caption strong{font-size:12px}.process-caption p{font-size:10px}.process-caption .mono{font-size:8px}.transport{padding:8px 0 calc(8px + env(safe-area-inset-bottom))}.play-button,.reset-button,.play-group .icon-button{min-height:44px}.progress-top{font-size:9px}.play-options{gap:6px}.reset-button,.speed-group button,.low-motion{font-size:10px}.panel-scroll{padding:0 12px 20px}.panel-heading{padding:6px 12px}.panel-heading h2{font-size:16px}.chapter-prompt .observation{font-size:12px}.object-menu{right:0;top:calc(100% + 2px);width:min(420px,calc(100vw - 24px));gap:0 6px;padding:10px}.object-menu button{font-size:12px;min-height:64px}.object-menu small{font-size:9px}.object-lesson{padding:0 12px;grid-template-rows:64px minmax(0,1fr)}.object-header{gap:7px;margin-bottom:9px}.object-back{font-size:11px;gap:9px}.object-breadcrumb{display:none}.book-link{font-size:10px}.object-layout{display:block;overflow:auto;padding-bottom:24px;overscroll-behavior:contain}.object-stage{height:max(300px,44svh);border-radius:10px}.object-stage-heading{top:16px;left:16px;right:16px;font-size:11px}.object-teaching{padding:25px 10px 12px;overflow:visible}.object-introduction h1{font-size:30px;letter-spacing:-.6px}.object-summary{font-size:13px;margin:15px 0 20px}.object-steps{display:flex;gap:12px;margin-bottom:22px}.object-steps button{flex:1;flex-direction:column;gap:6px;align-items:flex-start;min-height:65px;font-size:11px;border-bottom:0}.object-steps button>i{display:none}.object-step-copy{min-height:115px}.object-step-copy>p:last-child{font-size:14px}.object-navigation{padding-top:20px}.object-tools{bottom:60px;right:16px}.object-tools button{min-height:44px;font-size:11px}.object-model-note{left:16px;right:16px;bottom:16px;font-size:9px}.knowledge-tip{max-width:245px}.object-extension{font-size:11px}.lab-main[data-panel-open=true] .stage-meta{display:none}}
 @media(max-width:400px){.title-line>span{display:none}.details-toggle{padding:6px 7px}.details-toggle .toggle-mark{display:none}.objects-toggle{padding:6px}.chapter-button{font-size:9px}.stage-meta{display:none}.view-controls .view-button{font-size:9px}.object-header .book-link{max-width:145px;line-height:1.5;text-align:right}.object-stage{height:300px}}
 @media(prefers-reduced-motion:reduce){.object-lesson,.object-stage,.object-teaching{scroll-behavior:auto;transition:none}}
-/* Keep the chapter title and its sole textbook link visible at every viewport. */
+/* Keep the chapter title and Chinese-mode textbook link visible at every viewport. */
 .stage-heading h2{margin:0}
 @media(max-width:760px){.stage-meta,.lab-main[data-panel-open=true] .stage-meta{display:flex}.chapter-book{white-space:nowrap}}
 
@@ -100,7 +107,7 @@ body[data-renderer=webgl] .stage-control-dock #protein-perspective[aria-pressed=
   .stage-control-dock #zoom-in{order:1}
   .stage-control-dock #zoom-out{order:2}
   .stage-control-dock #view-reset{order:3;min-width:44px;padding-inline:3px;font-size:0}
-  .stage-control-dock #view-reset::after{content:'复位';font-size:10px}
+  .stage-control-dock #view-reset::after{content:attr(data-short-label);font-size:10px}
   .stage-control-dock .view-mode-group{order:4;flex:none;margin-right:0}
   .stage-control-dock #protein-perspective{order:5}
   .stage-control-dock #expand{order:6}
@@ -118,7 +125,7 @@ body[data-renderer=webgl] .stage-control-dock #protein-perspective[aria-pressed=
 /* The demonstration starts from the exhibit itself; timeline tools remain below. */
 .stage>.stage-play{position:absolute;z-index:5;left:20px;bottom:16px;flex:none;min-width:158px;min-height:54px;max-width:none;padding:8px 18px 8px 11px;gap:11px;border:1px solid #e9dba8;border-radius:10px;background:#e4d08d;color:#20392f;font-size:14px;font-weight:650;letter-spacing:.01em;box-shadow:0 6px 20px #07191d40;transition:background-color 160ms ease,box-shadow 160ms ease,transform 160ms ease}
 .stage>.stage-play #play-icon{display:grid;place-items:center;flex:none;width:30px;height:30px;padding-left:2px;border-radius:50%;background:#f6eaca;color:#284337;font-size:13px;font-weight:700;line-height:1}
-.stage>.stage-play[aria-label="暂停"] #play-icon{padding-left:0;font-size:17px}
+.stage>.stage-play[aria-pressed=true] #play-icon{padding-left:0;font-size:17px}
 .stage>.stage-play:not(:disabled):hover{background:#f0dc9b;box-shadow:0 9px 24px #07191d50;transform:translateY(-1px)}
 .stage>.stage-play:focus-visible{outline:3px solid #f9e9ae;outline-offset:3px}
 .lab-main[data-panel-open=true] .stage>.stage-play{top:76px;bottom:auto}
@@ -129,3 +136,21 @@ body[data-renderer=webgl] .stage-control-dock #protein-perspective[aria-pressed=
 }
 @media(max-width:400px){.stage>.stage-play,.lab-main[data-panel-open=true] .stage>.stage-play{width:116px;min-width:116px;margin-left:6px}}
 @media(prefers-reduced-motion:reduce){.stage>.stage-play{transition:none}.stage>.stage-play:not(:disabled):hover{transform:none}}
+
+/* Locale controls remain in the header on both the full exhibit and molecule lessons. */
+@media(max-width:760px){
+  .header-actions{gap:3px}
+  .language-switch{padding:2px}
+  .language-option{min-width:40px;min-height:40px;padding-inline:5px;font-size:10px}
+  .object-header>.book-link{margin-left:0}
+}
+@media(max-width:520px){
+  .lab-header{flex-wrap:wrap;align-content:center;padding-block:5px;gap:2px}
+  .identity{flex-basis:100%}
+  .title-line h1{font-size:16px}
+  .title-line>span{font-size:9px}
+  .header-actions{width:100%;justify-content:flex-end}
+  .object-header{gap:4px}
+  .object-back{font-size:10px;gap:4px;white-space:normal}
+  .object-header>.book-link{max-width:95px;font-size:9px;line-height:1.25;text-align:right}
+}
