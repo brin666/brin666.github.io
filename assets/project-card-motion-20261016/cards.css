@@ -1,0 +1,5 @@
+.project-card-motion { aspect-ratio: 7 / 4; }
+.project-card-motion.abyss-demo-visual { aspect-ratio: 8 / 5; }
+.project-card-motion-video { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; opacity: 0; pointer-events: none; }
+.project-card-motion[data-motion-state="ready"] .project-card-motion-video { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .project-card-motion-video { display: none; } }

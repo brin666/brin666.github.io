@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "fps": 30.0,
+  "frameDuration": 0.03333333333333333,
+  "frameCount": 48,
+  "initialState": "idle",
+  "states": [
+    {
+      "id": "idle",
+      "frame": 0,
+      "hold": 0.0
+    },
+    {
+      "id": "focused",
+      "frame": 47,
+      "hold": 1.5666666666666667
+    }
+  ],
+  "segments": [
+    {
+      "id": "idle->focused",
+      "from": "idle",
+      "to": "focused",
+      "sourceFrames": {
+        "start": 0,
+        "hold": 47,
+        "endExclusive": 48
+      },
+      "frames": {
+        "start": 0,
+        "hold": 47,
+        "endExclusive": 48
+      },
+      "start": 0.0,
+      "hold": 1.5666666666666667,
+      "endExclusive": 1.6,
+      "curve": {
+        "type": "constant",
+        "rate": 1.0
+      }
+    }
+  ]
+}
