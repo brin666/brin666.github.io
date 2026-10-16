@@ -151,7 +151,7 @@ export function createObjectLessonScene({ container, type, onInvalidate = () => 
   function label(text, object, local = vector(), { minStep = 0, maxStep = 2, letter = false, offset = [0, 0], anchor = null } = {}) {
     const element = document.createElement('span'); element.textContent = text; element.hidden = true;
     element.dataset.objectLessonLabel = letter ? 'letter' : 'annotation';
-    element.style.cssText = `position:absolute;left:0;top:0;transform:translate(-50%,-50%);white-space:nowrap;font-family:ui-sans-serif,system-ui,sans-serif;font-size:${letter ? 13 : 11}px;font-weight:${letter ? 750 : 600};line-height:1.3;color:#f2f2e5;${letter ? 'padding:1px 2px;text-shadow:0 1px 3px #132427,0 0 3px #132427;' : 'padding:3px 7px;border:1px solid #6a807666;border-radius:5px;background:#132427d9;'}`;
+    element.style.cssText = `position:absolute;left:0;top:0;transform:translate(-50%,-50%);white-space:nowrap;font-family:ui-sans-serif,system-ui,sans-serif;font-size:${letter ? 13 : 11}px;font-weight:${letter ? 800 : 600};line-height:1.3;color:${letter ? '#172b2d' : '#f2f2e5'};${letter ? 'padding:1px 2px;text-shadow:-1px 0 rgba(245,248,238,.85), 1px 0 rgba(245,248,238,.85), 0 -1px rgba(245,248,238,.85), 0 1px rgba(245,248,238,.85), 0 1px 2px rgba(9,25,27,.22);' : 'padding:3px 7px;border:1px solid #6a807666;border-radius:5px;background:#132427d9;'}`;
     overlay.append(element);
     labels.push({ element, object, local, minStep, maxStep, offset, anchor });
     return element;

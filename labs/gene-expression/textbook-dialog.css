@@ -1,0 +1,40 @@
+.textbook-dialog {
+  width: min(780px, calc(100vw - 36px));
+  height: min(92svh, 1100px);
+  max-width: none;
+  max-height: none;
+  padding: 0;
+  border: 1px solid #d4ccb9;
+  border-radius: 14px;
+  background: var(--page);
+  color: var(--ink);
+  box-shadow: 0 24px 80px #17251f66;
+  overflow: hidden;
+}
+.textbook-dialog::backdrop { background: #14231cbf; backdrop-filter: blur(4px); }
+.textbook-window { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+.textbook-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 18px 23px 14px; border-bottom: 1px solid var(--rule); }
+.textbook-header h2 { margin-top: 6px; font-size: 21px; font-weight: 600; line-height: 1.35; }
+.textbook-header p { margin-top: 5px; color: var(--muted); font-size: 11px; }
+.textbook-header .icon-button { width: 40px; height: 40px; flex: none; font-size: 26px; }
+.textbook-stage { flex: 1; min-height: 0; overflow: auto; overscroll-behavior: contain; padding: 15px; background: #ebe9df; text-align: center; }
+.textbook-stage img { display: block; width: auto; height: auto; max-width: 100%; max-height: calc(92svh - 190px); margin: auto; box-shadow: 0 4px 25px #2c2c2740; }
+.textbook-stage img[hidden],.textbook-stage .textbook-status[hidden],.textbook-actions button[hidden] { display: none !important; }
+.textbook-stage.is-zoomed img { max-width: none; max-height: none; }
+.textbook-status { display: grid; place-items: center; min-height: 100%; color: #645e4e; font-size: 14px; line-height: 1.7; }
+.textbook-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 61px; padding: 10px 23px; border-top: 1px solid var(--rule); color: var(--muted); font-size: 11px; }
+.textbook-actions { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
+.textbook-actions button,.textbook-actions a { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 8px 12px; border: 1px solid #cfc8b7; border-radius: 7px; color: #544728; font-size: 11px; text-decoration: none; white-space: nowrap; }
+.textbook-actions button:hover,.textbook-actions a:hover { background: #eee9d9; }
+@media (max-width: 600px) {
+  .textbook-dialog { width: calc(100vw - 16px); height: calc(100svh - 16px); border-radius: 11px; }
+  .textbook-header { padding: 13px 15px 10px; }
+  .textbook-header h2 { font-size: 17px; }
+  .textbook-header .icon-button { width: 44px; height: 44px; }
+  .textbook-stage { padding: 9px; }
+  .textbook-stage img { max-height: calc(100svh - 170px); }
+  .textbook-footer { padding: 8px 12px; }
+  .textbook-footer>span { display: none; }
+  .textbook-actions { width: 100%; justify-content: space-between; }
+  .textbook-actions button,.textbook-actions a { min-height: 44px; font-size: 11px; }
+}

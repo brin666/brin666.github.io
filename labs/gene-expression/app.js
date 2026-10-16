@@ -4,6 +4,7 @@ import { OBJECT_LESSONS } from './object-lessons.js';
 import { createObjectLesson, createKnowledgeHints, bookForObject } from './object-lesson.js';
 import { createEntranceUI } from './entrance-ui.js';
 import { createWhiteboard } from './whiteboard.js';
+import { createTextbookDialog } from './textbook-dialog.js';
 
 const $ = (id) => document.getElementById(id);
 const NAMES = ['认识 DNA', '转录', '出核', '翻译', '序列对照'];
@@ -18,13 +19,14 @@ let inspectorTrigger = null;
 let whiteboard = null;
 const entrance = { eligible: document.documentElement.dataset.geneEntrance === 'waiting' && !introOff && !sampleEntry, phase: document.documentElement.dataset.geneEntrance === 'waiting' ? 'waiting' : 'idle', active: false, time: 0, elapsed: 0, lastStamp: 0, paused: false, atEndRendered: false, pendingSkip: false, autoSkipped: false, prepared: false, reason: null, error: null };
 const entranceUI = createEntranceUI({ onSkip: skipEntrance });
+const textbookDialog = createTextbookDialog({ onOpen: () => { pause(); render(); } });
 if (entrance.eligible) {
   entranceUI.showLoading();
   window.dispatchEvent(new Event('gene-expression-entrance-ready'));
 }
 const objectLesson = createObjectLesson({
   getReducedMotion: () => store.reducedMotion,
-  onEnter() { pendingSeek++; clearChapterLoading(); interruptEntrance('object-lesson'); scene?.cancelDeferredWarmup?.(); pause(); cancelAnimationFrame(clockFrame); clockFrame=0; if($('sources').open)$('sources').close(); knowledgeHints.hide(); closeObjectMenu(); },
+  onEnter() { pendingSeek++; clearChapterLoading(); interruptEntrance('object-lesson'); scene?.cancelDeferredWarmup?.(); pause(); cancelAnimationFrame(clockFrame); clockFrame=0; if($('sources').open)$('sources').close(); textbookDialog.close(); knowledgeHints.hide(); closeObjectMenu(); },
   onReturn() { render(); requestSceneFrame(); },
 });
 const knowledgeHints = createKnowledgeHints({ getChapter: () => snapshot.chapter.id, isHidden: () => objectLesson.isActive() });
@@ -320,9 +322,10 @@ function render() {
   $('observation').textContent = HINTS[chapterId];
   $('translation-site-note').hidden = chapterId !== 3;
   const book=bookForObject(['template','polymerase','pore','ribosome','peptide'][chapterId],{chapter:chapterId});
-  $('chapter-book').textContent=`教材 P${book.page} · ${chapterId===2?'正文':chapterId===3||chapterId===4?'图4-7':'图4-4'} ↗`;
+  $('chapter-book').textContent=`教材 P${book.page} · ${chapterId===2?'正文':chapterId===3||chapterId===4?'图4-7':'图4-4'}`;
   $('chapter-book').href=book.url;
-  $('chapter-book').setAttribute('aria-label',`2019版人教生物必修2，${book.label}，打开教材扫描页`);
+  $('chapter-book').dataset.bookLabel=book.label;
+  $('chapter-book').setAttribute('aria-label',`2019版人教生物必修2，${book.label}，在窗口查看教材扫描页`);
   $('progress-label').textContent = `全程进度 · ${NAMES[chapterId]}`;
   chapterButtons.forEach((button) => {
     if (Number(button.dataset.chapter) === chapterId) button.setAttribute('aria-current', 'step'); else button.removeAttribute('aria-current');
@@ -731,7 +734,7 @@ document.addEventListener('keydown', (event) => {
     return;
   }
   if (objectLesson.isActive()) return;
-  if ($('sources').open) return;
+  if ($('sources').open || textbookDialog.isOpen()) return;
   if (event.key === 'Escape') {
     if (!objectMenu.hidden) { closeObjectMenu(); $('objects-toggle').focus({preventScroll:true}); return; }
     if (store.panelOpen) { event.preventDefault(); setPanelOpen(false, { returnFocus: true }); return; }

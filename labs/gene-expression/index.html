@@ -24,6 +24,7 @@
   <link rel="stylesheet" href="./exhibit-ui.css?v=20261014-mobile">
   <link rel="stylesheet" href="./entrance.css">
   <link rel="stylesheet" href="./whiteboard.css">
+  <link rel="stylesheet" href="./textbook-dialog.css">
   <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
   <script>
     (() => {
@@ -42,7 +43,7 @@
       addEventListener('gene-expression-entrance-ready', () => clearTimeout(watchdog), { once: true });
     })();
   </script>
-  <script type="module" src="./app.js?v=20261014-mobile"></script>
+  <script type="module" src="./app.js?v=20261016-textbook"></script>
 </head>
 <body>
   <section id="entrance-ui" data-phase="idle" aria-label="基因表达开场" aria-live="polite">
@@ -60,7 +61,7 @@
 
     <div id="lab-main" class="lab-main" data-panel-open="false">
       <section class="stage" aria-labelledby="stage-title">
-        <div class="stage-heading"><div><h2 id="stage-title">DNA 双链</h2></div><div class="stage-meta"><a id="chapter-book" class="chapter-book" target="_blank" rel="noopener noreferrer">教材定位 ↗</a></div></div>
+        <div class="stage-heading"><div><h2 id="stage-title">DNA 双链</h2></div><div class="stage-meta"><a id="chapter-book" class="chapter-book" target="_blank" rel="noopener noreferrer">查看教材</a></div></div>
         <div id="scene" class="scene" aria-label="基因表达三维教学场景"><div id="scene-loading" class="scene-loading">正在建立序列模型…</div></div>
         <button id="play" class="play-button stage-play" type="button" aria-label="开始演示" aria-pressed="false"><span id="play-icon" aria-hidden="true">▶</span><span id="play-text">开始演示</span></button>
         <div class="stage-control-dock">
@@ -117,6 +118,22 @@
   </section>
   <div id="knowledge-tip" class="knowledge-tip" role="tooltip" hidden><strong id="knowledge-name"></strong><span id="knowledge-page"></span><small id="knowledge-action"></small></div>
 
+  <dialog id="textbook-dialog" class="textbook-dialog" aria-labelledby="textbook-title" aria-describedby="textbook-description">
+    <div class="textbook-window">
+      <header class="textbook-header">
+        <div><span class="eyebrow">生物学 · 必修2</span><h2 id="textbook-title">教材扫描页</h2><p id="textbook-description">2019 版人教教材</p></div>
+        <button id="textbook-close" class="icon-button" type="button" aria-label="关闭教材窗口">×</button>
+      </header>
+      <div id="textbook-stage" class="textbook-stage">
+        <p id="textbook-status" class="textbook-status" role="status" aria-live="polite">正在加载教材扫描图…</p>
+        <img id="textbook-image" alt="" referrerpolicy="no-referrer" hidden>
+      </div>
+      <footer class="textbook-footer">
+        <span>教材扫描图来自外部网站</span>
+        <div class="textbook-actions"><button id="textbook-zoom" type="button" aria-pressed="false" hidden>放大原图</button><a id="textbook-original" target="_blank" rel="noopener noreferrer">在新标签打开原图 ↗</a></div>
+      </footer>
+    </div>
+  </dialog>
   <dialog id="sources" class="source-dialog" aria-labelledby="source-title"><div class="dialog-header"><div><span class="eyebrow">ABOUT THE MODEL</span><h2 id="source-title">资料来源与模型说明</h2></div><button id="sources-close" class="icon-button" aria-label="关闭模型说明">×</button></div><div class="source-content"><p>本页演示典型动物细胞环境中，一个核基因的蛋白质编码信息如何表达。基因表达也可以产生功能性 RNA，并非所有 RNA 都会被翻译。</p><h3>这是一段人工教学序列</h3><p>展示窗口共 30 个核苷酸，前后各含 6 个非翻译区核苷酸。读取从位置 7 的 AUG 开始，到位置 22–24 的 UAA 终止，得到 5 个氨基酸残基。它不是已知天然基因，也不代表真实基因的典型长度。上下游调控与转录终止背景不在这个窗口中；AUG 和 UAA 是本例的翻译信号，不能作为转录起止信号。</p><h3>空间与时间经过教学化调整</h3><p>RNA 聚合酶外形参考 <a href="https://www.rcsb.org/structure/1Y1W" target="_blank" rel="noopener noreferrer">PDB 1Y1W（酵母 RNA 聚合酶 II 延伸复合物）</a> 的实验坐标，保留十二亚基并生成简化曲面；用于真核转录教学，不是本页人工序列的实验复合物。DNA、RNA、核糖体和多肽为教学示意，非原子级结构；颜色、光泽、透视、相对大小、运动路径与速度均为教学表现。为使配对与转移清晰可见，分子之间的尺度比例与时间均有所调整。三维中的字母及下方序列共同标记信息位置，追踪不意味着 DNA 碱基本身变成氨基酸。</p><h3>RNA 加工与起始过程有所简化</h3><p>本页聚焦转录与翻译，RNA 加工的细节已简化。典型真核前体 mRNA 的加工可涉及加帽、剪接及 3′端加工等，部分加工可以与转录同时发生。章节顺序用于教学组织，不表示所有加工都严格等到转录结束才开始。</p><p>本例不含内含子，因此不播放剪接动画；编码链与 RNA 在此窗口内同向对照时，主要字母差别为 T 与 U。这个关系不能无条件推广到所有完整真核基因与成熟 mRNA。帽和 poly(A) 尾未纳入 30 个核苷酸的计数，poly(A) 尾也不是从本例 DNA 模板逐个转录来的。</p><p>翻译从 5′端附近识别起始位置的过程为示意，起始因子等细节省略。采用标准遗传密码与理想互补反密码子，不展开特殊遗传密码与摆动配对，也不表示每个密码子必然对应一种独立 tRNA。真实蛋白质形成还涉及折叠，部分需要进一步加工；本页结束于示例多肽的释放。</p><h3>概念与规则参考</h3><ul><li><a href="https://www.genome.gov/genetics-glossary/Transcription" target="_blank" rel="noopener noreferrer">NHGRI · 转录概念</a></li><li><a href="https://www.genome.gov/genetics-glossary/Translation" target="_blank" rel="noopener noreferrer">NHGRI · 翻译概念</a></li><li><a href="https://www.genome.gov/genetics-glossary/Transfer-RNA-tRNA" target="_blank" rel="noopener noreferrer">NHGRI · tRNA</a></li><li><a href="https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi#SG1" target="_blank" rel="noopener noreferrer">NCBI · 标准遗传密码（表中 T 在 RNA 中对应 U）</a></li><li><a href="https://openstax.org/books/biology-2e/pages/15-3-eukaryotic-transcription" target="_blank" rel="noopener noreferrer">OpenStax Biology 2e · 真核转录</a></li><li><a href="https://openstax.org/books/biology-2e/pages/15-4-rna-processing-in-eukaryotes" target="_blank" rel="noopener noreferrer">OpenStax Biology 2e · RNA 加工</a></li><li><a href="https://openstax.org/books/biology-2e/pages/15-5-ribosomes-and-protein-synthesis" target="_blank" rel="noopener noreferrer">OpenStax Biology 2e · 核糖体与蛋白质合成</a></li></ul><h3>原创内容与软件许可</h3><p>模型曲面、备用 SVG、教学文案和界面由本项目制作；聚合酶的结构坐标来源为上述 RCSB PDB 条目，核糖体曲面与残基外形为原创教学示意。交互需求参考 <a href="https://wedulab.com/labs/cell?lang=zh-CN#1" target="_blank" rel="noopener noreferrer">WeduLab</a> 的空间探索方向，实际观察结果见本地验收记录，没有复制其代码、模型和文案。</p><p>本地随页面提供 Three.js 0.160.0 与其 OrbitControls，遵循 <a href="./vendor/THREE-LICENSE.txt" target="_blank" rel="noopener noreferrer">MIT 许可</a>。所有教学计算在浏览器本地完成，无付费 API、登录或运行时大模型。</p></div></dialog>
 </body>
 </html>

@@ -90,9 +90,10 @@ export function createObjectLesson({onEnter,onReturn,getReducedMotion}) {
     $('object-previous').disabled=step===0;
     $('object-next').innerHTML=step===2?'返回整体过程 <span aria-hidden="true">↗</span>':'下一步 <span aria-hidden="true">→</span>';
     const book=bookForObject(activeType,{step});
-    $('object-book').textContent=`${book.label} ↗`;
+    $('object-book').textContent=book.label;
     $('object-book').href=book.url;
-    $('object-book').setAttribute('aria-label',`2019版人教生物必修2，${book.label}，打开教材扫描页`);
+    $('object-book').dataset.bookLabel=book.label;
+    $('object-book').setAttribute('aria-label',`2019版人教生物必修2，${book.label}，在窗口查看教材扫描页`);
     scene?.setStep(step);perspective(supportsPerspective(activeType) && step>0);
     if(updateRoute)history.replaceState(history.state,'',`#object=${activeType}&step=${step+1}`);
   }
@@ -166,7 +167,7 @@ export function createObjectLesson({onEnter,onReturn,getReducedMotion}) {
   $('object-perspective').addEventListener('click',()=>perspective($('object-perspective').getAttribute('aria-pressed')!=='true'));
   addEventListener('popstate',route);addEventListener('hashchange',route);
   document.addEventListener('keydown',event=>{
-    if(activeType && event.key==='Escape'){event.preventDefault();back();}
+    if(activeType && event.key==='Escape' && !$('textbook-dialog').open){event.preventDefault();back();}
   });
   document.addEventListener('visibilitychange',()=>{scene?.setMotionSuspended?.(document.hidden);if(document.hidden){cancelAnimationFrame(frame);frame=0;}else requestFrame();});
   addEventListener('pagehide',()=>close({focus:false}),{once:true});
