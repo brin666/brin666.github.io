@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "fps": 30.0,
+  "frameDuration": 0.03333333333333333,
+  "frameCount": 432,
+  "initialState": "depart",
+  "states": [
+    {
+      "id": "depart",
+      "frame": 0,
+      "hold": 0.0
+    },
+    {
+      "id": "arrive",
+      "frame": 431,
+      "hold": 14.366666666666667
+    }
+  ],
+  "segments": [
+    {
+      "id": "depart->arrive",
+      "from": "depart",
+      "to": "arrive",
+      "sourceFrames": {
+        "start": 0,
+        "hold": 431,
+        "endExclusive": 432
+      },
+      "frames": {
+        "start": 0,
+        "hold": 431,
+        "endExclusive": 432
+      },
+      "start": 0.0,
+      "hold": 14.366666666666667,
+      "endExclusive": 14.4,
+      "curve": {
+        "type": "constant",
+        "rate": 1.0
+      }
+    }
+  ]
+}

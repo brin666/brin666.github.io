@@ -1,0 +1,15 @@
+{
+  "project": "IntoFrame",
+  "source": "Existing IntoFrame-demo.mp4 PhotoReveal at 38.4-43.6s",
+  "modifications": "Short silent film excerpt at 2x speed; crop and downscale only. Original photo, generated sky, cinematic bars and foreground are unchanged.",
+  "photograph": {
+    "title": "BigBenLondon.jpg",
+    "author": "Massimo Catarinella",
+    "url": "https://commons.wikimedia.org/wiki/File:BigBenLondon.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+  },
+  "details": "/demos/intoframe/#credits",
+  "mediaLicense": "CC BY-SA 4.0",
+  "mediaLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+}
