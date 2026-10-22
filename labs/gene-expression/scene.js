@@ -781,6 +781,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
   let followReading = true;
   let viewMode = 'overview';
   const cameraModes = { dna:'overview', transcription:'reaction', export:'reaction', translation:'reaction', comparison:'overview' };
+  const translationTrackCenterX = (7 + 2 * 3 - 14.5) * .35;
   let presentationZoom = 1, manualCameraBlend = null;
   let polymeraseVisualSource = classic ? 'classic' : 'fallback-loading';
   let polymeraseAssetError = null, polymeraseLoadMs = null;
@@ -962,10 +963,10 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     rnaGroup.visible = shownRna > 0;
     rnaGroup.position.set(0, 0, 0); rnaGroup.scale.setScalar(1);
     const time=data.time;
-    const passage = refinedModels ? smooth((time-34)/1.6)*(1-smooth((time-38)/1.5)) : key==='export'?1:0;
+    const passage = refinedModels ? smooth((time-34)/1.6)*(1-smooth((time-38)/1)) : key==='export'?1:0;
     let from=null,to=null,fromTime=time,blend=0;
     if(refinedModels && time>=34 && time<35.2) {from='transcription';to='export';fromTime=34;blend=smooth((time-34)/1.2);}
-    else if(refinedModels && time>=38 && time<39.5) {from='export';to='translation';fromTime=38;blend=smooth((time-38)/1.5);}
+    else if(refinedModels && time>=38 && time<39) {from='export';to='translation';fromTime=38;blend=smooth((time-38)/1);}
     else if(refinedModels && time>=61.5 && time<62.8) {from='translation';to='comparison';fromTime=Math.min(time,61.999999);blend=smooth((time-61.5)/1.3);}
     if(from) {
       fillRnaPose(from,fromTime,rnaPoseA,rnaDirsA);fillRnaPose(to,time,rnaPoseB,rnaDirsB);
@@ -988,7 +989,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
       const correction=Math.min(0,envelopePositionX(time)-.82-rightmost);
       for(const point of rnaPoints)point.x+=correction;
     }
-    if(refinedModels && time>=38 && time<39.5) {
+    if(refinedModels && time>=38 && time<39) {
       // Reorient for translation only in the cytoplasm; the departing envelope
       // must never sweep through the same strand a second time.
       const leftmost=Math.min(...rnaPoints.map(point=>point.x));
@@ -1425,7 +1426,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
       onStatus({ renderer: 'webgl', chapter: key, basePairs: 30, rnaCount: shownRna, peptideCount: snapshot.peptideCount || 0 });
     }
     if(refinedModels && followReading)applyPresentationCamera();
-    else if (key === 'translation' && (width < 600 || viewMode === 'reaction') && followReading) followCurrentCodon();
+    else if (key === 'translation' && (width < 600 || viewMode === 'reaction') && followReading) frameTranslationTrack();
     else if (key === 'transcription' && viewMode === 'reaction' && followReading) followReaction();
     if(entranceActive)applyEntranceCamera();
     // The scene is still being scaled into the stage during the handoff. DOM
@@ -1575,10 +1576,11 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     }
   }
   function invalidate() { if (!disposed && !document.hidden) onInvalidate(); }
-  function viewDistance(key=currentKey, mode=viewMode) {
+  function viewDistance(key=currentKey, mode=viewMode, time=snapshot?.time ?? 0) {
     const mobile = entranceActive ? entranceMobile : width < 600;
     const reaction = mode === 'reaction' && ['transcription', 'translation',...(refinedModels?['export']:[])].includes(key);
-    const halfViewWidth = reaction ? (mobile ? 2.35 : 3.45) : mobile ? key === 'dna' && refinedModels && !options.expanded ? 5.7 : 5.8 : 6.35;
+    const translationWidth = refinedModels ? mix(mobile ? 2.35 : 3.45,4.6,smooth((time-38)/1)) : 4.6;
+    const halfViewWidth = reaction ? key === 'translation' ? translationWidth : mobile ? 2.35 : 3.45 : mobile ? key === 'dna' && refinedModels && !options.expanded ? 5.7 : 5.8 : 6.35;
     let distance = halfViewWidth / (Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect);
     if (reaction) distance = Math.max(distance, (key === 'translation' ? 2.15 : 1.9) / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)));
     if (key === 'export') distance = reaction ? Math.max(distance,8.6/Math.min(1,camera.aspect)) : Math.max(distance,12.4);
@@ -1587,7 +1589,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
   const cameraWindows=[
     {from:'dna',to:'transcription',start:3,end:4.6},
     {from:'transcription',to:'export',start:33.65,end:36.4},
-    {from:'export',to:'translation',start:37.4,end:40.3},
+    {from:'export',to:'translation',start:37.4,end:39},
     {from:'translation',to:'comparison',start:61.5,end:62.8},
   ];
   function applyEntranceCamera(){
@@ -1606,17 +1608,11 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
   }
   function stageCameraPose(key,time) {
     const mobile=entranceActive?entranceMobile:width<600,mode=cameraModes[key],reaction=mode==='reaction';
-    const distance=viewDistance(key,mode), target=vec(0,key==='translation'?(mobile?.65:.85):key==='transcription'&&reaction?.05:key==='comparison'?.28:key==='export'?.15:.70,0);
+    const distance=viewDistance(key,mode,time), target=vec(0,key==='translation'?(mobile?.65:.85):key==='transcription'&&reaction?.05:key==='comparison'?.28:key==='export'?.15:.70,0);
     if(key==='transcription'&&reaction)target.x=(transcriptionAdvance(derive(clamp(time,4,33.999999)))-14.5)*.35+.38;
-    if(key==='translation'&&(mobile||reaction)) {
-      const t=clamp(time,38,61.999999),tr=derive(t).translation;
-      if(t<39.5) {
-        const index=tr.mode==='scan'?mix(1.214285714,7,smooth(tr.phase)):7,i=Math.floor(index),fraction=index-i;
-        if(currentKey==='translation')target.x=mix(rnaPoints[i].x,rnaPoints[i+1].x,fraction)+.25;
-        else {fillRnaPose('export',38,rnaPoseA,rnaDirsA);target.x=mix(rnaPoseA[i].x,rnaPoseA[i+1].x,fraction)+.25;}
-      } else target.x=(7+(tr.ribosomeCodon??4)*3-14.5)*.35+.25;
-      const releaseFocus=smooth((time-59.3)/1.0);
-      target.y+=.80*releaseFocus;
+    if(key==='translation') {
+      target.x=translationTrackCenterX;
+      if(mobile||reaction)target.y+=.80*smooth((time-59.3)/1.0);
     }
     if(key==='export'&&reaction) {
       target.set(envelopePositionX(time)+EXPORT_FRAME.x,EXPORT_FRAME.y,EXPORT_FRAME.z);
@@ -1626,12 +1622,12 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
         target.lerp(middle,departure);
       }
     }
-    if(key==='translation' && currentKey==='translation' && (mobile||reaction) && time<61.5) {
-      // The ribosome also turns with the RNA during arrival. Follow its actual
-      // world-space reading region in all axes, not an unrelated x coordinate.
+    if(key==='translation' && currentKey==='translation' && (mobile||reaction) && time<39) {
+      // Follow the ribosome through arrival, then hand off to the fixed mRNA
+      // reference so its codons stay put while the ribosome moves along them.
       ribosome.updateWorldMatrix(true,false);
-      target.copy(ribosome.localToWorld(vec(.12,.65,.12)));
-      target.y+=.80*smooth((time-59.3)/1.0);
+      const arrivalTarget=ribosome.localToWorld(vec(.12,.65,.12));
+      target.copy(arrivalTarget.lerp(target,smooth((time-38)/1)));
     }
     const offset=key==='export'&&reaction?vec(.68,.14,.73).normalize().multiplyScalar(distance):vec(reaction?distance*.26:0,distance*(reaction?.22:mobile?.16:.20),distance);
     return {position:target.clone().add(offset),target,distance};
@@ -1647,7 +1643,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     } else pose=stageCameraPose(currentKey,time);
     // Follow the carried strand during transitions, then hand focus to the pore
     // and the reading site. Camera orientation and distance remain continuous.
-    if(time>=33.65 && time<40.3) {
+    if(time>=33.65 && time<39) {
       const middle=vec(0,0,0);
       for(const point of rnaPoints)middle.addScaledVector(point,1/30);
       middle.y+=.12;
@@ -1663,13 +1659,13 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
       } else if(time<38) {
         target.set(EXPORT_FRAME.x,EXPORT_FRAME.y,EXPORT_FRAME.z).lerp(middle,smooth((time-37.05)/.85));
       } else {
-        target.copy(middle).lerp(stageCameraPose('translation',time).target,smooth((time-38)/1.5));
+        target.copy(middle).lerp(stageCameraPose('translation',time).target,smooth((time-38)/1));
       }
       const direction=pose.position.clone().sub(pose.target).normalize();
       let distance=pose.position.distanceTo(pose.target);
       // Broad, fixed framing allowance during the RNA turn; no old 15.5-unit
       // zoom-out that left both the pore and RNA small and away from the center.
-      const turn=smooth((time-33.65)/.7)*(1-smooth((time-39.5)/.8));
+      const turn=smooth((time-33.65)/.7)*(1-smooth((time-38)/1));
       distance=mix(distance,Math.max(distance,9.2/Math.min(1,camera.aspect)),turn);
       pose={target,position:target.clone().addScaledVector(direction,distance),distance};
     }
@@ -1697,7 +1693,7 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     if(currentKey==='export' && reaction) camera.position.copy(vec(.68,.14,.73).normalize().multiplyScalar(baseDistance)).add(controls.target);
     else camera.position.set(reaction ? baseDistance * 0.26 : 0, targetY + baseDistance * tilt, baseDistance);
     followReading = true;
-    if (currentKey === 'translation' && (mobile || reaction)) followCurrentCodon();
+    if (currentKey === 'translation' && (mobile || reaction)) frameTranslationTrack();
     if (currentKey === 'transcription' && reaction) followReaction();
     invalidate();
   }
@@ -1714,9 +1710,9 @@ export function createScene({ container, onSelect = () => {}, onHover = () => {}
     controls.target.x = polymerase.position.x + .38;
     camera.position.copy(controls.target).add(offset);
   }
-  function followCurrentCodon() {
+  function frameTranslationTrack() {
     const offset = camera.position.clone().sub(controls.target);
-    controls.target.x = ribosome.position.x + 0.25;
+    controls.target.x = translationTrackCenterX;
     camera.position.copy(controls.target).add(offset);
   }
   function zoom(delta) {
