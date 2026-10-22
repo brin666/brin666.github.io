@@ -1,0 +1,1458 @@
+{
+  "created": "2026-10-22",
+  "kind": "Original AI-generated educational specimen illustrations",
+  "scope": "20 common Fe/Cu/Ag/Mn identities plus one aqueous sample",
+  "identityCount": 20,
+  "sampleCount": 21,
+  "imagesAreLaboratoryPhotographs": false,
+  "assets": [
+    {
+      "substanceId": "iron",
+      "profileId": null,
+      "file": "iron.webp",
+      "caption": {
+        "zh": "铁 · 单质固体",
+        "en": "Iron · elemental solid"
+      },
+      "alt": {
+        "zh": "银灰色的铁单质块",
+        "en": "Silvery-grey iron metal pieces"
+      },
+      "rawSha256": "1248be12137151cbe5bcfbe830295f81e707dfa70bc0818a9532a2ae48cd2259",
+      "webp": {
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "cornerRgba": {
+          "bottom_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "bottom_right": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_right": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dimensions": [
+          768,
+          641
+        ],
+        "maxLongSide": 768,
+        "path": "public/stickers/common-substances-20261022/iron.webp",
+        "quality": 86,
+        "sha256": "5fdf0a7592e80d3f7d287b4cb5d04787c45311587c55d616d2162a2de9fdfd77",
+        "sizeBytes": 129954
+      },
+      "processing": {
+        "edgeRatio": 0.008,
+        "helperEdgeRatio": 0.008,
+        "ink": "#34312D",
+        "keylineRatio": 0.0,
+        "keylineReason": "keyline not needed",
+        "outlineAlphaCutoff": 16,
+        "paddingRatio": 0.025,
+        "paper": "#F7F3EA",
+        "sampleBrightPixelShare": 0.11907,
+        "sampleMeanLuminance": 131.202,
+        "style": "defined"
+      }
+    },
+    {
+      "substanceId": "iron-ii-iii-oxide",
+      "profileId": null,
+      "file": "iron-ii-iii-oxide.webp",
+      "caption": {
+        "zh": "四氧化三铁 · 黑色粉末",
+        "en": "Iron(II,III) oxide · black powder"
+      },
+      "alt": {
+        "zh": "黑色四氧化三铁粉末",
+        "en": "Black iron(II,III) oxide powder"
+      },
+      "rawSha256": "0401f3c4a8e73b7b37057d153e37bdd8b28897b2d2bb7e35b19d57deea17d909",
+      "webp": {
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "cornerRgba": {
+          "bottom_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "bottom_right": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_right": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dimensions": [
+          768,
+          503
+        ],
+        "maxLongSide": 768,
+        "path": "public/stickers/common-substances-20261022/iron-ii-iii-oxide.webp",
+        "quality": 86,
+        "sha256": "17c1510665337dc279358f173f905156f9bab1118b17b8f916f95325dc5b456c",
+        "sizeBytes": 117546
+      },
+      "processing": {
+        "edgeMode": "largest connected powder component only",
+        "edgeRatio": 0.002,
+        "helperEdgeRatio": 0.0,
+        "ink": "#34312D",
+        "keylineRatio": 0.0,
+        "keylineReason": "powder grains use one aggregate edge",
+        "outlineAlphaCutoff": 16,
+        "outlineComponentCoverage": 0.9655,
+        "outlineComponentPixels": 526167,
+        "outlineVisibleMaskPixels": 544966,
+        "paddingRatio": 0.025,
+        "paper": "#F7F3EA",
+        "sampleBrightPixelShare": 0.00061,
+        "sampleMeanLuminance": 43.236,
+        "style": "defined",
+        "supportSmoothRadiusPx": 5
+      }
+    },
+    {
+      "substanceId": "copper-ii-sulfate",
+      "profileId": null,
+      "file": "copper-ii-sulfate.webp",
+      "caption": {
+        "zh": "无水硫酸铜 · 白色固体",
+        "en": "Anhydrous copper(II) sulfate · white solid"
+      },
+      "alt": {
+        "zh": "白色无水硫酸铜固体",
+        "en": "White anhydrous copper(II) sulfate"
+      },
+      "rawSha256": "9a9dc0aa5fae4b79505b2aa2c510cc02b2c7373d9087638cc5e469b474b350c9",
+      "webp": {
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "cornerRgba": {
+          "bottom_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "bottom_right": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_right": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dimensions": [
+          768,
+          560
+        ],
+        "maxLongSide": 768,
+        "path": "public/stickers/common-substances-20261022/copper-ii-sulfate.webp",
+        "quality": 86,
+        "sha256": "23e424a94dc1e7f1736b7a54910fef58547503275def53481daed1a458c697fa",
+        "sizeBytes": 67590
+      },
+      "processing": {
+        "edgeMode": "largest connected powder component only",
+        "edgeRatio": 0.002,
+        "helperEdgeRatio": 0.0,
+        "ink": "#34312D",
+        "keylineRatio": 0.0,
+        "keylineReason": "powder grains use one aggregate edge",
+        "outlineAlphaCutoff": 16,
+        "outlineComponentCoverage": 0.97413,
+        "outlineComponentPixels": 585595,
+        "outlineVisibleMaskPixels": 601147,
+        "paddingRatio": 0.025,
+        "paper": "#F7F3EA",
+        "sampleBrightPixelShare": 0.63826,
+        "sampleMeanLuminance": 212.653,
+        "style": "defined",
+        "supportSmoothRadiusPx": 5
+      }
+    },
+    {
+      "substanceId": "copper-sulfate-pentahydrate",
+      "profileId": null,
+      "file": "copper-sulfate-pentahydrate.webp",
+      "caption": {
+        "zh": "五水合硫酸铜 · 蓝色晶体",
+        "en": "Copper(II) sulfate pentahydrate · blue crystals"
+      },
+      "alt": {
+        "zh": "蓝色五水合硫酸铜晶体",
+        "en": "Blue copper(II) sulfate pentahydrate crystals"
+      },
+      "rawSha256": "8335a5bd36d2b7a04f1e0586cb7b9bb25198df3466cbd795ced2b967be098937",
+      "webp": {
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "cornerRgba": {
+          "bottom_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "bottom_right": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_right": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dimensions": [
+          743,
+          768
+        ],
+        "maxLongSide": 768,
+        "path": "public/stickers/common-substances-20261022/copper-sulfate-pentahydrate.webp",
+        "quality": 86,
+        "sha256": "bc1838ea1900df4a26cb2ad6dda2e0ba8284be728910d339aa2a35d1bd6fd5b5",
+        "sizeBytes": 161642
+      },
+      "processing": {
+        "edgeRatio": 0.008,
+        "helperEdgeRatio": 0.008,
+        "ink": "#34312D",
+        "keylineRatio": 0.0,
+        "keylineReason": "keyline not needed",
+        "outlineAlphaCutoff": 16,
+        "paddingRatio": 0.025,
+        "paper": "#F7F3EA",
+        "sampleBrightPixelShare": 0.04098,
+        "sampleMeanLuminance": 110.216,
+        "style": "defined"
+      }
+    },
+    {
+      "substanceId": "copper-ii-sulfate",
+      "profileId": "aqueous-0.2m",
+      "file": "copper-ii-sulfate-aqueous.webp",
+      "caption": {
+        "zh": "硫酸铜水溶液 · 0.2 mol/L 示意",
+        "en": "Copper(II) sulfate solution · 0.2 mol/L illustration"
+      },
+      "alt": {
+        "zh": "烧杯中的浅蓝色硫酸铜水溶液",
+        "en": "Light-blue copper(II) sulfate aqueous solution in a beaker"
+      },
+      "rawSha256": "f0dfc379870a46517067221c5d67e0acbbada8a05ba06bce2b640e2e5ce3d412",
+      "webp": {
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "cornerRgba": {
+          "bottom_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "bottom_right": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_right": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dimensions": [
+          613,
+          768
+        ],
+        "maxLongSide": 768,
+        "path": "public/stickers/common-substances-20261022/copper-ii-sulfate-aqueous.webp",
+        "quality": 86,
+        "sha256": "0c1acead89b51addd3f45e0612dc61f0ce570b22c05bd18993d760cd0e53be02",
+        "sizeBytes": 49704
+      },
+      "processing": {
+        "edgeRatio": 0.008,
+        "helperEdgeRatio": 0.008,
+        "ink": "#34312D",
+        "keylineRatio": 0.0,
+        "keylineReason": "keyline not needed",
+        "outlineAlphaCutoff": 16,
+        "paddingRatio": 0.025,
+        "paper": "#F7F3EA",
+        "sampleBrightPixelShare": 0.39571,
+        "sampleMeanLuminance": 192.562,
+        "style": "defined"
+      }
+    },
+    {
+      "substanceId": "iron-iii-hydroxide",
+      "profileId": null,
+      "file": "iron-iii-hydroxide.webp",
+      "caption": {
+        "zh": "氢氧化铁 · 棕褐色沉淀",
+        "en": "Iron(III) hydroxide · brown precipitate"
+      },
+      "alt": {
+        "zh": "液体下方的棕褐色氢氧化铁沉淀",
+        "en": "Brown iron(III) hydroxide precipitate beneath liquid"
+      },
+      "rawSha256": "3320e8f4748f181b4302370e179bdb033bde875d3cb58318e87f8d07cf36c5f9",
+      "webp": {
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "cornerRgba": {
+          "bottom_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "bottom_right": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_right": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dimensions": [
+          236,
+          768
+        ],
+        "maxLongSide": 768,
+        "path": "public/stickers/common-substances-20261022/iron-iii-hydroxide.webp",
+        "quality": 86,
+        "sha256": "e165b6c92fc409b70d236c0a6fadce8dec900ef85bb6961534c8e4025cd42e05",
+        "sizeBytes": 33486
+      },
+      "processing": {
+        "edgeRatio": 0.008,
+        "helperEdgeRatio": 0.008,
+        "ink": "#34312D",
+        "keylineRatio": 0.0,
+        "keylineReason": "keyline not needed",
+        "outlineAlphaCutoff": 16,
+        "paddingRatio": 0.025,
+        "paper": "#F7F3EA",
+        "sampleBrightPixelShare": 0.39014,
+        "sampleMeanLuminance": 142.439,
+        "style": "defined"
+      }
+    },
+    {
+      "substanceId": "copper",
+      "profileId": null,
+      "file": "copper.webp",
+      "caption": {
+        "zh": "铜 · 单质固体",
+        "en": "Copper · elemental solid"
+      },
+      "alt": {
+        "zh": "红色铜单质块",
+        "en": "Reddish copper metal pieces"
+      },
+      "rawSha256": "44fac1a4e3efe2f23899c7d05c4e82c018367a6611f93d649a11acf0c8cce23c",
+      "webp": {
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "cornerRgba": {
+          "bottom_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "bottom_right": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_right": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dimensions": [
+          768,
+          595
+        ],
+        "maxLongSide": 768,
+        "path": "public/stickers/common-substances-20261022/copper.webp",
+        "quality": 86,
+        "sha256": "0eeb95abc86bf9cfe04ae1f969eebce7b0b4cf8a5e8c9a195258471ad060379f",
+        "sizeBytes": 100260
+      },
+      "processing": {
+        "edgeRatio": 0.008,
+        "helperEdgeRatio": 0.008,
+        "ink": "#34312D",
+        "keylineRatio": 0.0,
+        "keylineReason": "keyline not needed",
+        "outlineAlphaCutoff": 16,
+        "paddingRatio": 0.025,
+        "paper": "#F7F3EA",
+        "sampleBrightPixelShare": 0.05711,
+        "sampleMeanLuminance": 133.662,
+        "style": "defined"
+      }
+    },
+    {
+      "substanceId": "silver",
+      "profileId": null,
+      "file": "silver.webp",
+      "caption": {
+        "zh": "银 · 单质固体",
+        "en": "Silver · elemental solid"
+      },
+      "alt": {
+        "zh": "有光泽的银单质块",
+        "en": "Shiny silver metal pieces"
+      },
+      "rawSha256": "e0a7cb3b6983f025fd644fc067f16e40bd3cedb6170ccc50f1ed7af498438b12",
+      "webp": {
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "cornerRgba": {
+          "bottom_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "bottom_right": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_right": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dimensions": [
+          768,
+          661
+        ],
+        "maxLongSide": 768,
+        "path": "public/stickers/common-substances-20261022/silver.webp",
+        "quality": 86,
+        "sha256": "099f7ba872ac99aa5f3a02fd907b24007e480350a210d4b77d61c406f7c400ba",
+        "sizeBytes": 125196
+      },
+      "processing": {
+        "edgeRatio": 0.008,
+        "helperEdgeRatio": 0.008,
+        "ink": "#34312D",
+        "keylineRatio": 0.0,
+        "keylineReason": "keyline not needed",
+        "outlineAlphaCutoff": 16,
+        "paddingRatio": 0.025,
+        "paper": "#F7F3EA",
+        "sampleBrightPixelShare": 0.28361,
+        "sampleMeanLuminance": 176.581,
+        "style": "defined"
+      }
+    },
+    {
+      "substanceId": "manganese",
+      "profileId": null,
+      "file": "manganese.webp",
+      "caption": {
+        "zh": "锰 · 单质固体",
+        "en": "Manganese · elemental solid"
+      },
+      "alt": {
+        "zh": "灰色的锰单质碎块",
+        "en": "Grey brittle manganese metal fragments"
+      },
+      "rawSha256": "e11173a3938ebe695bf73b0500fe85b24245e8a0314abc9dc34d68b35598708a",
+      "webp": {
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "cornerRgba": {
+          "bottom_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "bottom_right": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_right": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dimensions": [
+          768,
+          743
+        ],
+        "maxLongSide": 768,
+        "path": "public/stickers/common-substances-20261022/manganese.webp",
+        "quality": 86,
+        "sha256": "d444c2930ea0c9943bfe946b62ecf6e51c09ca909203e7a899771d2d058e708c",
+        "sizeBytes": 141930
+      },
+      "processing": {
+        "edgeRatio": 0.008,
+        "helperEdgeRatio": 0.008,
+        "ink": "#34312D",
+        "keylineRatio": 0.0,
+        "keylineReason": "keyline not needed",
+        "outlineAlphaCutoff": 16,
+        "paddingRatio": 0.025,
+        "paper": "#F7F3EA",
+        "sampleBrightPixelShare": 0.04153,
+        "sampleMeanLuminance": 113.221,
+        "style": "defined"
+      }
+    },
+    {
+      "substanceId": "copper-ii-oxide",
+      "profileId": null,
+      "file": "copper-ii-oxide.webp",
+      "caption": {
+        "zh": "氧化铜 · 黑色粉末",
+        "en": "Copper(II) oxide · black powder"
+      },
+      "alt": {
+        "zh": "黑色氧化铜粉末",
+        "en": "Black copper(II) oxide powder"
+      },
+      "rawSha256": "bce53d56b74c4fdf4cd5269368817b8b74dde1d6cc083806b9ffea07ac59b28a",
+      "webp": {
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "cornerRgba": {
+          "bottom_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "bottom_right": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_right": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dimensions": [
+          768,
+          563
+        ],
+        "maxLongSide": 768,
+        "path": "public/stickers/common-substances-20261022/copper-ii-oxide.webp",
+        "quality": 86,
+        "sha256": "21c9620cc6fa000dde824ca04901cb572876b4ac848fb1e708ef66c44b8d7f43",
+        "sizeBytes": 119742
+      },
+      "processing": {
+        "edgeMode": "largest connected powder component only",
+        "edgeRatio": 0.002,
+        "helperEdgeRatio": 0.0,
+        "ink": "#34312D",
+        "keylineRatio": 0.0,
+        "keylineReason": "powder grains use one aggregate edge",
+        "outlineAlphaCutoff": 16,
+        "outlineComponentCoverage": 0.98462,
+        "outlineComponentPixels": 625728,
+        "outlineVisibleMaskPixels": 635503,
+        "paddingRatio": 0.025,
+        "paper": "#F7F3EA",
+        "sampleBrightPixelShare": 0.0,
+        "sampleMeanLuminance": 31.429,
+        "style": "defined",
+        "supportSmoothRadiusPx": 5
+      }
+    },
+    {
+      "substanceId": "manganese-dioxide",
+      "profileId": null,
+      "file": "manganese-dioxide.webp",
+      "caption": {
+        "zh": "二氧化锰 · 黑褐色粉末",
+        "en": "Manganese dioxide · black-brown powder"
+      },
+      "alt": {
+        "zh": "黑褐色二氧化锰粉末",
+        "en": "Black-brown manganese dioxide powder"
+      },
+      "rawSha256": "3f82dd5deaebbbb265dd493bbf50137d204205bd5bd4521da67ff0e29baf7890",
+      "webp": {
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "cornerRgba": {
+          "bottom_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "bottom_right": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_right": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dimensions": [
+          768,
+          592
+        ],
+        "maxLongSide": 768,
+        "path": "public/stickers/common-substances-20261022/manganese-dioxide.webp",
+        "quality": 86,
+        "sha256": "f7af1103a883a285a8dd016611f19bf5cff87ce5509863099068bedbd93937b6",
+        "sizeBytes": 128048
+      },
+      "processing": {
+        "edgeMode": "largest connected powder component only",
+        "edgeRatio": 0.002,
+        "helperEdgeRatio": 0.0,
+        "ink": "#34312D",
+        "keylineRatio": 0.0,
+        "keylineReason": "powder grains use one aggregate edge",
+        "outlineAlphaCutoff": 16,
+        "outlineComponentCoverage": 0.97722,
+        "outlineComponentPixels": 681917,
+        "outlineVisibleMaskPixels": 697810,
+        "paddingRatio": 0.025,
+        "paper": "#F7F3EA",
+        "sampleBrightPixelShare": 0.0,
+        "sampleMeanLuminance": 39.254,
+        "style": "defined",
+        "supportSmoothRadiusPx": 5
+      }
+    },
+    {
+      "substanceId": "potassium-permanganate",
+      "profileId": null,
+      "file": "potassium-permanganate.webp",
+      "caption": {
+        "zh": "高锰酸钾 · 深紫色晶体",
+        "en": "Potassium permanganate · dark-purple crystals"
+      },
+      "alt": {
+        "zh": "深紫色高锰酸钾晶体",
+        "en": "Very dark purple potassium permanganate crystals"
+      },
+      "rawSha256": "aa4cbfd7fff41d901e93da460c1ca5975f78b4a27df6e51b4d1522c067c77145",
+      "webp": {
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "cornerRgba": {
+          "bottom_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "bottom_right": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_right": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dimensions": [
+          768,
+          671
+        ],
+        "maxLongSide": 768,
+        "path": "public/stickers/common-substances-20261022/potassium-permanganate.webp",
+        "quality": 86,
+        "sha256": "893bf4d77248221b80cd40213972f03e369b6b158ca4403589ca66784980a4e1",
+        "sizeBytes": 128550
+      },
+      "processing": {
+        "edgeRatio": 0.008,
+        "helperEdgeRatio": 0.008,
+        "ink": "#34312D",
+        "keylineRatio": 0.0,
+        "keylineReason": "keyline not needed",
+        "outlineAlphaCutoff": 16,
+        "paddingRatio": 0.025,
+        "paper": "#F7F3EA",
+        "sampleBrightPixelShare": 0.00401,
+        "sampleMeanLuminance": 48.5,
+        "style": "defined"
+      }
+    },
+    {
+      "substanceId": "iron-ii-hydroxide",
+      "profileId": null,
+      "file": "iron-ii-hydroxide.webp",
+      "caption": {
+        "zh": "氢氧化亚铁 · 所引示范中的绿色沉淀",
+        "en": "Iron(II) hydroxide · green precipitate in the cited demonstration"
+      },
+      "alt": {
+        "zh": "空气氧化前的绿色氢氧化亚铁沉淀",
+        "en": "Green iron(II) hydroxide precipitate before air oxidation"
+      },
+      "rawSha256": "96412189f717d7ccf1d49248de90f92872180470d84a274d29018d832e333670",
+      "webp": {
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "cornerRgba": {
+          "bottom_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "bottom_right": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_right": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dimensions": [
+          229,
+          768
+        ],
+        "maxLongSide": 768,
+        "path": "public/stickers/common-substances-20261022/iron-ii-hydroxide.webp",
+        "quality": 86,
+        "sha256": "61683c247ee590958e9f7cccc38f85bb3b0c9767246483eb14d90f1cc96fe7e1",
+        "sizeBytes": 26608
+      },
+      "processing": {
+        "edgeRatio": 0.008,
+        "helperEdgeRatio": 0.008,
+        "ink": "#34312D",
+        "keylineRatio": 0.0,
+        "keylineReason": "keyline not needed",
+        "outlineAlphaCutoff": 16,
+        "paddingRatio": 0.025,
+        "paper": "#F7F3EA",
+        "sampleBrightPixelShare": 0.34591,
+        "sampleMeanLuminance": 169.231,
+        "style": "defined"
+      }
+    },
+    {
+      "substanceId": "inorganic-iron-ii-chloride",
+      "profileId": null,
+      "file": "inorganic-iron-ii-chloride.webp",
+      "caption": {
+        "zh": "无水氯化亚铁 · 白至浅绿色晶体",
+        "en": "Anhydrous iron(II) chloride · white to pale-green crystals"
+      },
+      "alt": {
+        "zh": "白至浅绿色的无水氯化亚铁晶体",
+        "en": "White to very pale-green anhydrous iron(II) chloride crystals"
+      },
+      "rawSha256": "c928a56c1f75af0205690fd3388ca5a12082aa56a6d4d9ad658bebf5b4fecf3a",
+      "webp": {
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "cornerRgba": {
+          "bottom_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "bottom_right": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_right": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dimensions": [
+          768,
+          572
+        ],
+        "maxLongSide": 768,
+        "path": "public/stickers/common-substances-20261022/inorganic-iron-ii-chloride.webp",
+        "quality": 86,
+        "sha256": "3b655b0888a2e28cb99b7994cd92f035e340309e44ce0db55bc453c8638a90f1",
+        "sizeBytes": 74598
+      },
+      "processing": {
+        "edgeRatio": 0.008,
+        "helperEdgeRatio": 0.008,
+        "ink": "#34312D",
+        "keylineRatio": 0.0,
+        "keylineReason": "keyline not needed",
+        "outlineAlphaCutoff": 16,
+        "paddingRatio": 0.025,
+        "paper": "#F7F3EA",
+        "sampleBrightPixelShare": 0.53251,
+        "sampleMeanLuminance": 202.719,
+        "style": "defined"
+      }
+    },
+    {
+      "substanceId": "inorganic-iron-iii-chloride",
+      "profileId": null,
+      "file": "inorganic-iron-iii-chloride.webp",
+      "caption": {
+        "zh": "无水氯化铁 · 黑褐色晶体",
+        "en": "Anhydrous iron(III) chloride · black-brown crystals"
+      },
+      "alt": {
+        "zh": "黑褐色的无水氯化铁晶体",
+        "en": "Black-brown anhydrous iron(III) chloride crystals"
+      },
+      "rawSha256": "76ce74c0126e3a6a9e51307659dbf270965472e281d493c240551fa33114f39d",
+      "webp": {
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "cornerRgba": {
+          "bottom_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "bottom_right": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_right": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dimensions": [
+          768,
+          737
+        ],
+        "maxLongSide": 768,
+        "path": "public/stickers/common-substances-20261022/inorganic-iron-iii-chloride.webp",
+        "quality": 86,
+        "sha256": "c5850bdff934706104b15a487d6c845ab04de74865dff8132b8fa4a74cf3b84f",
+        "sizeBytes": 157510
+      },
+      "processing": {
+        "edgeRatio": 0.008,
+        "helperEdgeRatio": 0.008,
+        "ink": "#34312D",
+        "keylineRatio": 0.0,
+        "keylineReason": "keyline not needed",
+        "outlineAlphaCutoff": 16,
+        "paddingRatio": 0.025,
+        "paper": "#F7F3EA",
+        "sampleBrightPixelShare": 0.00942,
+        "sampleMeanLuminance": 46.221,
+        "style": "defined"
+      }
+    },
+    {
+      "substanceId": "iron-sulfate-heptahydrate",
+      "profileId": null,
+      "file": "iron-sulfate-heptahydrate.webp",
+      "caption": {
+        "zh": "七水合硫酸亚铁 · 浅绿蓝色晶体",
+        "en": "Iron(II) sulfate heptahydrate · pale greenish-blue crystals"
+      },
+      "alt": {
+        "zh": "浅绿蓝色的七水合硫酸亚铁晶体",
+        "en": "Pale greenish-blue iron(II) sulfate heptahydrate crystals"
+      },
+      "rawSha256": "ea39df5c38844eeef91672c04642bd6609c4c95aadb206208088d8b0169cca4c",
+      "webp": {
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "cornerRgba": {
+          "bottom_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "bottom_right": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_right": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dimensions": [
+          768,
+          652
+        ],
+        "maxLongSide": 768,
+        "path": "public/stickers/common-substances-20261022/iron-sulfate-heptahydrate.webp",
+        "quality": 86,
+        "sha256": "ed48276c8c74ca718010d0bc7eb462ebfc99e29ab0f7f6531e8d5b06a3a9603e",
+        "sizeBytes": 93622
+      },
+      "processing": {
+        "edgeRatio": 0.008,
+        "helperEdgeRatio": 0.008,
+        "ink": "#34312D",
+        "keylineRatio": 0.0,
+        "keylineReason": "keyline not needed",
+        "outlineAlphaCutoff": 16,
+        "paddingRatio": 0.025,
+        "paper": "#F7F3EA",
+        "sampleBrightPixelShare": 0.29037,
+        "sampleMeanLuminance": 189.23,
+        "style": "defined"
+      }
+    },
+    {
+      "substanceId": "copper-ii-hydroxide",
+      "profileId": null,
+      "file": "copper-ii-hydroxide.webp",
+      "caption": {
+        "zh": "氢氧化铜 · 蓝色沉淀",
+        "en": "Copper(II) hydroxide · blue precipitate"
+      },
+      "alt": {
+        "zh": "液体下方的蓝色氢氧化铜沉淀",
+        "en": "Blue copper(II) hydroxide precipitate beneath liquid"
+      },
+      "rawSha256": "628cb5ea12f8d06fafb3ae49059efd35738578fdc8980d50412d7c90cb0aa747",
+      "webp": {
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "cornerRgba": {
+          "bottom_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "bottom_right": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_right": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dimensions": [
+          237,
+          768
+        ],
+        "maxLongSide": 768,
+        "path": "public/stickers/common-substances-20261022/copper-ii-hydroxide.webp",
+        "quality": 86,
+        "sha256": "9655c8cd28ee4b2f04b979dfde064cdacd2c7041df313b379295f627db6eeade",
+        "sizeBytes": 31116
+      },
+      "processing": {
+        "edgeRatio": 0.008,
+        "helperEdgeRatio": 0.008,
+        "ink": "#34312D",
+        "keylineRatio": 0.0,
+        "keylineReason": "keyline not needed",
+        "outlineAlphaCutoff": 16,
+        "paddingRatio": 0.025,
+        "paper": "#F7F3EA",
+        "sampleBrightPixelShare": 0.41873,
+        "sampleMeanLuminance": 181.298,
+        "style": "defined"
+      }
+    },
+    {
+      "substanceId": "inorganic-copper-ii-chloride-dihydrate",
+      "profileId": null,
+      "file": "inorganic-copper-ii-chloride-dihydrate.webp",
+      "caption": {
+        "zh": "二水合氯化铜 · 蓝绿色固体",
+        "en": "Copper(II) chloride dihydrate · blue-green solid"
+      },
+      "alt": {
+        "zh": "蓝绿色二水合氯化铜晶体",
+        "en": "Blue-green copper(II) chloride dihydrate crystals"
+      },
+      "rawSha256": "b6216d009d8bf5a6d65dd6ec9fab60ab8d48b5c279ba62f5e49f355689287c60",
+      "webp": {
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "cornerRgba": {
+          "bottom_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "bottom_right": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_right": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dimensions": [
+          768,
+          623
+        ],
+        "maxLongSide": 768,
+        "path": "public/stickers/common-substances-20261022/inorganic-copper-ii-chloride-dihydrate.webp",
+        "quality": 86,
+        "sha256": "7e6ef6246f8ceae21d0b1f33c10548e49224c13a01379d3e2f148ae834caaf60",
+        "sizeBytes": 146250
+      },
+      "processing": {
+        "edgeRatio": 0.008,
+        "helperEdgeRatio": 0.008,
+        "ink": "#34312D",
+        "keylineRatio": 0.0,
+        "keylineReason": "keyline not needed",
+        "outlineAlphaCutoff": 16,
+        "paddingRatio": 0.025,
+        "paper": "#F7F3EA",
+        "sampleBrightPixelShare": 0.03132,
+        "sampleMeanLuminance": 121.34,
+        "style": "defined"
+      }
+    },
+    {
+      "substanceId": "silver-nitrate",
+      "profileId": null,
+      "file": "silver-nitrate.webp",
+      "caption": {
+        "zh": "硝酸银 · 无色至白色晶体",
+        "en": "Silver nitrate · colorless to white crystals"
+      },
+      "alt": {
+        "zh": "无色至白色的硝酸银晶体",
+        "en": "Colorless to white silver nitrate crystals"
+      },
+      "rawSha256": "e21dadc46bcabd0cb622af7bce167a539287ae939c78e1d76236b8a957010d8a",
+      "webp": {
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "cornerRgba": {
+          "bottom_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "bottom_right": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_right": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dimensions": [
+          768,
+          562
+        ],
+        "maxLongSide": 768,
+        "path": "public/stickers/common-substances-20261022/silver-nitrate.webp",
+        "quality": 86,
+        "sha256": "fc6d098fd0f99059c70ebda4ac7e9fcdef2c52a9c9117facd0f5005f69893652",
+        "sizeBytes": 82598
+      },
+      "processing": {
+        "edgeRatio": 0.008,
+        "helperEdgeRatio": 0.008,
+        "ink": "#34312D",
+        "keylineRatio": 0.0,
+        "keylineReason": "keyline not needed",
+        "outlineAlphaCutoff": 16,
+        "paddingRatio": 0.025,
+        "paper": "#F7F3EA",
+        "sampleBrightPixelShare": 0.51868,
+        "sampleMeanLuminance": 204.506,
+        "style": "defined"
+      }
+    },
+    {
+      "substanceId": "silver-chloride",
+      "profileId": null,
+      "file": "silver-chloride.webp",
+      "caption": {
+        "zh": "氯化银 · 白色沉淀",
+        "en": "Silver chloride · white precipitate"
+      },
+      "alt": {
+        "zh": "白色凝乳状氯化银沉淀",
+        "en": "White curdy silver chloride precipitate"
+      },
+      "rawSha256": "4494c1a53ee44d49ed0a28c522e3248f88f5291c171b8075dec6222d01dc11a8",
+      "webp": {
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "cornerRgba": {
+          "bottom_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "bottom_right": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_right": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dimensions": [
+          242,
+          768
+        ],
+        "maxLongSide": 768,
+        "path": "public/stickers/common-substances-20261022/silver-chloride.webp",
+        "quality": 86,
+        "sha256": "940685d8efb3bf8ca7bb2346faee9bf4105129cedcaa375b03408f2bcf7c6806",
+        "sizeBytes": 26826
+      },
+      "processing": {
+        "edgeRatio": 0.008,
+        "helperEdgeRatio": 0.008,
+        "ink": "#34312D",
+        "keylineRatio": 0.0,
+        "keylineReason": "keyline not needed",
+        "outlineAlphaCutoff": 16,
+        "paddingRatio": 0.025,
+        "paper": "#F7F3EA",
+        "sampleBrightPixelShare": 0.3867,
+        "sampleMeanLuminance": 190.095,
+        "style": "defined"
+      }
+    },
+    {
+      "substanceId": "silver-bromide",
+      "profileId": null,
+      "file": "silver-bromide.webp",
+      "caption": {
+        "zh": "溴化银 · 淡黄色沉淀",
+        "en": "Silver bromide · pale-yellow precipitate"
+      },
+      "alt": {
+        "zh": "淡黄色溴化银沉淀",
+        "en": "Pale-yellow silver bromide precipitate"
+      },
+      "rawSha256": "2243546418cd223d3e2f42d428d34b7d45168441d109f1044433197ec70763aa",
+      "webp": {
+        "alphaExtrema": [
+          0,
+          255
+        ],
+        "cornerRgba": {
+          "bottom_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "bottom_right": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_left": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "top_right": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "dimensions": [
+          234,
+          768
+        ],
+        "maxLongSide": 768,
+        "path": "public/stickers/common-substances-20261022/silver-bromide.webp",
+        "quality": 86,
+        "sha256": "588612d68aac80642d24366a23aa3555a336defaba0fb3c7cac048c2cad46143",
+        "sizeBytes": 24970
+      },
+      "processing": {
+        "edgeRatio": 0.008,
+        "helperEdgeRatio": 0.008,
+        "ink": "#34312D",
+        "keylineRatio": 0.002,
+        "keylineReason": "pale sample",
+        "outlineAlphaCutoff": 16,
+        "paddingRatio": 0.025,
+        "paper": "#F7F3EA",
+        "sampleBrightPixelShare": 0.5682,
+        "sampleMeanLuminance": 205.453,
+        "style": "defined"
+      }
+    }
+  ]
+}
