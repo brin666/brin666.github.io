@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#171c1e"><meta name="description" content="可调焦、换镜与换液的洋葱细胞质壁分离教学实验台。"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23b6c9b2'/%3E%3Cellipse cx='16' cy='16' rx='7' ry='12' fill='none' stroke='%2334483b' stroke-width='2'/%3E%3Cellipse cx='16' cy='16' rx='4' ry='8' fill='%239b5b89'/%3E%3C/svg%3E"><title>质壁分离 · 显微实验台</title>  <script type="module" crossorigin src="/labs/plasmolysis/assets/index-CWzqdjB0.js"></script>
+  <link rel="stylesheet" crossorigin href="/labs/plasmolysis/assets/index-CdON22Hx.css">
+</head>
+<body>
+<div class="app">
+ <header class="header"><div class="identity"><span class="cell-mark" aria-hidden="true"><i></i></span><h1>质壁分离<span>显微实验台</span></h1></div><div class="header-actions"><span class="demo-tag">教学 Demo</span><button id="about-open" class="quiet">实验说明 <span aria-hidden="true">↗</span></button></div></header>
+ <main class="workspace">
+  <section class="bench" aria-label="三维显微镜实验桌">
+   <div id="instrument" class="instrument"><p class="loading">正在布置实验桌…</p></div>
+   <div class="bench-heading"><div><h2>从一片洋葱表皮开始</h2><p>转动旋钮，让细胞慢慢清晰。</p></div><button id="reset-view" class="round-button" title="恢复观察视角" aria-label="恢复观察视角">⌖</button></div>
+   <div class="specimen-selector"><span class="control-label">玻片标本</span><div class="segmented tissue-group" role="group" aria-label="选择表皮"><button data-tissue="outer" aria-pressed="true"><i class="tissue-dot purple"></i>外表皮</button><button data-tissue="inner" aria-pressed="false"><i class="tissue-dot pale"></i>内表皮</button></div></div>
+   <div class="bench-tip"><span class="tiny-ring"></span>拖动粗、细准焦旋钮 · 点击试剂瓶选液</div>
+   <div class="solution-dock">
+    <div class="dock-top"><span class="control-label">选择溶液</span><span id="selection-caption">蔗糖溶液</span></div>
+    <div class="solutions" role="group" aria-label="选择溶液">
+     <button data-solution="sucrose" aria-pressed="true"><i style="--liquid:#c6bd9b"></i>蔗糖</button>
+     <button data-solution="kno3" aria-pressed="false"><i style="--liquid:#acc2c6"></i>硝酸钾</button>
+     <button data-solution="glycerol" aria-pressed="false"><i style="--liquid:#c3b1ce"></i>甘油</button>
+     <button data-solution="dyed" aria-pressed="false"><i style="--liquid:#77b9b4"></i>染色蔗糖</button>
+     <button data-solution="water" aria-pressed="false"><i style="--liquid:#e0e8e2"></i>清水</button>
+    </div>
+    <div class="dose-row"><div class="dose-options"><div id="concentration-control"><span class="control-label">浓度</span><div class="segmented concentration-group" role="group" aria-label="蔗糖浓度"><button data-concentration="0.1" aria-pressed="false">0.1</button><button data-concentration="0.2" aria-pressed="false">0.2</button><button data-concentration="0.3" aria-pressed="true">0.3</button></div><span class="unit">g/mL</span></div><p id="solution-note" class="solution-note" hidden></p></div><button id="add-solution" class="primary"><span aria-hidden="true">＋</span> 加入溶液</button></div>
+   </div>
+  </section>
+  <aside class="observation" aria-label="显微观察与镜头控制">
+   <section class="ocular-card"><div class="ocular-heading"><h2>目镜视野</h2><span class="magnification">100<span>×</span></span></div><button id="expand-eye" class="eye-button" aria-label="放大目镜观察窗口"><canvas id="specimen-canvas" aria-label="洋葱细胞显微镜图像"></canvas><span class="expand-mark" aria-hidden="true">⤢</span></button><div class="ocular-foot"><span id="specimen-name">紫色洋葱 · 外表皮</span><span>点击放大 ↗</span></div></section>
+   <div class="optics-controls">
+    <div class="lens-row"><span class="control-label">物镜</span><div class="segmented" role="group" aria-label="物镜倍率"><button data-objective="4" aria-pressed="false"><i class="lens-dot red"></i>4×</button><button data-objective="10" aria-pressed="true"><i class="lens-dot yellow"></i>10×</button><button data-objective="40" aria-pressed="false"><i class="lens-dot blue"></i>40×</button></div></div>
+    <div class="lens-row"><span class="control-label">目镜</span><div class="segmented" role="group" aria-label="目镜倍率"><button data-eyepiece="5" aria-pressed="false">5×</button><button data-eyepiece="10" aria-pressed="true">10×</button><button data-eyepiece="16" aria-pressed="false">16×</button></div></div>
+    <div class="focus-heading"><span class="control-label">调焦</span><span id="focus-status">稍有离焦</span></div>
+    <div class="focus-controls"><label for="coarse-focus">粗调</label><input id="coarse-focus" type="range" min="-1" max="1" step="0.01" value="0.28" aria-label="粗准焦调节"><span class="fine-label">精调</span><div class="fine-controls"><button id="fine-minus" aria-label="精调减小焦距">−</button><button id="fine-plus" aria-label="精调增大焦距">＋</button></div></div>
+    <button id="autofocus" class="autofocus"><span aria-hidden="true">◎</span> 一键对焦</button>
+    <p class="scroll-hint">视野内滚轮精调 · Shift + 滚轮粗调</p>
+   </div>
+   <div class="observation-options"><button id="water-toggle" class="switch-button" aria-pressed="false"><span class="switch" aria-hidden="true"></span>显示水分子</button><button id="compare-open" class="quiet">双栏对比 <span aria-hidden="true">⇄</span></button></div>
+  </aside>
+ </main>
+ <footer class="transport"><div class="status"><span id="status-dot" class="status-dot"></span><div><strong id="phase-title">清水中的细胞</strong><p id="phase-description">选一瓶溶液，开始观察。</p></div></div><div class="transport-actions"><button id="pause" class="quiet" aria-pressed="false"><span id="pause-icon">Ⅱ</span> <span id="pause-text">暂停</span></button><button id="replay" class="quiet">↺ 重播</button><button id="rinse" class="rinse">换清水</button></div></footer>
+</div>
+<dialog id="eye-dialog" class="eye-dialog"><div class="dialog-header"><div><span class="control-label">目镜视野</span><strong class="magnification">100×</strong></div><div><button id="expanded-autofocus" class="small-primary">◎ 一键对焦</button><button data-close="eye-dialog" class="close-button" aria-label="关闭放大观察">×</button></div></div><div class="expanded-body"><canvas id="expanded-canvas" aria-label="放大的细胞观察图像"></canvas></div><div class="expanded-controls"><span id="expanded-specimen">紫色洋葱鳞片叶外表皮</span><div class="expanded-lenses"><label>物镜 <select id="expanded-objective"><option value="4">4×</option><option value="10" selected>10×</option><option value="40">40×</option></select></label><label>目镜 <select id="expanded-eyepiece"><option value="5">5×</option><option value="10" selected>10×</option><option value="16">16×</option></select></label></div><span>滚轮精调 · Shift + 滚轮粗调</span></div></dialog>
+<dialog id="compare-dialog" class="compare-dialog"><div class="dialog-header"><div><span class="control-label">同一初始标本</span><h2>把两种条件放在一起看</h2></div><button data-close="compare-dialog" class="close-button" aria-label="关闭对比">×</button></div><div class="compare-mode"><label>比较方式 <select id="compare-mode"><option value="concentration">不同蔗糖浓度</option><option value="solution">不同溶液</option><option value="tissue">内外表皮</option></select></label><button id="compare-start" class="small-primary">重新开始对比</button><button id="compare-pause" class="quiet" aria-pressed="false">暂停</button></div><div class="comparison-grid"><section><div class="compare-label"><strong>A</strong><select id="compare-a" aria-label="对比条件 A"></select></div><canvas id="compare-canvas-a"></canvas><p id="compare-status-a"></p></section><section><div class="compare-label"><strong>B</strong><select id="compare-b" aria-label="对比条件 B"></select></div><canvas id="compare-canvas-b"></canvas><p id="compare-status-b"></p></section></div><p class="comparison-note">同一标本、相同观察进程。浓度响应与动画时间为教学预设。</p></dialog>
+<dialog id="about-dialog" class="about-dialog"><div class="dialog-header"><h2>关于这张实验桌</h2><button data-close="about-dialog" class="close-button" aria-label="关闭说明">×</button></div><div class="about-content"><p>先选标本，再选择溶液并点击“加入”。通过粗调、精调或一键对焦观察细胞；点击圆形目镜可打开大观察窗。</p><h3>你正在观察什么</h3><p>细胞壁保持轮廓，失水时内部原生质层与细胞壁分离，换清水后可观察复原。内表皮天然颜色较浅；外表皮液泡以紫色表现。</p><h3>这是教学模型</h3><p>浓度响应、变化速度和水分子粒子均为教学示意，未经真实实验标定，不用于预测具体样本的收缩比例或实验时间。分子展示双向运动及净流向，未按真实尺度绘制。</p><p>硝酸钾、甘油演示条件适宜时的分离与恢复机制；真实结果受浓度、处理时间与细胞活性影响。“染色蔗糖”使用理想外液示踪色，显示分离空间中的外液，不代表特定红墨水配方。</p><p>参考：<a href="https://bio.njtc.edu.cn/info/1018/10991.htm" target="_blank" rel="noreferrer">内江师范学院植物生理实验</a>、<a href="https://biolab.zjnu.edu.cn/8772/list.htm" target="_blank" rel="noreferrer">浙江师范大学实验资料</a>。人教版对应正文仍待逐页核对。</p><p class="about-credit">显微实验台 · 本地交互 Demo<br>原创模型与界面，操作思路参考 WeduLab MicroLab。</p></div></dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+</body></html>
