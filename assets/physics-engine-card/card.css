@@ -1,0 +1,6 @@
+.physics-motion-visual { position: relative; background: #fff; border: 1px solid rgba(36,35,30,.12); }
+.physics-motion-visual img, .physics-motion-visual video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.physics-motion-visual img { object-position: center top; }
+.physics-motion-visual video { opacity: 0; transition: opacity .16s ease; pointer-events: none; }
+.physics-motion-visual[data-video-state="playing"] video, .physics-motion-visual[data-video-state="ended"] video { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .physics-motion-visual video { display: none; transition: none; } }

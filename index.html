@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light" />
     <title>百乐 · 项目、Demo、Skill 与文章</title>
+    <link rel="stylesheet" href="./assets/physics-engine-card/card.css" />
+    <script src="./assets/physics-engine-card/runtime.js" defer></script>
     <script src="./preview.js?v=skill-github-20261013" defer></script>
     <script type="module" crossorigin src="./assets/preview-ClaGMzeF.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/preview-CWrKpUcU.css">
@@ -44,8 +46,9 @@
           <div class="section-heading"><span class="section-index">01</span><span class="section-slash">/</span><h2 id="projects-title">项目</h2></div>
 
           <article class="project-showcase physics-apparatus-showcase" aria-labelledby="physics-apparatus-title">
-            <div class="project-visual" aria-hidden="true">
+            <div class="project-visual physics-motion-visual" data-engine-motion aria-hidden="true">
               <img src="./assets/physics-apparatus-cover.png" alt="" width="1440" height="1080" loading="lazy" decoding="async" style="object-position: center top" />
+              <video muted playsinline preload="none" disablepictureinpicture disableremoteplayback tabindex="-1" data-video-src="./assets/physics-engine-card/motion.mp4"></video>
             </div>
             <div class="project-copy">
               <h3 id="physics-apparatus-title">物理器械室</h3>
@@ -61,7 +64,7 @@
               <video muted playsinline preload="none" disablepictureinpicture disableremoteplayback tabindex="-1" data-video-src="./assets/periodic-table-card/entrance.mp4"></video>
             </div>
             <div class="project-copy">
-              <h3 id="periodic-table-title">更好的元素周期表</h3>
+              <h3 id="periodic-table-title">元素周期表</h3>
               <p class="project-description" id="periodic-table-description">面向初高中学生的交互式化学学习网站，结合元素周期表、知识思维导图、同位素探索与元素拖拽组合查询，让元素、物质和化学反应之间的联系更直观。</p>
               <div class="project-tags" aria-label="项目标签"><span>化学学习</span><span>交互设计</span><span>Web应用</span></div>
             </div>
